@@ -1,0 +1,87 @@
+Libreame\BackendBundle\Entity\Puntosusuario:
+    type: entity
+    table: puntosusuario
+    indexes:
+        fk_puntosusuario_usuario1_idx:
+            columns:
+                - puntosusuario_idusuario
+        fk_puntosusuario_actividadusuario1_idx:
+            columns:
+                - punusuario_idactiusuario
+        fk_puntosusuario_resenavideojuego1_idx:
+            columns:
+                - punusuario_resenavideojuego
+        fk_puntosusuario_ejemplar1_idx:
+            columns:
+                - punusuario_idejemplar
+    id:
+        idpuntosusuario:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id de los puntos de usuario'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        inpuntaje:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Puntaje ganado o gastado'
+        fefechapuntos:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de los puntos'
+        insumaresta:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '1 Suma 2 Resta'
+                default: '1'
+    manyToOne:
+        punusuarioactiusuario:
+            targetEntity: Actividadusuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                punusuario_idactiusuario:
+                    referencedColumnName: idactividadusuario
+            orphanRemoval: false
+        punusuarioejemplar:
+            targetEntity: Ejemplar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                punusuario_idejemplar:
+                    referencedColumnName: idejemplar
+            orphanRemoval: false
+        punusuarioResenavideojuego:
+            targetEntity: Resenavideojuego
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                punusuario_resenavideojuego:
+                    referencedColumnName: idresenavideojuego
+            orphanRemoval: false
+        puntosusuariousuario:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                puntosusuario_idusuario:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

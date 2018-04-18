@@ -1,0 +1,41 @@
+Libreame\BackendBundle\Entity\Plansuscripcion:
+    type: entity
+    table: plansuscripcion
+    id:
+        idplansuscripcion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del plan de suscripción'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnomplan:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Nombre del plan'
+        txdescripcionplan:
+            type: string
+            nullable: false
+            length: 300
+            options:
+                fixed: false
+                comment: 'Descripcíon del plan'
+        fevigencia:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de finalización de vigencia del plan : 31 Dic 2060 (Para indefinido)'
+        ingratis:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0: Pago - 1 : Gratis'
+                default: '1'
+    lifecycleCallbacks: {  }

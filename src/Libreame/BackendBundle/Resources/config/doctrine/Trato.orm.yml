@@ -1,0 +1,74 @@
+Libreame\BackendBundle\Entity\Trato:
+    type: entity
+    table: trato
+    indexes:
+        fk_tratoaccion_usuario1_idx:
+            columns:
+                - trato_idusrdueno
+        fk_tratoaccion_usuario2_idx:
+            columns:
+                - trato_idusrsolicita
+        fk_tratoaccion_ejemplar1_idx:
+            columns:
+                - trato_idejemplar
+    id:
+        idtrato:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        idtratotexto:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Id UNICO del trato para diferenciar una conversación. Control'
+        fefechatrato:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha del registro'
+        inestadotrato:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: '0 Cerrado 1 Declinado revisar bien'
+                default: '0'
+    manyToOne:
+        tratoejemplar:
+            targetEntity: Ejemplar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                trato_idejemplar:
+                    referencedColumnName: idejemplar
+            orphanRemoval: false
+        tratousrdueno:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                trato_idusrdueno:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+        tratousrsolicita:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                trato_idusrsolicita:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

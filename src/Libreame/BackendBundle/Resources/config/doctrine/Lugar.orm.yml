@@ -1,0 +1,51 @@
+Libreame\BackendBundle\Entity\Lugar:
+    type: entity
+    table: lugar
+    indexes:
+        fk_lugar_lugar1_idx:
+            columns:
+                - inlugpadre
+    id:
+        inlugar:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id Automatico'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txlugcodigo:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Codigo del lugar: Ejemplo en Colombia DIVIPOLA'
+        txlugnombre:
+            type: string
+            nullable: false
+            length: 100
+            options:
+                fixed: false
+                comment: 'Nombre del lugar, Ciudad, Depto, etc.'
+        inlugelegible:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: 'Indica si el registro puede ser elegido por un usuario 0: No elegible - 1 : Elegible'
+                default: '0'
+    manyToOne:
+        inlugpadre:
+            targetEntity: Lugar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inlugpadre:
+                    referencedColumnName: inlugar
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,55 @@
+Libreame\BackendBundle\Entity\Actividadusuario:
+    type: entity
+    table: actividadusuario
+    indexes:
+        fk_actividadusuario_usuario1_idx:
+            columns:
+                - actusuario_idusuarioescribe
+        fk_actividadusuario_ejemplar1_idx:
+            columns:
+                - actusuario_idejemplar
+        fk_actividadusuario_tratoaccion1_idx:
+            columns:
+                - actusuario_idtrato
+    id:
+        idactividadusuario:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del registro de actividad'
+            id: true
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        actusuarioejemplar:
+            targetEntity: Ejemplar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                actusuario_idejemplar:
+                    referencedColumnName: idejemplar
+            orphanRemoval: false
+        actusuariotrato:
+            targetEntity: Trato
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                actusuario_idtrato:
+                    referencedColumnName: idtrato
+            orphanRemoval: false
+        actusuariousuarioescribe:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                actusuario_idusuarioescribe:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

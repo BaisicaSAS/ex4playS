@@ -1,0 +1,56 @@
+Libreame\BackendBundle\Entity\Actsesion:
+    type: entity
+    table: actsesion
+    indexes:
+        fk_actsesion_sesion1_idx:
+            columns:
+                - actsesion_insesion
+    id:
+        inactsesion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: ID
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        inactaccion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Todas las acciones que existan en el sistema enumeradas y quemadas en una tabla o arreglo'
+                default: '0'
+        txactmensaje:
+            type: string
+            nullable: false
+            length: 500
+            options:
+                fixed: false
+                comment: 'Mensaje de exito / fallo de la accion'
+        feactfecha:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de la actividad'
+        inactfinalizada:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0: no 1:si'
+                default: '0'
+    manyToOne:
+        actsesionInsesion:
+            targetEntity: Sesion
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                actsesion_insesion:
+                    referencedColumnName: insesion
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

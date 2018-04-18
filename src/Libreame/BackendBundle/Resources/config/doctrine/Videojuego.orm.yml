@@ -1,0 +1,48 @@
+Libreame\BackendBundle\Entity\Videojuego:
+    type: entity
+    table: videojuego
+    indexes:
+        fk_videojuego_consola1_idx:
+            columns:
+                - videojuego_consola
+    id:
+        idvideojuego:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del videojuego'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnomvideojuego:
+            type: string
+            nullable: false
+            length: 300
+            options:
+                fixed: false
+                comment: 'nombre del videojuego'
+        felanzamiento:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de lanzamiento del videojuego'
+        incategvideojuego:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Categoria del videojuego'
+    manyToOne:
+        videojuegoConsola:
+            targetEntity: Consola
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                videojuego_consola:
+                    referencedColumnName: idconsola
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

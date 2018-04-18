@@ -1,0 +1,32 @@
+services:
+            
+    #Servicio para acciones comunes y llamado a funciones de negocio
+    logica_service:
+        class: Libreame\BackendBundle\Helpers\Logica
+#       arguments: [@doctrine.orm.entity_manager]
+
+    #Servicio principal publico, por el cual se puede acceder a cualquier funcionalidad del sistema
+    acceso_service:
+        class: Libreame\BackendBundle\Controller\GamesController
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    #Servicio que contiene los metodos para registrarse (darse de alta) en el sistema
+    #registro_service:
+    #    class: Libreame\BackendBundle\Helpers\Registro
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    #Servicio que contiene los metodos para ingresar y salir del sistema(Login, Logout)
+    login_service:
+        class: Libreame\BackendBundle\Helpers\Login
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    #Servicio que contiene los metodos para obtener los datos de un usuario (Pestaña de PREFERENCIAS)#
+    #gest_usuarios_service:
+    #    class: Libreame\BackendBundle\Helpers\GestionUsuarios
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    #Servicio que contiene los metodos para recu´perar los feed de Ejemplares subidos a la plataforma
+    #gest_ejemplares_service:
+    #    class: Libreame\BackendBundle\Helpers\GestionEjemplares
+#        arguments: [@service_id, "plain_value", %parameter%]
+

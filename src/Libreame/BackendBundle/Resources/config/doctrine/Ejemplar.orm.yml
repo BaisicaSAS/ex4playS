@@ -1,0 +1,40 @@
+Libreame\BackendBundle\Entity\Ejemplar:
+    type: entity
+    table: ejemplar
+    indexes:
+        fk_ejemplar_videojuego1_idx:
+            columns:
+                - ejemplar_videojuego
+    id:
+        idejemplar:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del ejemplar'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        fecargue:
+            type: datetime
+            nullable: false
+        inejemplarpublicado:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0-No ublicado  1-publicado'
+                default: '0'
+    manyToOne:
+        ejemplarVideojuego:
+            targetEntity: Videojuego
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ejemplar_videojuego:
+                    referencedColumnName: idvideojuego
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

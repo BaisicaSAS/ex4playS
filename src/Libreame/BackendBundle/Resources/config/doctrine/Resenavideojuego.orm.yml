@@ -1,0 +1,62 @@
+Libreame\BackendBundle\Entity\Resenavideojuego:
+    type: entity
+    table: resenavideojuego
+    indexes:
+        fk_resenavideojuego_videojuego1_idx:
+            columns:
+                - resena_videojuego
+        fk_resenavideojuego_usuario1_idx:
+            columns:
+                - resena_usuariopublica
+    id:
+        idresenavideojuego:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del registro de contenido'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        intipocontenido:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Tipo de contenido 0-resena o noticia, 1-comentario, 3-truco, '
+                default: '0'
+        txcontenido:
+            type: string
+            nullable: false
+            length: 2000
+            options:
+                fixed: false
+                comment: 'El contenido que genera el usuario...sedebe revisar buen cómo se va a formatear y almacenar, segun el tipo'
+        fepublica:
+            type: datetime
+            nullable: true
+            options:
+                comment: 'Fecha de la publicacion'
+    manyToOne:
+        resenaUsuariopublica:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                resena_usuariopublica:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+        resenaVideojuego:
+            targetEntity: Videojuego
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                resena_videojuego:
+                    referencedColumnName: idvideojuego
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

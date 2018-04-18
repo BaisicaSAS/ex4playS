@@ -1,0 +1,67 @@
+Libreame\BackendBundle\Entity\Ejemplarusuario:
+    type: entity
+    table: ejemplarusuario
+    indexes:
+        fk_ejemplarusuario_usuario1_idx:
+            columns:
+                - ejemplarusuario_idusuario
+        fk_ejemplarusuario_ejemplar1_idx:
+            columns:
+                - ejemplarusuario_idejemplar
+    id:
+        idejemplarusuario:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: "Id del registro de relacion\n"
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        invigente:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: '0 : No esta vigente la relacion, 1 significa que esta vigente...es decir este usuario es el dueno del juego actualmente..no puede haber 2 usuarios con el mismo ejemplar al tiempo.'
+                default: '0'
+        feduenodesde:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha desde la que se indica que es dueño del ejemplar (Publicado o recibido en cambio)'
+        inpublicado:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Indica si el ejemplar aparece en las búsquedas, como publicado. 0 : No publicado, 1: Publicado'
+                default: '0'
+        fepublicacion:
+            type: datetime
+            nullable: true
+            options:
+                comment: 'Ultima fecha de publicación del ejemplar por parte de ese usuario'
+    manyToOne:
+        ejemplarusuarioejemplar:
+            targetEntity: Ejemplar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ejemplarusuario_idejemplar:
+                    referencedColumnName: idejemplar
+            orphanRemoval: false
+        ejemplarusuariousuario:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ejemplarusuario_idusuario:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

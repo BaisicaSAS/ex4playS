@@ -1,0 +1,14 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: '3306'
+    database_name: ex4play
+    database_user: adminex4play
+    database_password: adminex4play
+    mailer_transport: smtp
+    mailer_host: p3plcpnl0478.prod.phx3.secureserver.net
+    mailer_user: registro@ex4read.co
+    mailer_password: R3g15tr0
+    locale: en
+    secret: 818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4

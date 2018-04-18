@@ -1,0 +1,62 @@
+Libreame\BackendBundle\Entity\Sesion:
+    type: entity
+    table: sesion
+    indexes:
+        fk_sesion_usuario1_idx:
+            columns:
+                - sesion_idusuario
+    id:
+        insesion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: ID
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txsesnumero:
+            type: string
+            nullable: false
+            length: 100
+            options:
+                fixed: false
+                comment: 'ID o Numero de la sesion'
+        insesactiva:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0: Inactiva 1: Activa'
+                default: '1'
+        fesesfechaini:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de inicio de la sesion'
+        fesesfechafin:
+            type: datetime
+            nullable: true
+            options:
+                comment: 'Fecha de fin de la sesion'
+        txipaddr:
+            type: string
+            nullable: false
+            length: 30
+            options:
+                fixed: false
+                comment: 'Direccion IP desde donde se genera la sesion'
+                default: 000.000.000.000
+    manyToOne:
+        sesionusuario:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sesion_idusuario:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

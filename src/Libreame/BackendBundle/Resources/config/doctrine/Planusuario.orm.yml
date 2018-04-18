@@ -1,0 +1,48 @@
+Libreame\BackendBundle\Entity\Planusuario:
+    type: entity
+    table: planusuario
+    indexes:
+        fk_planusuario_plansuscripcion1_idx:
+            columns:
+                - planusuario_idplan
+        fk_planusuario_usuario1_idx:
+            columns:
+                - planusuario_idusuario
+    id:
+        idplanusuario:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del registro de planes usuarios para mantener histórico'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        fevigencia:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de fin de la vigencia del plan...permite controlar que está vigente 31 Dic 2060 (Para indefinido)'
+    manyToOne:
+        planusuarioplan:
+            targetEntity: Plansuscripcion
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                planusuario_idplan:
+                    referencedColumnName: idplansuscripcion
+            orphanRemoval: false
+        planusuariousuario:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                planusuario_idusuario:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

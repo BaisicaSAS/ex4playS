@@ -1,0 +1,19 @@
+ex4read_ingresarSistema:
+    pattern:  /ingreso
+    defaults: { _controller: LibreameBackendBundle:Games:servicio, _format: json}
+    methods: [POST] 
+
+ex4read_confirmarRegistro:
+    pattern:  /registro/{id}
+    defaults: { _controller: LibreameBackendBundle:Registro:confirmarRegistro}
+    methods: [GET] 
+
+#ex4read_resetUsuario:
+#    pattern:  /reset/{usuario}
+#    defaults: { _controller: LibreameBackendBundle:Pruebas:resetUsuario}
+#    methods: [GET] 
+
+#ex4read_indexar:
+#    pattern:  /indexarPrueba/{dummy}
+#    defaults: { _controller: LibreameBackendBundle:Indexar:indexarPrueba}
+#    methods: [GET] 

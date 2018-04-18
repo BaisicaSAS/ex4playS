@@ -1,0 +1,29 @@
+Libreame\BackendBundle\Entity\Fabricante:
+    type: entity
+    table: fabricante
+    id:
+        idfabricante:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del fabricante'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnomfabricante:
+            type: string
+            nullable: false
+            length: 120
+            options:
+                fixed: false
+                comment: 'Nombre del fabricante'
+        txpaisfabricante:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Pais del fabricante'
+    lifecycleCallbacks: {  }

@@ -1,0 +1,77 @@
+Libreame\BackendBundle\Entity\Usuario:
+    type: entity
+    table: usuario
+    indexes:
+        fk_usuario_lugar1_idx:
+            columns:
+                - usuario_inlugar
+    id:
+        idusuario:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del usuario'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnomusuario:
+            type: string
+            nullable: false
+            length: 20
+            options:
+                fixed: false
+                comment: 'Nombre de usuario'
+        txnickname:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Nombre para mostrar'
+        txmailusuario:
+            type: string
+            nullable: false
+            length: 120
+            options:
+                fixed: false
+                comment: 'Correo electronico del usuario'
+        txclaveusuario:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+                comment: 'Clave del usuario'
+        fecreacionusuario:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de creacion del usuario'
+        inusuestado:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0: Esperando confirmacion 1: Activo 2: Cuarentena 3: Inactivo'
+                default: '0'
+        txusuvalidacion:
+            type: string
+            nullable: true
+            length: 300
+            options:
+                fixed: false
+                comment: 'Cuando se registra el usuario el sistema genera un codigo que se envia en el email de confirmacion.  Este campo se utiliza tambien en los cambios de clave.'
+    manyToOne:
+        usuarioInlugar:
+            targetEntity: Lugar
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                usuario_inlugar:
+                    referencedColumnName: inlugar
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

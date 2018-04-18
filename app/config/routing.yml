@@ -1,0 +1,4 @@
+libreame_backend:
+    resource: "@LibreameBackendBundle/Resources/config/routing.yml"
+    prefix:   /
+

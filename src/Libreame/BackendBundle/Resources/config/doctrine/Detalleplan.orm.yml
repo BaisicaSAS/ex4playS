@@ -1,0 +1,58 @@
+Libreame\BackendBundle\Entity\Detalleplan:
+    type: entity
+    table: detalleplan
+    indexes:
+        fk_detalleplan_plansuscripcion1_idx:
+            columns:
+                - detalleplan_idplan
+    id:
+        iddetalleplan:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id del detalle del plan'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        innumtarifa:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Indicador del nuero de la tarifa: Ejemplo 1, 2, 3... Un indice  '
+                default: '1'
+        indiastarifa:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Días de vigencia de una tarifa del plan, -1 : Indefinido'
+                default: '-1'
+        incantidadcambios:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Cantidad de cambios o transacciones que permite realizar la suscripcion en un periodo de tiempo definido por inperiodicidad'
+                default: '1'
+        inperiodicidad:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Periodicidad de la cantidad de cambios es decir en cantidad de cambios hay 1, y aqui se especifica: 0 Durante la vigencia , 1 Mensual, 2 Bimestral, 3 Trimestral, 4 Semestral, 5 Anual'
+                default: '0'
+    manyToOne:
+        detalleplanplan:
+            targetEntity: Plansuscripcion
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                detalleplan_idplan:
+                    referencedColumnName: idplansuscripcion
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

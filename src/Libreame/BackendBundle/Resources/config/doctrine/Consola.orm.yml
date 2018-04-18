@@ -1,0 +1,42 @@
+Libreame\BackendBundle\Entity\Consola:
+    type: entity
+    table: consola
+    indexes:
+        fk_consola_fabricante_idx:
+            columns:
+                - consola_fabricante
+    id:
+        idconsola:
+            type: bigint
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Id de la consola'
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnombreconsola:
+            type: string
+            nullable: false
+            length: 200
+            options:
+                fixed: false
+                comment: 'Nombre de la consola'
+        felanzamiento:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha de lanzamiento de la consola'
+    manyToOne:
+        consolaFabricante:
+            targetEntity: Fabricante
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                consola_fabricante:
+                    referencedColumnName: idfabricante
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
