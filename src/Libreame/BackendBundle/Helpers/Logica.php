@@ -1340,10 +1340,8 @@ class Logica {
         //$sesion = new LbSesiones();
         //$actsesion = new LbActsesion();
         
-        $ManejoDataRepository = $this->container->get(ManejoDataRepository::class);
-
         //Lugar por default (Es el de ID = 1)
-        $Lugar = $ManejoDataRepository->getLugar(1);
+        $Lugar = ManejoDataRepository::getLugar(1);
         //Grupo por default (Es el de ID = 1)
         $Grupo = ManejoDataRepository::getGrupo(1);
         //Valida que el usuario no existe

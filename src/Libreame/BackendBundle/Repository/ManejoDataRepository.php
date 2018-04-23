@@ -270,7 +270,8 @@ public function validaSesionUsuario($psolicitud)
     public function getLugar($inlugar)
     {   
         try{
-            return $this->getEntityManager()->getRepository('AppBundle:Lugar')->
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:Lugar')->
                     findOneBy(array('inlugar' => $inlugar));
         } catch (Exception $ex) {
                 return new Lugar();

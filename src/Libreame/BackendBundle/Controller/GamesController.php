@@ -285,7 +285,8 @@ class GamesController extends Controller
                 //echo "<script>alert('Ejecuta accion ')</script>"; 
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$objLogica = new Logica($em);
-                $objLogica = $this->container->get(Logica::class);
+                //$objLogica = $this->container->get(Logica::class);
+                $objLogica = $this->container->get('logica_service');
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
