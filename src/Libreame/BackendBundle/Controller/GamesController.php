@@ -286,6 +286,7 @@ class GamesController extends Controller
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->container->get(Logica::class);
+                echo "Por aqui antes del containerlogica_service GamesController 290";
                 $objLogica = $this->container->get('logica_service');
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);

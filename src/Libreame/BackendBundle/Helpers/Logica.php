@@ -1341,6 +1341,7 @@ class Logica {
         //$actsesion = new LbActsesion();
         
         //Lugar por default (Es el de ID = 1)
+        echo "getLugar Logica - 1345";
         $Lugar = ManejoDataRepository::getLugar(1);
         //Grupo por default (Es el de ID = 1)
         $Grupo = ManejoDataRepository::getGrupo(1);

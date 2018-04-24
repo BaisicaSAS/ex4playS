@@ -48,7 +48,7 @@ class ManejoDataRepository extends EntityRepository {
     
     ///********************* LO QUE SE USA ********************************///
     
-public function validaSesionUsuario($psolicitud)
+    public function validaSesionUsuario($psolicitud)
     {   
         //$respuesta = GamesController::inPlatCai;
         try{
