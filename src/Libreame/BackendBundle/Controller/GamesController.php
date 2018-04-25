@@ -266,6 +266,7 @@ class GamesController extends Controller
     public function servicioAction(Request $request)
     {
         error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
+        $em = $this->getDoctrine()->getManager();
         //echo "IngresarSistema ::: servicio";
         //$request = $this->getRequest();
         $content = $request->getContent();
@@ -286,12 +287,11 @@ class GamesController extends Controller
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->container->get(Logica::class);
-                echo "Por aqui antes del containerlogica_service GamesController 290";
                 $objLogica = $this->container->get('logica_service');
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
-                $respuesta = $objLogica->ejecutaAccion($this->objSolicitud);
+                $respuesta = $objLogica->ejecutaAccion($this->objSolicitud, $em);
                 //echo "genera respuesta: ".$this->objSolicitud->getAccion();
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
                 //echo "<script>alert('.......ELSE..........')</script>";
@@ -795,8 +795,8 @@ class GamesController extends Controller
         switch ($errno) {
            case E_WARNING:
                     //echo "Hay un WARNING.<br />\n";
-                    // echo "El warning es: ". $errstr ."-linea [".$errline."] <br />\n";
-                    //echo "El fichero donde se ha producido el warning es: ". $errfile ."<br />\n";
+                    //echo "El warning es: ". $errstr ."-linea [".$errline."] <br />\n";
+                    //ech echoo "El fichero donde se ha producido el warning es: ". $errfile ."<br />\n";
                     //echo "La línea donde se ha producido el warning es: ". $errline ."<br />\n";
                     /* No ejecutar el gestor de errores interno de PHP, hacemos que lo pueda procesar un try catch */
                     return true;
@@ -815,5 +815,4 @@ class GamesController extends Controller
         }
     }
 
-    
 }

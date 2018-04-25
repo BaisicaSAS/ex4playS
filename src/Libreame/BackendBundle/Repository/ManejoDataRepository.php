@@ -4,11 +4,14 @@ namespace Libreame\BackendBundle\Repository;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query;
 use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Entity\Lugar;
+use Libreame\BackendBundle\Entity\Usuario;
+
 /*use AppBundle\Entity\LbEjemplares;
 use AppBundle\Entity\LbGeneros;
 use AppBundle\Entity\LbLibros;
@@ -44,9 +47,35 @@ use AppBundle\Entity\LbTareas;*/
 class ManejoDataRepository extends EntityRepository {
 
     var $inImagenValida;
-    
-    
+    //private $em;
+      
+    /*public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    } */
     ///********************* LO QUE SE USA ********************************///
+    
+    //ex4plays :: Obtiene el objeto Usuario según su EMAIL
+    public function getUsuarioByEmail($txemail, $em)
+    {   
+        try{
+            return $em->getRepository('LibreameBackendBundle:Usuario')->
+                findOneBy(array('txmailusuario' => $txemail));
+        } catch (Exception $ex) {
+                return new Usuario();
+        } 
+    }
+    //ex4plays :: Obtiene el objeto Lugar según su ID 
+    public function getLugar($inlugar, EntityManager $em)
+    {   
+        try{
+            return $em->getRepository('LibreameBackendBundle:Lugar')->
+                    findOneBy(array('inlugar' => $inlugar));
+        } catch (Exception $ex) {
+                return new Lugar();
+        } 
+    }
+    
     
     public function validaSesionUsuario($psolicitud)
     {   
@@ -266,18 +295,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    //Obtiene el objeto Lugar según su ID 
-    public function getLugar($inlugar)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:Lugar')->
-                    findOneBy(array('inlugar' => $inlugar));
-        } catch (Exception $ex) {
-                return new Lugar();
-        } 
-    }
-    
     //Obtiene todos los objetos lugar
     public function getLugares()
     {   
@@ -917,18 +934,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene el objeto Libro según su ID 
-    public function getGrupo($ingrupo)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbGrupos')->
-                findOneBy(array('ingrupo' => $ingrupo));
-        } catch (Exception $ex) {
-                return new LbGrupos();
-        } 
-    }
-    
     //Obtiene el objeto Usuario según su ID 
     public function getUsuarioById($inusuario)
     {   
@@ -938,51 +943,6 @@ class ManejoDataRepository extends EntityRepository {
                 findOneBy(array('inusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
         } catch (Exception $ex) {
                 return new LbUsuarios();
-        } 
-    }
-    
-    //Obtiene el objeto Usuario según su EMAIL
-    public function getUsuarioByEmail($txemail)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('txusuemail' => $txemail));
-        } catch (Exception $ex) {
-                return new LbUsuarios();
-        } 
-    }
-    
-    //Obtiene el objeto Usuario según su TELEFONO 
-    public function getUsuarioByTelefono($txtelefono)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('txusutelefono' => $txtelefono));
-        } catch (Exception $ex) {
-                return new LbUsuarios();
-        } 
-    }
-    
-    //Obtiene el Dispositivo del usuario 
-    public function getDispositivoUsuario($iddispositivo, LbUsuarios $usuario, $em)
-    {   
-        try{
-            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            
-            if ($flEm) {$em = $this->getDoctrine()->getManager();}
-            if($iddispositivo == GamesController::txAnyData) {
-                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(
-                        array('indisusuario' => $usuario));
-            } else {
-                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $iddispositivo, 
-                        'indisusuario' => $usuario));
-            }
-            if ($flEm) {$em->flush();}
-        } catch (Exception $ex) {
-                return new LbDispusuarios();
         } 
     }
     
@@ -998,7 +958,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
         
-    //Obtiene todos los grupos a los que pertenece el usuario
     public function getEjemplarById($ejemplar)
     {   
         try{
@@ -1055,20 +1014,6 @@ class ManejoDataRepository extends EntityRepository {
                     findBy(array('inedilibroeditorial' => $editorial));
         } catch (Exception $ex) {
                 return new LbEditorialeslibros();
-        } 
-    }
-                
-    //Obtiene todos los grupos a los que pertenece el usuario
-    public function getObjetoGruposUsuario(LbUsuarios $usuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT g FROM LibreameBackendBundle:LbGrupos g JOIN LibreameBackendBundle:LbMembresias m"
-                    ." WHERE m.inmemusuario = :usuario AND g.ingrupo = m.inmemgrupo";
-            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
-            return $query->getResult();
-        } catch (Exception $ex) {
-                return new LbGrupos();
         } 
     }
                 

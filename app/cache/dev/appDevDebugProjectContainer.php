@@ -3767,7 +3767,7 @@ class appDevDebugProjectContainer extends Container
             'assetic.variables' => array(
 
             ),
-            'assetic.java.bin' => 'C:\\ProgramData\\Oracle\\Java\\javapath\\java.EXE',
+            'assetic.java.bin' => 'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath\\java.EXE',
             'assetic.node.bin' => '/usr/bin/node',
             'assetic.ruby.bin' => '/usr/bin/ruby',
             'assetic.sass.bin' => '/usr/bin/sass',

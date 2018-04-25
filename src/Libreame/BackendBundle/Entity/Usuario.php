@@ -80,6 +80,5 @@ class Usuario
      */
     private $usuarioInlugar;
 
-
 }
 

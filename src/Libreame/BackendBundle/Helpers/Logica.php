@@ -4,6 +4,7 @@ namespace Libreame\BackendBundle\Helpers;
         
 //use DateTime;
 use Doctrine;
+use Doctrine\ORM\EntityManager;
 use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Helpers\Respuesta;
@@ -14,6 +15,7 @@ use Libreame\BackendBundle\Entity\Actividadusuario;
 use Libreame\BackendBundle\Entity\Detalleplan;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
+use Libreame\BackendBundle\Entity\Lugar;
 
 
 
@@ -33,7 +35,8 @@ class Logica {
      * Evalua la accion solicitada, ejecuta lo solicitado y retorna la respuesta al controlador.
      */
     
-    public function ejecutaAccion($solicitud)
+    //ex4plays :: Adicionado $em
+    public function ejecutaAccion($solicitud, EntityManager $em)
     {
         try{
             $respuesta = GamesController::inFallido;
@@ -44,14 +47,16 @@ class Logica {
                 //accion de registro en el sistema
                 case GamesController::txAccRegistro: {//Dato:1 : Registro en el sistema
                     //echo "<script>alert('Antes de entrar a Registro-".$solicitud->getEmail()."')</script>";
-                    $respuesta = Logica::registroUsuario($solicitud);
+                    //ex4plays :: Adicionado $em
+                    $respuesta = Logica::registroUsuario($solicitud, $em);
                     break;
                 }    
                 //accion de login en el sistema
                 case GamesController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
                     $objLogin = $this->get(Login::class);
-                    $respuesta = $objLogin::loginUsuario($solicitud);
+                    //ex4plays :: Adicionado $em
+                    $respuesta = $objLogin::loginUsuario($solicitud, $em);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
@@ -414,18 +419,18 @@ class Logica {
     }    
     
 
-    /*
+    /* ex4plays :: Modificado $em
      * respuestaDatosUsuario: 
      * Funcion que genera el JSON de respuesta para la accion de Recuperar Datos de Usuario :: GamesController::txAccRecParam
      */
-    public function respuestaDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    public function respuestaDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
 
         try {
             //Recupera el lugar, de la tabla de Lugares
             
             //echo "Va a generar respusta DatosUsuari0 \n";
             $usuario = new LbUsuarios();
-            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             $lugar = new LbLugares();
             if ($respuesta->getRespuesta()== GamesController::inULogged){
                 $lugar = ManejoDataRepository::getLugar($usuario->getInusulugar());
@@ -469,15 +474,15 @@ class Logica {
         } 
     }    
 
-    /*
+    /* ex4plays :: Adicionado $em
      * respuestaBuscarEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de Buscar ejemplares :: GamesController::txAccBusEjem:
      */
-    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
@@ -585,15 +590,15 @@ class Logica {
         } 
     }    
     
-    /*
+    /* ex4play :: Adicioando $em
      * respuestaFeedEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar Feed de ejemplares :: GamesController::txAccRecFeeds:
      */
-    public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
@@ -1011,11 +1016,12 @@ class Logica {
         } 
     }    
     
-    public function respuestaVisualizarBiblioteca(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    // ex4play :: Adicioando $em
+    public function respuestaVisualizarBiblioteca(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaVisualizarBiblioteca :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
@@ -1331,7 +1337,9 @@ class Logica {
         } 
     }    
     
-    public function registroUsuario($pSolicitud)
+    //ex4plays :: Modificado
+    //Adicionado el $em
+    public function registroUsuario($pSolicitud, $em)
     {   
         $respuesta = new Respuesta();
 
@@ -1341,13 +1349,10 @@ class Logica {
         //$actsesion = new LbActsesion();
         
         //Lugar por default (Es el de ID = 1)
-        echo "getLugar Logica - 1345";
-        $Lugar = ManejoDataRepository::getLugar(1);
-        //Grupo por default (Es el de ID = 1)
-        $Grupo = ManejoDataRepository::getGrupo(1);
+        $Lugar = ManejoDataRepository::getLugar(GamesController::inExitoso, $em);
+        
         //Valida que el usuario no existe
-        if (!ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail()) and 
-            !ManejoDataRepository::getUsuarioByTelefono($pSolicitud->getTelefono())){
+        if (!ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)){
             try {
                 //Guarda el usuario
                 //echo "<script>alert('Usuario [".$pSolicitud->getEmail()." ] NO existe')</script>";

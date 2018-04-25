@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
+use Doctrine\ORM\EntityManager;
 use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Entity\Usuario;
 
@@ -38,7 +39,9 @@ class Login
      * 
      */
     
-    public function loginUsuario($pSolicitud)
+    /* ex4palys :: Adicionado $em
+     */
+    public function loginUsuario($pSolicitud, EntityManager $em)
     {   
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
@@ -52,8 +55,7 @@ class Login
             $actsesion = new LbActsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
-            if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail())){
-                
+            if (!($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em))){
                 $respuesta->setArrUsuarios($usuario);
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
@@ -131,7 +133,10 @@ class Login
     }
     
 
-    public function logoutUsuario($pSolicitud)
+    /*
+     * ex4plays :: Adicionado $em
+     */
+    public function logoutUsuario($pSolicitud, EntityManager $em)
     {   
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
@@ -145,7 +150,7 @@ class Login
             $actsesion = new LbActsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
-            if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail())){
+            if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)){
                 
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";

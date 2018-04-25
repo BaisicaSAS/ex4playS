@@ -1476,3 +1476,319 @@ return $record['level'] >= $this->actionLevel;
 }
 }
 }
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter
+{
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
+interface ParamConverterInterface
+{
+public function apply(Request $request, ParamConverter $configuration);
+public function supports(ParamConverter $configuration);
+}
+}
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter
+{
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use DateTime;
+class DateTimeParamConverter implements ParamConverterInterface
+{
+public function apply(Request $request, ParamConverter $configuration)
+{
+$param = $configuration->getName();
+if (!$request->attributes->has($param)) {
+return false;
+}
+$options = $configuration->getOptions();
+$value = $request->attributes->get($param);
+if (!$value && $configuration->isOptional()) {
+return false;
+}
+if (isset($options['format'])) {
+$date = DateTime::createFromFormat($options['format'], $value);
+if (!$date) {
+throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
+}
+} else {
+if (false === strtotime($value)) {
+throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
+}
+$date = new DateTime($value);
+}
+$request->attributes->set($param, $date);
+return true;
+}
+public function supports(ParamConverter $configuration)
+{
+if (null === $configuration->getClass()) {
+return false;
+}
+return'DateTime'=== $configuration->getClass();
+}
+}
+}
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter
+{
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NoResultException;
+class DoctrineParamConverter implements ParamConverterInterface
+{
+protected $registry;
+public function __construct(ManagerRegistry $registry = null)
+{
+$this->registry = $registry;
+}
+public function apply(Request $request, ParamConverter $configuration)
+{
+$name = $configuration->getName();
+$class = $configuration->getClass();
+$options = $this->getOptions($configuration);
+if (null === $request->attributes->get($name, false)) {
+$configuration->setIsOptional(true);
+}
+if (false === $object = $this->find($class, $request, $options, $name)) {
+if (false === $object = $this->findOneBy($class, $request, $options)) {
+if ($configuration->isOptional()) {
+$object = null;
+} else {
+throw new \LogicException(sprintf('Unable to guess how to get a Doctrine instance from the request information for parameter "%s".', $name));
+}
+}
+}
+if (null === $object && false === $configuration->isOptional()) {
+throw new NotFoundHttpException(sprintf('%s object not found.', $class));
+}
+$request->attributes->set($name, $object);
+return true;
+}
+protected function find($class, Request $request, $options, $name)
+{
+if ($options['mapping'] || $options['exclude']) {
+return false;
+}
+$id = $this->getIdentifier($request, $options, $name);
+if (false === $id || null === $id) {
+return false;
+}
+if (isset($options['repository_method'])) {
+$method = $options['repository_method'];
+} else {
+$method ='find';
+}
+try {
+return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+} catch (NoResultException $e) {
+return;
+}
+}
+protected function getIdentifier(Request $request, $options, $name)
+{
+if (isset($options['id'])) {
+if (!is_array($options['id'])) {
+$name = $options['id'];
+} elseif (is_array($options['id'])) {
+$id = array();
+foreach ($options['id'] as $field) {
+$id[$field] = $request->attributes->get($field);
+}
+return $id;
+}
+}
+if ($request->attributes->has($name)) {
+return $request->attributes->get($name);
+}
+if ($request->attributes->has('id') && !isset($options['id'])) {
+return $request->attributes->get('id');
+}
+return false;
+}
+protected function findOneBy($class, Request $request, $options)
+{
+if (!$options['mapping']) {
+$keys = $request->attributes->keys();
+$options['mapping'] = $keys ? array_combine($keys, $keys) : array();
+}
+foreach ($options['exclude'] as $exclude) {
+unset($options['mapping'][$exclude]);
+}
+if (!$options['mapping']) {
+return false;
+}
+if (isset($options['id']) && null === $request->attributes->get($options['id'])) {
+return false;
+}
+$criteria = array();
+$em = $this->getManager($options['entity_manager'], $class);
+$metadata = $em->getClassMetadata($class);
+$mapMethodSignature = isset($options['repository_method'])
+&& isset($options['map_method_signature'])
+&& $options['map_method_signature'] === true;
+foreach ($options['mapping'] as $attribute => $field) {
+if ($metadata->hasField($field)
+|| ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))
+|| $mapMethodSignature) {
+$criteria[$field] = $request->attributes->get($attribute);
+}
+}
+if ($options['strip_null']) {
+$criteria = array_filter($criteria, function ($value) { return !is_null($value); });
+}
+if (!$criteria) {
+return false;
+}
+if (isset($options['repository_method'])) {
+$repositoryMethod = $options['repository_method'];
+} else {
+$repositoryMethod ='findOneBy';
+}
+try {
+if ($mapMethodSignature) {
+return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
+}
+return $em->getRepository($class)->$repositoryMethod($criteria);
+} catch (NoResultException $e) {
+return;
+}
+}
+private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
+{
+$arguments = array();
+$repository = $em->getRepository($class);
+$ref = new \ReflectionMethod($repository, $repositoryMethod);
+foreach ($ref->getParameters() as $parameter) {
+if (array_key_exists($parameter->name, $criteria)) {
+$arguments[] = $criteria[$parameter->name];
+} elseif ($parameter->isDefaultValueAvailable()) {
+$arguments[] = $parameter->getDefaultValue();
+} else {
+throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', get_class($repository), $repositoryMethod, $parameter->name));
+}
+}
+return $ref->invokeArgs($repository, $arguments);
+}
+public function supports(ParamConverter $configuration)
+{
+if (null === $this->registry || !count($this->registry->getManagers())) {
+return false;
+}
+if (null === $configuration->getClass()) {
+return false;
+}
+$options = $this->getOptions($configuration);
+$em = $this->getManager($options['entity_manager'], $configuration->getClass());
+if (null === $em) {
+return false;
+}
+return !$em->getMetadataFactory()->isTransient($configuration->getClass());
+}
+protected function getOptions(ParamConverter $configuration)
+{
+return array_replace(array('entity_manager'=> null,'exclude'=> array(),'mapping'=> array(),'strip_null'=> false,
+), $configuration->getOptions());
+}
+private function getManager($name, $class)
+{
+if (null === $name) {
+return $this->registry->getManagerForClass($class);
+}
+return $this->registry->getManager($name);
+}
+}
+}
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter
+{
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+class ParamConverterManager
+{
+protected $converters = array();
+protected $namedConverters = array();
+public function apply(Request $request, $configurations)
+{
+if (is_object($configurations)) {
+$configurations = array($configurations);
+}
+foreach ($configurations as $configuration) {
+$this->applyConverter($request, $configuration);
+}
+}
+protected function applyConverter(Request $request, ConfigurationInterface $configuration)
+{
+$value = $request->attributes->get($configuration->getName());
+$className = $configuration->getClass();
+if (is_object($value) && $value instanceof $className) {
+return;
+}
+if ($converterName = $configuration->getConverter()) {
+if (!isset($this->namedConverters[$converterName])) {
+throw new \RuntimeException(sprintf("No converter named '%s' found for conversion of parameter '%s'.",
+$converterName, $configuration->getName()
+));
+}
+$converter = $this->namedConverters[$converterName];
+if (!$converter->supports($configuration)) {
+throw new \RuntimeException(sprintf("Converter '%s' does not support conversion of parameter '%s'.",
+$converterName, $configuration->getName()
+));
+}
+$converter->apply($request, $configuration);
+return;
+}
+foreach ($this->all() as $converter) {
+if ($converter->supports($configuration)) {
+if ($converter->apply($request, $configuration)) {
+return;
+}
+}
+}
+}
+public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
+{
+if ($priority !== null) {
+if (!isset($this->converters[$priority])) {
+$this->converters[$priority] = array();
+}
+$this->converters[$priority][] = $converter;
+}
+if (null !== $name) {
+$this->namedConverters[$name] = $converter;
+}
+}
+public function all()
+{
+krsort($this->converters);
+$converters = array();
+foreach ($this->converters as $all) {
+$converters = array_merge($converters, $all);
+}
+return $converters;
+}
+}
+}
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration
+{
+interface ConfigurationInterface
+{
+public function getAliasName();
+public function allowArray();
+}
+}
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration
+{
+abstract class ConfigurationAnnotation implements ConfigurationInterface
+{
+public function __construct(array $values)
+{
+foreach ($values as $k => $v) {
+if (!method_exists($this, $name ='set'.$k)) {
+throw new \RuntimeException(sprintf('Unknown key "%s" for annotation "@%s".', $k, get_class($this)));
+}
+$this->$name($v);
+}
+}
+}
+}
