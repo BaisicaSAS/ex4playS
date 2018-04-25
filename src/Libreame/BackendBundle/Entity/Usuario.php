@@ -80,5 +80,45 @@ class Usuario
      */
     private $usuarioInlugar;
 
+    
+    function __construct(){ 
+        $strBlanco = "";
+        $this->txmailusuario = $strBlanco;
+        $this->txnomusuario = $strBlanco;  
+        $this->txnickname = $strBlanco;
+        $this->txclaveusuario = $strBlanco;
+        $this->usuarioInlugar = $strBlanco;
+        $this->txusuvalidacion = $strBlanco;
+    } 
+    
+    //Función que crea un usuario para su registro en el sistema
+    public function creaUsuario($pSolicitud, $Lugar)
+    {   
+        $usuario = new Usuario() ;
+        try {
+            setlocale (LC_TIME, "es_CO");
+            $fechaReg = new \DateTime('c');
+            
+            $usuario->se($pSolicitud->getEmail());  
+            $usuario->settxusunombre($pSolicitud->getEmail());  
+            $usuario->settxusunommostrar($pSolicitud->getEmail());
+            $usuario->setFefecregistro($fechaReg);
+            $usuario->setFeusuultingreso($fechaReg);
+            if (trim($pSolicitud->getTelefono()) == ""){
+                $usuario->settxusutelefono($pSolicitud->getEmail());  
+            } else {
+                $usuario->settxusutelefono($pSolicitud->getTelefono());  
+            }
+            $usuario->settxusuclave($pSolicitud->getClave());  
+            $usuario->settxusuimagen('DEFAULT IMAGE URL');  
+            $usuario->setinusulugar($Lugar);  
+            $usuario->settxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+
+            return $usuario;
+        } catch (Exception $ex)  {    
+            return $usuario;
+        }
+    }
+    
 }
 
