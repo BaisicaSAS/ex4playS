@@ -1,0 +1,12 @@
+//Padre de lugar puede ser NULL
+
+ALTER TABLE `ex4play`.`lugar` 
+DROP FOREIGN KEY `fk_lugar_lugar1`;
+ALTER TABLE `ex4play`.`lugar` 
+CHANGE COLUMN `inlugpadre` `inlugpadre` INT(11) NULL COMMENT 'Padre o entidad de orden superior que contiene este lugar' ;
+ALTER TABLE `ex4play`.`lugar` 
+ADD CONSTRAINT `fk_lugar_lugar1`
+  FOREIGN KEY (`inlugpadre`)
+  REFERENCES `ex4play`.`lugar` (`inlugar`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;

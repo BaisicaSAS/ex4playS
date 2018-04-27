@@ -1344,7 +1344,6 @@ class Logica {
         $respuesta = new Respuesta();
 
         $usuario = new Usuario();
-        $membresia = new Planusuario();
         //$sesion = new LbSesiones();
         //$actsesion = new LbActsesion();
         
@@ -1358,37 +1357,9 @@ class Logica {
                 //echo "<script>alert('Usuario [".$pSolicitud->getEmail()." ] NO existe')</script>";
                 $usuario=$usuario->creaUsuario($pSolicitud, $Lugar);
 
-                //Guarda el dispositivo si NO existe: debe existir el ID + Usuario 
-                //porque se pueden registrar y operar desde el mismo Dispositivo
-                //echo "<script>alert('DISPOSITIVO')</script>";
-                $guardadevice=0;
-                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL)){
-                    //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
-                    $guardadevice=1;
-
-                    $device=$device->creaDispusuario($usuario, $pSolicitud);
-                }
-
-                //Guarda la membresia al grupo default
-                $membresia->setInmemusuario($usuario);
-                $membresia->setInmemgrupo($Grupo);
-                //echo "<script>alert('MEMBRESIA')</script>";
-                
-                //throw $this->createNotFoundException('Error de registros');
-                //Guarda la información
-                ManejoDataRepository::persistEntidad($usuario);
+                ManejoDataRepository::persistEntidad($usuario, $em);
                 //echo "<script>alert('Persiste usuario')</script>";
-                //Si el dispositivo existia no se guarda y se trae del repositorio
-                if($guardadevice===1){
-                    //echo "<script>alert('Persiste device')</script>";
-                    ManejoDataRepository::persistEntidad($device);
-                } else {
-                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL);
-                }
 
-                //echo "<script>alert('Persiste membresia')</script>";
-                ManejoDataRepository::persistEntidad($membresia);
-                //Guarda la sesion inactiva
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                 setlocale (LC_TIME, "es_CO");
                 $fecha = new \DateTime('c');

@@ -3,7 +3,8 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Libreame\BackendBundle\Helpers\Logica;
+use Libreame\BackendBundle\Controller\GamesController;
 /**
  * Usuario
  *
@@ -80,6 +81,113 @@ class Usuario
      */
     private $usuarioInlugar;
 
+    /* 
+     * getters ex4playS
+     */
+    
+    public function getIdusuario()
+    {
+        return $this->idusuario;
+    }
+    
+    public function getTxnomusuario()
+    {
+        return $this->txnomusuario;
+    }
+    
+    public function getTxnickname()
+    {
+        return $this->txnomusuario;
+    }
+    
+    public function getTxmailusuario()
+    {
+        return $this->txmailusuario;
+    }
+    
+    public function getTxclaveusuario()
+    {
+        return $this->txclaveusuario;
+    }
+    
+    public function getFecreacionusuario()
+    {
+        return $this->fecreacionusuario;
+    }
+    
+    public function getInusuestado()
+    {
+        return $this->inusuestado;
+    }
+
+    public function getTxusuvalidacion()
+    {
+        return $this->txusuvalidacion;
+    }
+
+    public function getUsuarioInlugar()
+    {
+        return $this->usuarioInlugar;
+    }
+    
+    /* 
+     * setters ex4playS
+     */
+    public function setTxnomusuario($txnomusuario)
+    {
+        $this->txnomusuario = $txnomusuario;
+
+        return $this;
+    }
+    
+    public function setTxnickname($txnickname)
+    {
+        $this->txnickname = $txnickname;
+
+        return $this;
+    }
+
+    public function setTxmailusuario($txmailusuario)
+    {
+        $this->txmailusuario = $txmailusuario;
+
+        return $this;
+    }
+
+    public function setTxclaveusuario($txclaveusuario)
+    {
+        $this->txclaveusuario = $txclaveusuario;
+
+        return $this;
+    }
+
+    public function setFecreacionusuario($fecreacionusuario)
+    {
+        $this->fecreacionusuario = $fecreacionusuario;
+
+        return $this;
+    }
+
+    public function setInusuestado($inusuestado)
+    {
+        $this->inusuestado = $inusuestado;
+
+        return $this;
+    }
+
+    public function setTxusuvalidacion($txusuvalidacion)
+    {
+        $this->txusuvalidacion = $txusuvalidacion;
+
+        return $this;
+    }
+
+    public function setUsuarioInlugar(\Libreame\BackendBundle\Entity\Lugar $usuarioInlugar = null)
+    {
+        $this->usuarioInlugar = $usuarioInlugar;
+
+        return $this;
+    }
     
     function __construct(){ 
         $strBlanco = "";
@@ -99,20 +207,15 @@ class Usuario
             setlocale (LC_TIME, "es_CO");
             $fechaReg = new \DateTime('c');
             
-            $usuario->se($pSolicitud->getEmail());  
-            $usuario->settxusunombre($pSolicitud->getEmail());  
-            $usuario->settxusunommostrar($pSolicitud->getEmail());
-            $usuario->setFefecregistro($fechaReg);
-            $usuario->setFeusuultingreso($fechaReg);
-            if (trim($pSolicitud->getTelefono()) == ""){
-                $usuario->settxusutelefono($pSolicitud->getEmail());  
-            } else {
-                $usuario->settxusutelefono($pSolicitud->getTelefono());  
-            }
-            $usuario->settxusuclave($pSolicitud->getClave());  
-            $usuario->settxusuimagen('DEFAULT IMAGE URL');  
-            $usuario->setinusulugar($Lugar);  
-            $usuario->settxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+            $usuario->setTxmailusuario($pSolicitud->getEmail());  
+            $usuario->setTxnomusuario($pSolicitud->getEmail());  
+            $usuario->setTxnickname($pSolicitud->getEmail());
+            $usuario->setFecreacionusuario($fechaReg);
+
+            $usuario->setTxclaveusuario($pSolicitud->getClave());  
+            // OJO LA IMAGEN $usuario->settxusuimagen('DEFAULT IMAGE URL');  
+            $usuario->setUsuarioInlugar($Lugar);  
+            $usuario->settxusuvalidacion(Logica::generaRand(GamesController::inTamVali));  
 
             return $usuario;
         } catch (Exception $ex)  {    

@@ -196,9 +196,10 @@ class ManejoDataRepository extends EntityRepository {
      * Recibe una cadena con los datos del usuario
      * Usuario/Password{cifrado}/FechaHora{Esta se guarda en el dispositivo para que sirva como clave}
      * Id/nombre dispositivo
-     *  
+     * 
+     * ex4plays :: eliminada la variable DEVICE 
      */
-    public function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd,$em)
+    public function generaSesion($pEstado,$pFecIni,$pFecFin,$pIpAdd,$em)
     {
         //Guarda la sesion inactiva
         //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
@@ -212,7 +213,7 @@ class ManejoDataRepository extends EntityRepository {
             $sesion->setTxsesnumero($objLogica::generaRand(GamesController::inTamSesi));
             $sesion->setFesesfechaini($pFecIni);
             $sesion->setFesesfechafin($pFecFin);
-            $sesion->setInsesdispusuario($pDevice);
+
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
             //echo "<script>alert('Guardo sesion')</script>";
@@ -1681,11 +1682,11 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Guarda CUALQUIER ENTIDAD del parametro
-    public function persistEntidad($entidad)
+    //ex4plays::Adicionado $em
+    public function persistEntidad($entidad, EntityManager $em)
     {   
         try{
             //echo "<script>alert('1Persiste usuario')</script>";
-            $em = $this->getDoctrine()->getManager();
             $em->persist($entidad);
             $em->flush();
             //echo "<script>alert('2Persiste usuario')</script>";

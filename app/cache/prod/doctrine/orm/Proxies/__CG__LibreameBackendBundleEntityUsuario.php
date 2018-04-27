@@ -173,4 +173,15 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function creaUsuario($pSolicitud, $Lugar)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'creaUsuario', [$pSolicitud, $Lugar]);
+
+        return parent::creaUsuario($pSolicitud, $Lugar);
+    }
+
 }

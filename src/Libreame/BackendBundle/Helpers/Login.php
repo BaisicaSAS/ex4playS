@@ -60,21 +60,6 @@ class Login
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
-                //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
-                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL)){
-                    //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
-
-                    $device=$device->creaDispusuario($usuario, $pSolicitud);
-                    //echo "<script>alert('Persiste device')</script>";
-                    !ManejoDataRepository::persistEntidad($device);
-                }
-                else {
-                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL);
-                }
-
-               //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
-
-                
                 //Verifica si el usuario está activo
                 if ($estado == GamesController::inUsuActi)
                 {
@@ -154,20 +139,6 @@ class Login
                 
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
-
-                //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
-                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL)){
-                    //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
-
-                    $device=$device->creaDispusuario($usuario, $pSolicitud);
-                    //echo "<script>alert('Persiste device')</script>";
-                    !ManejoDataRepository::persistEntidad($device);
-                }
-                else {
-                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL);
-                }
-
-               //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
 
                 
                 //Verifica si el usuario está activo
