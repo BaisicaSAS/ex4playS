@@ -6,6 +6,8 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Doctrine\ORM\EntityManager;
 use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Entity\Usuario;
+use Libreame\BackendBundle\Entity\Sesion;
+use Libreame\BackendBundle\Entity\Actsesion;
 
 
 class Login 
@@ -49,10 +51,10 @@ class Login
         $fecha = new \DateTime;
         try {
             //echo "<script>alert('Ingresa Login')</script>";
-            $usuario = new LbUsuarios();
-            $device = new LbDispusuarios();
-            $sesion = new LbSesiones();
-            $actsesion = new LbActsesion();
+            $usuario = new Usuario();
+
+            $sesion = new Sesion();
+            $actsesion = new Actsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
             if (!($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em))){
@@ -86,7 +88,7 @@ class Login
 
                             //Crea sesion
                             //echo "<script>alert('-----Creará sesion"  .GamesController::inSesActi."')</script>";
-                            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr(),NULL);
+                            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),NULL);
                             //Genera sesion activa sin fecha de finalización
                             ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,NULL);
                             $respuesta->setRespuesta(GamesController::inULogged);    

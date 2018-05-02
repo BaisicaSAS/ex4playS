@@ -10,3 +10,7 @@ ADD CONSTRAINT `fk_lugar_lugar1`
   REFERENCES `ex4play`.`lugar` (`inlugar`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `txUsuImagen` LONGTEXT NOT NULL COMMENT 'Guarda la url de la imagen' AFTER `usuario_inlugar`;

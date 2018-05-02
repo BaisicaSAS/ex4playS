@@ -81,6 +81,13 @@ class Usuario
      */
     private $usuarioInlugar;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="txusuimagen", type="text", nullable=false)
+     */
+    private $txusuimagen;
+
     /* 
      * getters ex4playS
      */
@@ -128,6 +135,11 @@ class Usuario
     public function getUsuarioInlugar()
     {
         return $this->usuarioInlugar;
+    }
+    
+    public function getTxusuimagen()
+    {
+        return $this->txusuimagen;
     }
     
     /* 
@@ -189,6 +201,13 @@ class Usuario
         return $this;
     }
     
+    public function setTxusuimagen($txusuimagen)
+    {
+        $this->txusuimagen = $txusuimagen;
+
+        return $this;
+    }
+    
     function __construct(){ 
         $strBlanco = "";
         $this->txmailusuario = $strBlanco;
@@ -197,6 +216,7 @@ class Usuario
         $this->txclaveusuario = $strBlanco;
         $this->usuarioInlugar = $strBlanco;
         $this->txusuvalidacion = $strBlanco;
+        $this->txusuimagen = $strBlanco;
     } 
     
     //Función que crea un usuario para su registro en el sistema
@@ -213,7 +233,7 @@ class Usuario
             $usuario->setFecreacionusuario($fechaReg);
 
             $usuario->setTxclaveusuario($pSolicitud->getClave());  
-            // OJO LA IMAGEN $usuario->settxusuimagen('DEFAULT IMAGE URL');  
+            $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
             $usuario->setUsuarioInlugar($Lugar);  
             $usuario->settxusuvalidacion(Logica::generaRand(GamesController::inTamVali));  
 

@@ -11,6 +11,9 @@ use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Entity\Lugar;
 use Libreame\BackendBundle\Entity\Usuario;
+use Libreame\BackendBundle\Entity\Sesion;
+use Libreame\BackendBundle\Entity\Actsesion;
+ 
 
 /*use AppBundle\Entity\LbEjemplares;
 use AppBundle\Entity\LbGeneros;
@@ -198,19 +201,20 @@ class ManejoDataRepository extends EntityRepository {
      * Id/nombre dispositivo
      * 
      * ex4plays :: eliminada la variable DEVICE 
+     * Actualizado llamado al objeto lógica
      */
     public function generaSesion($pEstado,$pFecIni,$pFecFin,$pIpAdd,$em)
     {
         //Guarda la sesion inactiva
         //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
-            $objLogica = $this->get('logica_service');
+            //$objLogica = $this->get('logica_service');
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
             if ($flEm) {$em = $this->getDoctrine()->getManager();}
             $sesion = new LbSesiones();
             $sesion->setInsesactiva($pEstado);
-            $sesion->setTxsesnumero($objLogica::generaRand(GamesController::inTamSesi));
+            $sesion->setTxsesnumero(Logica::generaRand(GamesController::inTamSesi));
             $sesion->setFesesfechaini($pFecIni);
             $sesion->setFesesfechafin($pFecFin);
 
@@ -228,6 +232,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     /*
      * GeneraActSesion 
+     * ex4play :: Ajustado al modelo
      */
     public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
     {
@@ -238,7 +243,7 @@ class ManejoDataRepository extends EntityRepository {
             
             //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
-            $actsesion = new LbActsesion();
+            $actsesion = new Actsesion();
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
             $actsesion->setInactsesiondisus($pSesion);
             $actsesion->setInactaccion($pAccion);
@@ -2228,6 +2233,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Activa un usuario en accion de Validacion de Registro
+    // * ex4plays :: eliminada la variable DEVICE 
     public function activarUsuarioRegistro(LbUsuarios $usuario)
     {
         try{
@@ -2246,9 +2252,8 @@ class ManejoDataRepository extends EntityRepository {
             $usuario->setInusuestado(GamesController::inDatoUno);
             $usuario->setTxusuvalidacion($usuario->getTxusuvalidacion().'OK');
 
-            $dispUsuario = ManejoDataRepository::getDispositivoUsuario(GamesController::txAnyData,$usuario,$em);
             //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
-            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesInac, $fecha, $fecha, $dispUsuario, GamesController::txMeNoIdS, $em);
+            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesInac, $fecha, $fecha, GamesController::txMeNoIdS, $em);
             //Guarda la actividad de la sesion:: 
             ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), GamesController::txAccConfRegi, $fecha, $fecha, $em);
             
