@@ -36,7 +36,7 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario');
     }
 
     /**
@@ -97,7 +97,7 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

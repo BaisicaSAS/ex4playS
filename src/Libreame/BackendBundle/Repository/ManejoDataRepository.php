@@ -209,9 +209,9 @@ class ManejoDataRepository extends EntityRepository {
         //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             //$objLogica = $this->get('logica_service');
-            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            
-            if ($flEm) {$em = $this->getDoctrine()->getManager();}
+
+            //if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            //if ($flEm) {$em = $this->getDoctrine()->getManager();}
             $sesion = new LbSesiones();
             $sesion->setInsesactiva($pEstado);
             $sesion->setTxsesnumero(Logica::generaRand(GamesController::inTamSesi));

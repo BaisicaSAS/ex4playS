@@ -36,7 +36,7 @@ class Consola extends \Libreame\BackendBundle\Entity\Consola implements \Doctrin
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Consola extends \Libreame\BackendBundle\Entity\Consola implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'idconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'txnombreconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'consolaFabricante'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'idconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'txnombreconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'consolaFabricante');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'idconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'txnombreconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'consolaFabricante'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'idconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'txnombreconsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Consola' . "\0" . 'consolaFabricante');
     }
 
     /**
@@ -97,7 +97,7 @@ class Consola extends \Libreame\BackendBundle\Entity\Consola implements \Doctrin
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Consola extends \Libreame\BackendBundle\Entity\Consola implements \Doctrin
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

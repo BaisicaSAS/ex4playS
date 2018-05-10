@@ -62,8 +62,8 @@ class GamesController extends Controller
     const txAccBusEjemp =  '7'; //Buscar Ejemplares        
     const txAccRecOfert =  '8'; //Recuperar oferta
     const txAccRecUsuar =  '9'; //Ver/Recuperar usuario: Incluye su calificacion
-    
     const txAccCerraSes =  '10'; //Logout / Cerrar sesion
+
     const txAccBajaSist =  '11'; //Dar de baja
     const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
     const txAccPubliEje =  '13'; //Publicar un ejemplar

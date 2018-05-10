@@ -36,7 +36,7 @@ class Puntosusuario extends \Libreame\BackendBundle\Entity\Puntosusuario impleme
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Puntosusuario extends \Libreame\BackendBundle\Entity\Puntosusuario impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'idpuntosusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'inpuntaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'fefechapuntos', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'insumaresta', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioactiusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioResenavideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'puntosusuariousuario'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'idpuntosusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'inpuntaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'fefechapuntos', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'insumaresta', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioactiusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioResenavideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'puntosusuariousuario');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'idpuntosusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'inpuntaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'fefechapuntos', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'insumaresta', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioactiusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioResenavideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'puntosusuariousuario'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'idpuntosusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'inpuntaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'fefechapuntos', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'insumaresta', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioactiusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'punusuarioResenavideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Puntosusuario' . "\0" . 'puntosusuariousuario');
     }
 
     /**
@@ -97,7 +97,7 @@ class Puntosusuario extends \Libreame\BackendBundle\Entity\Puntosusuario impleme
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Puntosusuario extends \Libreame\BackendBundle\Entity\Puntosusuario impleme
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

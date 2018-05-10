@@ -36,7 +36,7 @@ class Ejemplar extends \Libreame\BackendBundle\Entity\Ejemplar implements \Doctr
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Ejemplar extends \Libreame\BackendBundle\Entity\Ejemplar implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'idejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'fecargue', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'inejemplarpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'ejemplarVideojuego'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'idejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'fecargue', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'inejemplarpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'ejemplarVideojuego');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'idejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'fecargue', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'inejemplarpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'ejemplarVideojuego'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'idejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'fecargue', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'inejemplarpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplar' . "\0" . 'ejemplarVideojuego');
     }
 
     /**
@@ -97,7 +97,7 @@ class Ejemplar extends \Libreame\BackendBundle\Entity\Ejemplar implements \Doctr
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Ejemplar extends \Libreame\BackendBundle\Entity\Ejemplar implements \Doctr
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

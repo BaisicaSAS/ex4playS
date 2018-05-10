@@ -36,7 +36,7 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen');
     }
 
     /**
@@ -97,7 +97,7 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**
@@ -176,10 +176,223 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
     /**
      * {@inheritDoc}
      */
+    public function getIdusuario()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getIdusuario();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdusuario', array());
+
+        return parent::getIdusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxnomusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxnomusuario', array());
+
+        return parent::getTxnomusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxnickname()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxnickname', array());
+
+        return parent::getTxnickname();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxmailusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxmailusuario', array());
+
+        return parent::getTxmailusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxclaveusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxclaveusuario', array());
+
+        return parent::getTxclaveusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFecreacionusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFecreacionusuario', array());
+
+        return parent::getFecreacionusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInusuestado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInusuestado', array());
+
+        return parent::getInusuestado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxusuvalidacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuvalidacion', array());
+
+        return parent::getTxusuvalidacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUsuarioInlugar()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsuarioInlugar', array());
+
+        return parent::getUsuarioInlugar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxusuimagen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuimagen', array());
+
+        return parent::getTxusuimagen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxnomusuario($txnomusuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxnomusuario', array($txnomusuario));
+
+        return parent::setTxnomusuario($txnomusuario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxnickname($txnickname)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxnickname', array($txnickname));
+
+        return parent::setTxnickname($txnickname);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxmailusuario($txmailusuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxmailusuario', array($txmailusuario));
+
+        return parent::setTxmailusuario($txmailusuario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxclaveusuario($txclaveusuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxclaveusuario', array($txclaveusuario));
+
+        return parent::setTxclaveusuario($txclaveusuario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFecreacionusuario($fecreacionusuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFecreacionusuario', array($fecreacionusuario));
+
+        return parent::setFecreacionusuario($fecreacionusuario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInusuestado($inusuestado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInusuestado', array($inusuestado));
+
+        return parent::setInusuestado($inusuestado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxusuvalidacion($txusuvalidacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxusuvalidacion', array($txusuvalidacion));
+
+        return parent::setTxusuvalidacion($txusuvalidacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUsuarioInlugar(\Libreame\BackendBundle\Entity\Lugar $usuarioInlugar = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUsuarioInlugar', array($usuarioInlugar));
+
+        return parent::setUsuarioInlugar($usuarioInlugar);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxusuimagen($txusuimagen)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxusuimagen', array($txusuimagen));
+
+        return parent::setTxusuimagen($txusuimagen);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function creaUsuario($pSolicitud, $Lugar)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'creaUsuario', [$pSolicitud, $Lugar]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'creaUsuario', array($pSolicitud, $Lugar));
 
         return parent::creaUsuario($pSolicitud, $Lugar);
     }

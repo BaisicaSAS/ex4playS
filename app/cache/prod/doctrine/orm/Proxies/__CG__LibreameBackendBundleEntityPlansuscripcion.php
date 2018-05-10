@@ -36,7 +36,7 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis');
     }
 
     /**
@@ -97,7 +97,7 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

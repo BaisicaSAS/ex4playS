@@ -36,7 +36,7 @@ class Detalleplan extends \Libreame\BackendBundle\Entity\Detalleplan implements 
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Detalleplan extends \Libreame\BackendBundle\Entity\Detalleplan implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'iddetalleplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'innumtarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'indiastarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'incantidadcambios', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'inperiodicidad', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'detalleplanplan'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'iddetalleplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'innumtarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'indiastarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'incantidadcambios', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'inperiodicidad', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'detalleplanplan');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'iddetalleplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'innumtarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'indiastarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'incantidadcambios', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'inperiodicidad', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'detalleplanplan'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'iddetalleplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'innumtarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'indiastarifa', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'incantidadcambios', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'inperiodicidad', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Detalleplan' . "\0" . 'detalleplanplan');
     }
 
     /**
@@ -97,7 +97,7 @@ class Detalleplan extends \Libreame\BackendBundle\Entity\Detalleplan implements 
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Detalleplan extends \Libreame\BackendBundle\Entity\Detalleplan implements 
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

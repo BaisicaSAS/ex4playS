@@ -36,7 +36,7 @@ class Trato extends \Libreame\BackendBundle\Entity\Trato implements \Doctrine\OR
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Trato extends \Libreame\BackendBundle\Entity\Trato implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtratotexto', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'fefechatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'inestadotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratoejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrdueno', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrsolicita'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtratotexto', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'fefechatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'inestadotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratoejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrdueno', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrsolicita');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtratotexto', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'fefechatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'inestadotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratoejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrdueno', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrsolicita'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'idtratotexto', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'fefechatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'inestadotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratoejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrdueno', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Trato' . "\0" . 'tratousrsolicita');
     }
 
     /**
@@ -97,7 +97,7 @@ class Trato extends \Libreame\BackendBundle\Entity\Trato implements \Doctrine\OR
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Trato extends \Libreame\BackendBundle\Entity\Trato implements \Doctrine\OR
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

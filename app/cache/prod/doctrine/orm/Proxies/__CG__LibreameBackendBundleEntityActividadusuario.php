@@ -36,7 +36,7 @@ class Actividadusuario extends \Libreame\BackendBundle\Entity\Actividadusuario i
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Actividadusuario extends \Libreame\BackendBundle\Entity\Actividadusuario i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'idactividadusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariousuarioescribe'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'idactividadusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariousuarioescribe');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'idactividadusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariousuarioescribe'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'idactividadusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actividadusuario' . "\0" . 'actusuariousuarioescribe');
     }
 
     /**
@@ -97,7 +97,7 @@ class Actividadusuario extends \Libreame\BackendBundle\Entity\Actividadusuario i
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Actividadusuario extends \Libreame\BackendBundle\Entity\Actividadusuario i
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

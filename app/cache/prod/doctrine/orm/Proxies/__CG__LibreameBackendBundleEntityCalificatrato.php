@@ -36,7 +36,7 @@ class Calificatrato extends \Libreame\BackendBundle\Entity\Calificatrato impleme
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Calificatrato extends \Libreame\BackendBundle\Entity\Calificatrato impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idcalificatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'fecalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'incalificacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'txobservacioncalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatratotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalificado'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idcalificatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'fecalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'incalificacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'txobservacioncalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatratotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalificado');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idcalificatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'fecalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'incalificacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'txobservacioncalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatratotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalificado'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idcalificatrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'fecalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'idtrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'incalificacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'txobservacioncalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatratotrato', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalifica', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Calificatrato' . "\0" . 'calificatrUsrcalificado');
     }
 
     /**
@@ -97,7 +97,7 @@ class Calificatrato extends \Libreame\BackendBundle\Entity\Calificatrato impleme
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Calificatrato extends \Libreame\BackendBundle\Entity\Calificatrato impleme
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

@@ -36,7 +36,7 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola');
     }
 
     /**
@@ -97,7 +97,7 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

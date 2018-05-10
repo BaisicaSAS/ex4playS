@@ -36,7 +36,7 @@ class Lugar extends \Libreame\BackendBundle\Entity\Lugar implements \Doctrine\OR
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Lugar extends \Libreame\BackendBundle\Entity\Lugar implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugcodigo', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugnombre', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugelegible', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugpadre'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugcodigo', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugnombre', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugelegible', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugpadre');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugcodigo', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugnombre', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugelegible', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugpadre'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugcodigo', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'txlugnombre', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugelegible', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Lugar' . "\0" . 'inlugpadre');
     }
 
     /**
@@ -97,7 +97,7 @@ class Lugar extends \Libreame\BackendBundle\Entity\Lugar implements \Doctrine\OR
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Lugar extends \Libreame\BackendBundle\Entity\Lugar implements \Doctrine\OR
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

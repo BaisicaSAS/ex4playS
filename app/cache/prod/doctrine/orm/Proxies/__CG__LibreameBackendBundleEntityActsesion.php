@@ -36,7 +36,7 @@ class Actsesion extends \Libreame\BackendBundle\Entity\Actsesion implements \Doc
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Actsesion extends \Libreame\BackendBundle\Entity\Actsesion implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactsesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactaccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'txactmensaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'feactfecha', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactfinalizada', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'actsesionInsesion'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactsesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactaccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'txactmensaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'feactfecha', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactfinalizada', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'actsesionInsesion');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactsesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactaccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'txactmensaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'feactfecha', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactfinalizada', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'actsesionInsesion'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactsesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactaccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'txactmensaje', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'feactfecha', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'inactfinalizada', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Actsesion' . "\0" . 'actsesionInsesion');
     }
 
     /**
@@ -97,7 +97,7 @@ class Actsesion extends \Libreame\BackendBundle\Entity\Actsesion implements \Doc
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Actsesion extends \Libreame\BackendBundle\Entity\Actsesion implements \Doc
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

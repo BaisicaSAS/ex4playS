@@ -36,7 +36,7 @@ class Sesion extends \Libreame\BackendBundle\Entity\Sesion implements \Doctrine\
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Sesion extends \Libreame\BackendBundle\Entity\Sesion implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txsesnumero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesactiva', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechaini', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechafin', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txipaddr', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'sesionusuario'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txsesnumero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesactiva', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechaini', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechafin', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txipaddr', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'sesionusuario');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txsesnumero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesactiva', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechaini', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechafin', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txipaddr', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'sesionusuario'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txsesnumero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'insesactiva', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechaini', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'fesesfechafin', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'txipaddr', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Sesion' . "\0" . 'sesionusuario');
     }
 
     /**
@@ -97,7 +97,7 @@ class Sesion extends \Libreame\BackendBundle\Entity\Sesion implements \Doctrine\
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Sesion extends \Libreame\BackendBundle\Entity\Sesion implements \Doctrine\
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**

@@ -36,7 +36,7 @@ class Ejemplarusuario extends \Libreame\BackendBundle\Entity\Ejemplarusuario imp
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = array();
 
 
 
@@ -64,10 +64,10 @@ class Ejemplarusuario extends \Libreame\BackendBundle\Entity\Ejemplarusuario imp
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'idejemplarusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'invigente', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'feduenodesde', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'inpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'fepublicacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuariousuario'];
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'idejemplarusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'invigente', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'feduenodesde', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'inpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'fepublicacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuariousuario');
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'idejemplarusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'invigente', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'feduenodesde', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'inpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'fepublicacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuariousuario'];
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'idejemplarusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'invigente', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'feduenodesde', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'inpublicado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'fepublicacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuarioejemplar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Ejemplarusuario' . "\0" . 'ejemplarusuariousuario');
     }
 
     /**
@@ -97,7 +97,7 @@ class Ejemplarusuario extends \Libreame\BackendBundle\Entity\Ejemplarusuario imp
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
     }
 
     /**
@@ -105,7 +105,7 @@ class Ejemplarusuario extends \Libreame\BackendBundle\Entity\Ejemplarusuario imp
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
     }
 
     /**
