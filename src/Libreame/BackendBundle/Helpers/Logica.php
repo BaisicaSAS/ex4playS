@@ -1165,22 +1165,22 @@ class Logica {
      * enviaMailRegistro 
      * Se encarga de enviar el email con el que el usuario confirmara su registro
      */
-    public function enviaMailRegistro($usuario)
+    public function enviaMailRegistro(Usuario $usuario)
     {   
         try{
             $cadena = Logica::generaCadenaURL($usuario);
             #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
             $message = \Swift_Message::newInstance()
                 ->setContentType('text/html')
-                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxusunombre())
+                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
                 ->setFrom('registro@ex4read.co')
                 ->setBcc('registro@ex4read.co')
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
-                ->setTo($usuario->getTxusuemail())
+                ->setTo($usuario->getTxmailusuario())
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
-                    array('usuario' => $usuario->getTxusuemail(), 
+                    array('usuario' => $usuario->getTxmailusuario(), 
                         'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
@@ -1198,10 +1198,10 @@ class Logica {
      * generaCadenaURL 
      * Combina datos para entregar URL de Registro
      */
-    public function generaCadenaURL(LbUsuarios $usuario)
+    public function generaCadenaURL(Usuario $usuario)
     {   
         //Cantidad de caracteres del mail
-        $caracEmail = strlen($usuario->getTxusuemail());
+        $caracEmail = strlen($usuario->getTxmailusuario());
         //Arreglo de caractéres email
         if ($caracEmail > 99)  {
             $arCarMail[0] = floor($caracEmail / 100);
@@ -1224,9 +1224,9 @@ class Logica {
         //echo "\nCar Mail 1: ".$arCarMail[1];
         //echo "\nCar Mail 2: ".$arCarMail[2];
         //email
-        $email = $usuario->getTxusuemail();
+        $email = $usuario->getTxmailusuario();
         //Inicializa la cadena
-        $cadena = $usuario->gettxusuvalidacion();
+        $cadena = $usuario->getTxusuvalidacion();
 
         //echo 'arreglo: '.$arCarMail[0].'-'.$arCarMail[1].'-'.$arCarMail[2].'carac email: '.$caracEmail.'    -   valida: '.$cadena;
         //Obtener el patron de ocurrencia de datos
@@ -1365,7 +1365,7 @@ class Logica {
                 $fecha = new \DateTime('c');
                 //echo "<script>alert('fecha ')</script>";
 
-                $sesion = ManejoDataRepository::generaSesion(GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),$em);
+                $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),$em);
                 //echo "<script>alert('Generó sesion ')</script>";
                 //Guarda la actividad de la sesion:: Como finalizada
                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,GamesController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha,$em);

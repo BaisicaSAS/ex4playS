@@ -200,7 +200,7 @@ class ManejoDataRepository extends EntityRepository {
      * ex4plays :: eliminada la variable DEVICE 
      * Actualizado llamado al objeto lógica
      */
-    public function generaSesion($pEstado,$pFecIni,$pFecFin,$pIpAdd,$em)
+    public function generaSesion($usuario,$pEstado,$pFecIni,$pFecFin,$pIpAdd,$em)
     {
         //Guarda la sesion inactiva
         //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
@@ -210,6 +210,7 @@ class ManejoDataRepository extends EntityRepository {
             //if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             //if ($flEm) {$em = $this->getDoctrine()->getManager();}
             $sesion = new Sesion();
+            $sesion->setsesionusuario($usuario);
             $sesion->setinsesactiva($pEstado);
             $sesion->settxsesnumero(Logica::generaRand(GamesController::inTamSesi));
             $sesion->setfesesfechaini($pFecIni);
@@ -218,7 +219,8 @@ class ManejoDataRepository extends EntityRepository {
             $sesion->settxipaddr($pIpAdd);
             $em->persist($sesion);
             //echo "<script>alert('Guardo sesion')</script>";
-            if ($flEm) {$em->flush();}
+            //if ($flEm) {$em->flush();}
+            $em->flush();
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
             
@@ -235,14 +237,11 @@ class ManejoDataRepository extends EntityRepository {
     {
         //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
-            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            if ($flEm) {$em = $this->getDoctrine()->getManager();}
-            
             //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
             $actsesion = new Actsesion();
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
-            $actsesion->setinactsesion($pSesion);
+            $actsesion->setactsesionInsesion($pSesion);
             $actsesion->setinactaccion($pAccion);
             $actsesion->setfeactfecha($pSesion->getFesesfechaini());
             $actsesion->setinactfinalizada($pFinalizada);
@@ -250,7 +249,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('::::Antes de persist act sesion')</script>";
             $em->persist($actsesion);
             //echo "<script>alert('::::antes de flush act sesion')</script>";
-            if ($flEm) {$em->flush();}
+            $em->flush();
             //echo "<script>alert('::::despues de flush act sesion')</script>";
  
             return $actsesion;
