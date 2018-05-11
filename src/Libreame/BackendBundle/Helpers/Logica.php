@@ -5,6 +5,7 @@ namespace Libreame\BackendBundle\Helpers;
 //use DateTime;
 use Doctrine;
 use Doctrine\ORM\EntityManager;
+use Swift_Transport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Libreame\BackendBundle\Controller\GamesController;
@@ -1346,7 +1347,10 @@ class Logica {
                 ),'text/html');*/
 
             //$this->container->get('mailer')->send($message);
-            $this->get('mailer')->send($message);
+            $st = new Swift_Transport();
+            $mailer = new \Swift_Mailer($st);
+            $mailer->send($message);
+            //$this->get('mailer')->send($message);
             
             return 0;
         } catch (Exception $ex) {
