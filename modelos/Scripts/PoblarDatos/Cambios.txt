@@ -14,3 +14,9 @@ ADD CONSTRAINT `fk_lugar_lugar1`
 
 ALTER TABLE `ex4play`.`usuario` 
 ADD COLUMN `txUsuImagen` LONGTEXT NOT NULL COMMENT 'Guarda la url de la imagen' AFTER `usuario_inlugar`;
+
+
+ALTER TABLE `ex4play`.`videojuego` 
+ADD COLUMN `txurlinformacion` VARCHAR(1000) NOT NULL DEFAULT 'SIN INFORMACION' COMMENT 'URL donde encuentra informacion : Administrador\n' AFTER `videojuego_consola`,
+ADD COLUMN `txobservaciones` VARCHAR(1000) NOT NULL DEFAULT 'NINGUNA' COMMENT 'Observaciones' AFTER `txurlinformacion`,
+ADD COLUMN `txgenerovideojuego` VARCHAR(200) NOT NULL DEFAULT 'SIN CLASIFICAR' COMMENT 'Genero del videojuego' AFTER `txobservaciones`;

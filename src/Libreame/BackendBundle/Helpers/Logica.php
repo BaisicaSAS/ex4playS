@@ -1365,10 +1365,10 @@ class Logica {
                 $fecha = new \DateTime('c');
                 //echo "<script>alert('fecha ')</script>";
 
-                $sesion = ManejoDataRepository::generaSesion(GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),NULL);
+                $sesion = ManejoDataRepository::generaSesion(GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),$em);
                 //echo "<script>alert('Generó sesion ')</script>";
                 //Guarda la actividad de la sesion:: Como finalizada
-                ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,GamesController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha,NULL);
+                ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,GamesController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha,$em);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                 //Envia email

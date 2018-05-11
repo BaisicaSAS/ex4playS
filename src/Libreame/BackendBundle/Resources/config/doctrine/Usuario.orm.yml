@@ -63,6 +63,13 @@ Libreame\BackendBundle\Entity\Usuario:
             options:
                 fixed: false
                 comment: 'Cuando se registra el usuario el sistema genera un codigo que se envia en el email de confirmacion.  Este campo se utiliza tambien en los cambios de clave.'
+        txusuimagen:
+            type: string
+            nullable: false
+            length: 1000
+            options:
+                fixed: false
+                comment: 'Guarda la url de la imagen.'
     manyToOne:
         usuarioInlugar:
             targetEntity: Lugar

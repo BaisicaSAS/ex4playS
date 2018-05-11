@@ -52,6 +52,28 @@ class Videojuego
      */
     private $videojuegoConsola;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txurlinformacion", type="string", length=1000, nullable=false)
+     */
+    private $txurlinformacion;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txobservaciones", type="string", length=1000, nullable=false)
+     */
+    private $txobservaciones;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txgenerovideojuego", type="string", length=200, nullable=false)
+     */
+    private $txgenerovideojuego;
+
+
+    
 }
 

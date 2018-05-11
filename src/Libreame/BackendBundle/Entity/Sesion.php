@@ -67,5 +67,88 @@ class Sesion
     private $sesionusuario;
 
 
+    /***/
+    /*SETTERS Y GETTERS 
+    /***/
+    public function getinsesion()
+    {
+        return $this->insesion;
+    }
+
+    public function gettxsesnumero()
+    {
+        return $this->txsesnumero;
+    }
+
+    public function getinsesactiva()
+    {
+        return $this->insesactiva;
+    }
+
+    public function getfesesfechaini()
+    {
+        return $this->fesesfechaini;
+    }
+
+    public function getfesesfechafin()
+    {
+        return $this->fesesfechafin;
+    }
+
+    public function gettxipaddr()
+    {
+        return $this->txipaddr;
+    }
+
+    public function getsesionusuario()
+    {
+        return $this->sesionusuario;
+    }
+    
+    /* 
+     * setters ex4playS
+     */
+    public function settxsesnumero($txsesnumero)
+    {
+        $this->txsesnumero = $txsesnumero;
+
+        return $this;
+    }
+
+    public function setinsesactiva($insesactiva)
+    {
+        $this->insesactiva = $insesactiva;
+
+        return $this;
+    }
+
+    public function setfesesfechaini($fesesfechaini)
+    {
+        $this->fesesfechaini = $fesesfechaini;
+
+        return $this;
+    }
+
+    public function setfesesfechafin($fesesfechafin)
+    {
+        $this->fesesfechafin = $fesesfechafin;
+
+        return $this;
+    }
+
+    public function settxipaddr($txipaddr)
+    {
+        $this->txipaddr = $txipaddr;
+
+        return $this;
+    }
+
+    public function setsesionusuario($sesionusuario)
+    {
+        $this->sesionusuario = $sesionusuario;
+
+        return $this;
+    }
+
 }
 

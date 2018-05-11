@@ -34,6 +34,30 @@ Libreame\BackendBundle\Entity\Videojuego:
             options:
                 unsigned: false
                 comment: 'Categoria del videojuego'
+        txurlinformacion:
+            type: string
+            nullable: false
+            length: 1000
+            options:
+                fixed: false
+                comment: 'URL donde encuentra informacion : Administrador'
+                default: 'SIN INFORMACION'
+        txobservaciones:
+            type: string
+            nullable: false
+            length: 1000
+            options:
+                fixed: false
+                comment: 'Observaciones'
+                default: 'NINGUNA'
+        txgenerovideojuego:
+            type: string
+            nullable: false
+            length: 200
+            options:
+                fixed: false
+                comment: 'Genero del videojuego'
+                default: 'SIN CLASIFICAR'
     manyToOne:
         videojuegoConsola:
             targetEntity: Consola

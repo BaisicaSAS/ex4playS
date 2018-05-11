@@ -60,5 +60,83 @@ class Actsesion
     private $actsesionInsesion;
 
 
+    /***/
+    /*SETTERS Y GETTERS 
+    /***/
+    public function getinactsesion()
+    {
+        return $this->inactsesion;
+    }
+
+    public function getinactaccion()
+    {
+        return $this->inactaccion;
+    }
+
+    public function gettxactmensaje()
+    {
+        return $this->txactmensaje;
+    }
+    
+    public function getfeactfecha()
+    {
+        return $this->feactfecha;
+    }
+    
+    public function getinactfinalizada()
+    {
+        return $this->inactfinalizada;
+    }
+    
+    public function getactsesionInsesion()
+    {
+        return $this->actsesionInsesion;
+    }
+
+ /*setter*/
+
+    public function setinactsesion($inactsesion)
+    {
+        $this->inactsesion = $inactsesion;
+
+        return $this;
+    }
+
+    public function setinactaccion($inactaccion)
+    {
+        $this->inactaccion = $inactaccion;
+
+        return $this;
+    }
+
+    public function settxactmensaje($txactmensaje)
+    {
+        $this->txactmensaje = $txactmensaje;
+
+        return $this;
+    }
+    
+    public function setfeactfecha($feactfecha)
+    {
+        $this->feactfecha = $feactfecha;
+
+        return $this;
+    }
+    
+    public function setinactfinalizada($inactfinalizada)
+    {
+        $this->inactfinalizada = $inactfinalizada;
+        
+        return $this;
+    }
+    
+    public function setactsesionInsesion($actsesionInsesion)
+    {
+        $this->actsesionInsesion = $actsesionInsesion;
+        
+        return $this;
+    }
+
+    
 }
 

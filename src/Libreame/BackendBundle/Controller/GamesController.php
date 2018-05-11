@@ -350,10 +350,6 @@ class GamesController extends Controller
                 $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
                 $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
                 $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);
-                $this->objSolicitud->setDeviceMAC($json_datos['idsesion']['iddevice']);
-                $this->objSolicitud->setDeviceMarca($json_datos['idsesion']['marca']);
-                $this->objSolicitud->setDeviceModelo($json_datos['idsesion']['modelo']);
-                $this->objSolicitud->setDeviceSO($json_datos['idsesion']['so']);
                 //Según la solicitud descompone el JSON
                 $tmpSesion = $this->objSolicitud->getAccion();
                 //echo "<script>alert('ult ejemplar ".$json_datos['idsolicitud']['ultejemplar']."')</script>";

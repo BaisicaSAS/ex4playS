@@ -13,6 +13,7 @@ use Libreame\BackendBundle\Entity\Lugar;
 use Libreame\BackendBundle\Entity\Usuario;
 use Libreame\BackendBundle\Entity\Sesion;
 use Libreame\BackendBundle\Entity\Actsesion;
+use Libreame\BackendBundle\Helpers\Logica;
  
 
 /*use AppBundle\Entity\LbEjemplares;
@@ -52,10 +53,6 @@ class ManejoDataRepository extends EntityRepository {
     var $inImagenValida;
     //private $em;
       
-    /*public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    } */
     ///********************* LO QUE SE USA ********************************///
     
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
@@ -212,13 +209,13 @@ class ManejoDataRepository extends EntityRepository {
 
             //if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             //if ($flEm) {$em = $this->getDoctrine()->getManager();}
-            $sesion = new LbSesiones();
-            $sesion->setInsesactiva($pEstado);
-            $sesion->setTxsesnumero(Logica::generaRand(GamesController::inTamSesi));
-            $sesion->setFesesfechaini($pFecIni);
-            $sesion->setFesesfechafin($pFecFin);
+            $sesion = new Sesion();
+            $sesion->setinsesactiva($pEstado);
+            $sesion->settxsesnumero(Logica::generaRand(GamesController::inTamSesi));
+            $sesion->setfesesfechaini($pFecIni);
+            $sesion->setfesesfechafin($pFecFin);
 
-            $sesion->setTxipaddr($pIpAdd);
+            $sesion->settxipaddr($pIpAdd);
             $em->persist($sesion);
             //echo "<script>alert('Guardo sesion')</script>";
             if ($flEm) {$em->flush();}
@@ -245,11 +242,11 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
             $actsesion = new Actsesion();
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
-            $actsesion->setInactsesiondisus($pSesion);
-            $actsesion->setInactaccion($pAccion);
-            $actsesion->setFeactfecha($pSesion->getFesesfechaini());
-            $actsesion->setInactfinalizada($pFinalizada);
-            $actsesion->setTxactmensaje($pMensaje);
+            $actsesion->setinactsesion($pSesion);
+            $actsesion->setinactaccion($pAccion);
+            $actsesion->setfeactfecha($pSesion->getFesesfechaini());
+            $actsesion->setinactfinalizada($pFinalizada);
+            $actsesion->settxactmensaje($pMensaje);
             //echo "<script>alert('::::Antes de persist act sesion')</script>";
             $em->persist($actsesion);
             //echo "<script>alert('::::antes de flush act sesion')</script>";
