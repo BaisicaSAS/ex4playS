@@ -1322,7 +1322,7 @@ class Logica {
      * enviaMailRegistro 
      * Se encarga de enviar el email con el que el usuario confirmara su registro
      */
-    public function enviaMailRegistro(Usuario $usuario)
+    protected function enviaMailRegistro(Usuario $usuario)
     {   
         try{
             $cadena = Logica::generaCadenaURL($usuario);
