@@ -5,6 +5,8 @@ namespace Libreame\BackendBundle\Helpers;
 //use DateTime;
 use Doctrine;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Libreame\BackendBundle\Controller\GamesController;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Helpers\Respuesta;
@@ -20,6 +22,7 @@ use Libreame\BackendBundle\Entity\Lugar;
 
 
 class Logica {   
+
 
     const pos1mail = 2;
     const pos2mail = 4;
@@ -366,9 +369,7 @@ class Logica {
     public function respuestaGenerica(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => $pSolicitud->getSession(), 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => $pSolicitud->getSession(), 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -383,9 +384,7 @@ class Logica {
     public function respuestaRegistro(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -406,9 +405,7 @@ class Logica {
             }
                 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
                             'idusuario' => $idusuario,
                             'idsesion' => $respuesta->getSession(), 
@@ -445,9 +442,7 @@ class Logica {
             //echo "genero fecha \n";
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
                     'usuario' => array('idusuario' => $usuario->getInusuario(), 
                         'nomusuario' => utf8_encode($usuario->getTxusunombre()),
@@ -579,9 +574,7 @@ class Logica {
             }
             
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplares' => $arrTmp ));
 
@@ -695,9 +688,7 @@ class Logica {
             }
             
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplares' => $arrTmp ));
 
@@ -753,9 +744,7 @@ class Logica {
             }
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'mensaje' => $arrTmp));
         } catch (Exception $ex) {
@@ -788,9 +777,7 @@ class Logica {
             }
             
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
                     'usuario' => array('idusuario' => $respuesta->RespUsuarios[0]->getInusuario(), 
                         'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
@@ -812,9 +799,7 @@ class Logica {
     public function respuestaCerrarSesion($respuesta, $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -829,9 +814,7 @@ class Logica {
     public function respuestaActualizarDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -845,9 +828,7 @@ class Logica {
     
     public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),
                         'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro()
@@ -862,9 +843,7 @@ class Logica {
     public function respuestaCambiarClave(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -880,9 +859,7 @@ class Logica {
     public function respuestaMarcarMensaje(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -899,9 +876,7 @@ class Logica {
             //echo "respuesta idiomas \n";
             //print_r(array_values($parreglo));
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                             'idiomas' => $parreglo));
 //                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
@@ -919,9 +894,7 @@ class Logica {
     public function respuestaListaLugares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'lugares' => $parreglo)));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -936,9 +909,7 @@ class Logica {
     public function respuestaMegustaEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 
                             'cantmegusta' => $respuesta->getCantMegusta(), 'cantcomenta' => $respuesta->getCantComenta())));
         } catch (Exception $ex) {
@@ -954,9 +925,7 @@ class Logica {
     public function respuestaVerUsuMegustaEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'usuarios' => $parreglo)));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -971,9 +940,7 @@ class Logica {
     public function respuestaComentarioEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 
                             'cantmegusta' => $respuesta->getCantMegusta(), 'cantcomenta' => $respuesta->getCantComenta())));
         } catch (Exception $ex) {
@@ -989,9 +956,7 @@ class Logica {
     public function respuestaEnviarMensajeChat(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'indacept' => $respuesta->getIndAcept(), 
                                 'indotroacept' => $respuesta->getIndOtroAcept(), 'botonera' => $respuesta->getBotonesMostrar(), 'conversacion' => $parreglo )));
         } catch (Exception $ex) {
@@ -1007,9 +972,7 @@ class Logica {
     public function respuestaVerComentariosEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'comentarios' => $parreglo)));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
@@ -1132,9 +1095,7 @@ class Logica {
             }
             
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplares' => $arrTmp ));
 
@@ -1152,47 +1113,13 @@ class Logica {
     public function respuestaCalificarUsuarioTrato(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 
     }    
     
-    /*
-     * enviaMailRegistro 
-     * Se encarga de enviar el email con el que el usuario confirmara su registro
-     */
-    public function enviaMailRegistro(Usuario $usuario)
-    {   
-        try{
-            $cadena = Logica::generaCadenaURL($usuario);
-            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
-            $message = \Swift_Message::newInstance()
-                ->setContentType('text/html')
-                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
-                ->setFrom('registro@ex4read.co')
-                ->setBcc('registro@ex4read.co')
-                //->setFrom('baisicasas@gmail.com')
-                //->setBcc('baisicasas@gmail.com')
-                ->setTo($usuario->getTxmailusuario())
-                ->setBody($this->renderView(
-                    'LibreameBackendBundle:Registro:registro.html.twig',
-                    array('usuario' => $usuario->getTxmailusuario(), 
-                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
-            ),'text/html');
-
-            $this->get('mailer')->send($message);
-        
-            return 0;
-        } catch (Exception $ex) {
-                return GamesController::inPlatCai;
-        } 
-    }
     
     /*
      * generaCadenaURL 
@@ -1308,9 +1235,7 @@ class Logica {
             //echo "respuesta idiomas \n";
             //print_r(array_values($parreglo));
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                             'editoriales' => $parreglo));
 //                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
@@ -1325,9 +1250,7 @@ class Logica {
             //echo "respuesta idiomas \n";
             //print_r(array_values($parreglo));
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                             'autores' => $parreglo));
 //                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
@@ -1372,6 +1295,7 @@ class Logica {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                 //Envia email
+                //$Logica = new Logica();
                 Logica::enviaMailRegistro($usuario);
                 //echo "<script>alert('Envió mail ')</script>";
 
@@ -1394,5 +1318,40 @@ class Logica {
             
     }
     
+    /*
+     * enviaMailRegistro 
+     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     */
+    public function enviaMailRegistro(Usuario $usuario)
+    {   
+        try{
+            $cadena = Logica::generaCadenaURL($usuario);
+            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
+            $message = \Swift_Message::newInstance()
+                ->setContentType('text/html')
+                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
+                ->setFrom('registro@ex4read.co')
+                ->setBcc('registro@ex4read.co')
+                //->setFrom('baisicasas@gmail.com')
+                //->setBcc('baisicasas@gmail.com')
+                ->setTo($usuario->getTxmailusuario())
+                ->setBody('Probando '.$cadena);
+                /*->setBody($this->renderView(
+                    'LibreameBackendBundle:Registro:registro.html.twig',
+                    array('usuario' => $usuario->getTxmailusuario(), 
+                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
+                
+                ),'text/html');*/
+
+            //$this->container->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
+            
+            return 0;
+        } catch (Exception $ex) {
+                return GamesController::inPlatCai;
+        } 
+    }
 
 }

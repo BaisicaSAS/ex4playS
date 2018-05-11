@@ -15,10 +15,6 @@ class Solicitud {
     private $pAccion; //Accion solicitada
     private $pSession; //Sesion ???? 
     private $pIPaddr; //Direccion IP
-    private $pDeviceMAC; //MAC del Dispositivo
-    private $pDeviceMarca; // Marca del dispositivo
-    private $pDeviceModelo; //Modelo del dispositivo
-    private $pDeviceSO; //Sistema operativo del dispositivo
 
     //Atributos para el detalle: identificado en el tag IDSOLICITUD del JSON
     //C01: Registro 
@@ -110,22 +106,6 @@ class Solicitud {
 
     public function getIPaddr() {
         return $this->pIPaddr;
-    }
-
-    public function getDeviceMac() {
-        return $this->pDeviceMAC;
-    }
-
-    public function getDeviceMarca() {
-        return $this->pDeviceMarca;
-    }
-
-    public function getDeviceModelo() {
-        return $this->pDeviceModelo;
-    }
-
-    public function getDeviceSO() {
-        return $this->pDeviceSO;
     }
 
     public function getEmail() {
@@ -340,7 +320,7 @@ class Solicitud {
         return $this;
     }
 
-    public function setDeviceMAC($pDeviceMAC) {
+    /*public function setDeviceMAC($pDeviceMAC) {
         $this->pDeviceMAC = $pDeviceMAC;
         return $this;
     }
@@ -359,7 +339,7 @@ class Solicitud {
         $this->pDeviceSO = $pDeviceSO;
         return $this;
     }
-    
+    */
     public function setEmail($pEmail) {
         $this->pEmail = $pEmail;
         return $this;

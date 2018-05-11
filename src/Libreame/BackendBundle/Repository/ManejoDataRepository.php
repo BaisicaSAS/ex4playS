@@ -77,7 +77,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    public function validaSesionUsuario($psolicitud)
+    /*public function validaSesionUsuario($psolicitud)
     {   
         //$respuesta = GamesController::inPlatCai;
         try{
@@ -88,7 +88,7 @@ class ManejoDataRepository extends EntityRepository {
             $respuesta = GamesController::inUsSeIna; //Inicializa como sesion logueada
             $em = $this->getDoctrine()->getManager();
             //echo "<script>alert('validaSesionUsuario :: ingreso')</script>";
-            if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
+            if (!$em->getRepository('LibreameBackendBundle:usuario')->
                         findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
                 //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
                 $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
@@ -145,7 +145,7 @@ class ManejoDataRepository extends EntityRepository {
         } catch (Exception $ex) {
             return ($respuesta);
         }    
-    }
+    }*/
 
     /*
      * usuarioSesionActiva 
