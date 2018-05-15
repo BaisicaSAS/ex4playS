@@ -1297,7 +1297,9 @@ class Logica {
 
                 //Envia email
                 //$Logica = new Logica();
-                Logica::enviaMailRegistro($usuario);
+                
+                //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
+                //Logica::enviaMailRegistro($usuario);
                 //echo "<script>alert('Envió mail ')</script>";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
@@ -1347,10 +1349,7 @@ class Logica {
                 ),'text/html');*/
 
             //$this->container->get('mailer')->send($message);
-            $st = new Swift_Transport();
-            $mailer = new \Swift_Mailer($st);
-            $mailer->send($message);
-            //$this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
             
             return 0;
         } catch (Exception $ex) {
