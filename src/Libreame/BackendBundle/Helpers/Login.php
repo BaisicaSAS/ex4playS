@@ -119,6 +119,7 @@ class Login
 
     /*
      * ex4plays :: Adicionado $em
+     * Cambios en el modelo de datos y de json
      */
     public function logoutUsuario($pSolicitud, EntityManager $em)
     {   
@@ -129,36 +130,30 @@ class Login
         $fecha = new \DateTime;
         try {
             //echo "<script>alert('Ingresa Login')</script>";
-            $usuario = new LbUsuarios();
-            $device = new LbDispusuarios();
-            $sesion = new LbSesiones();
-            $actsesion = new LbActsesion();
+            $usuario = new Usuario();
+            $sesion = new Sesion();
+            $actsesion = new Actsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
             if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)){
                 
                 $estado = $usuario->getInusuestado();
-                //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
-
-                
                 //Verifica si el usuario está activo
                 if ($estado == GamesController::inUsuActi)
                 {
                     
                     //Verifica si la clave es correcta
-                    if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
+                    if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
                         //Verifica si el usuario NO tiene la sesion activa
-                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device, $pSolicitud->getSession()) == FALSE){
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == FALSE){
                             $respuesta->setRespuesta(GamesController::inUsSeIna);
                         }
                         else
                         {
                             //AQUI CIERRA SESION FINALMENTE
-                            //echo "<script>alert('-----Creará sesion"  .GamesController::inSesActi."')</script>";
-                            //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud);
-                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud, NULL));
+                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud, $em), $em);
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, $em);
+                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, $em);
                             $respuesta->setRespuesta(GamesController::inULogged);    
                         }
                     }

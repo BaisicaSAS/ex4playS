@@ -1785,15 +1785,15 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Cierra la sesion de un usuario 
-    public function cerrarSesionUsuario(LbSesiones $sesion)
+    // ex4playS :: $em y modicficaciones al modelo
+    public function cerrarSesionUsuario(Sesion $sesion, $em)
     {   
         try{
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
-            $em = $this->getDoctrine()->getManager();
             
-            $sesion->setFesesfechafin($fecha);
-            $sesion->setInsesactiva(GamesController::inDatoCer);
+            $sesion->setfesesfechafin($fecha);
+            $sesion->setinsesactiva(GamesController::inDatoCer);
             
             $em->persist($sesion);
             
@@ -1801,7 +1801,7 @@ class ManejoDataRepository extends EntityRepository {
             
             return $sesion;
         } catch (Exception $ex) {
-             return new LbSesiones();
+             return new Sesion();
         } 
     }
 

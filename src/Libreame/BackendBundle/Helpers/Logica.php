@@ -109,8 +109,10 @@ class Logica {
 
                 case GamesController::txAccCerraSes: {//Dato:10 : Cerrar Sesion
                     //echo "<script>alert('Antes de entrar a Logout-".$solicitud->getEmail()."')</script>";
-                    $objLogin = $this->get('login_service');
-                    $respuesta = $objLogin::logoutUsuario($solicitud);
+                    /*$objLogin = $this->get('login_service');
+                    $respuesta = $objLogin::logoutUsuario($solicitud);*/
+                    //ex4plaS :: Nuevo llamado al servicio
+                    $respuesta = Login::logoutUsuario($solicitud, $em);
                     break;
                 } 
 
