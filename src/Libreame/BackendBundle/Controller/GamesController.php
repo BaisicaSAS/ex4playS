@@ -588,19 +588,7 @@ class GamesController extends Controller
             } elseif (!isset($datos['idsesion']['ipaddr'])) {
                 //echo "<script>alert('FALTA IPADDRES')</script>";
                 $resp = FALSE;
-            /*} elseif (!isset($datos['idsesion']['iddevice'])) {
-                //echo "<script>alert('FALTA DEVICE')</script>";
-                $resp = FALSE;
-            } elseif (!isset($datos['idsesion']['marca'])) {
-                //echo "<script>alert('FALTA MARCA')</script>";
-                $resp = FALSE;
-            } elseif (!isset($datos['idsesion']['modelo'])) {
-                //echo "<script>alert('FALTA MODELO')</script>";
-                $resp = FALSE;
-            } elseif (!isset($datos['idsesion']['so'])) {
-                //echo "<script>alert('FALTA SO')</script>";
-                $resp = FALSE;
-            */} else {
+            } else {
                 //Si todos los datos del encabezado están seteados, evalúa según la acción
                 switch ($accion){
                     case self::txAccRegistro: { //Dato:1 :  Registro en el sistema

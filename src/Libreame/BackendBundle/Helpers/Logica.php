@@ -1248,21 +1248,6 @@ class Logica {
         } 
     }    
     
-    public function respuestaListaAutores(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
-        try {
-            //echo "respuesta idiomas \n";
-            //print_r(array_values($parreglo));
-            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
-                            'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                            'autores' => $parreglo));
-//                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
-            //echo "termino armar \n" ;
-        } catch (Exception $ex) {
-                return GamesController::inPlatCai;
-        } 
-    }    
-    
     //ex4plays :: Modificado
     //Adicionado el $em
     public function registroUsuario($pSolicitud, $em)
