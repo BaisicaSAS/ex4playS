@@ -35,10 +35,7 @@ class Login
      * Valida:
      *  1. Usuario existe y la clave es valida
      *  2. Si el usuario está activo (Solo puede estar en estado 1)
-     *  2. DESPUES:::Dispositivo registrado??:::Se valida si el dispositivo es aquel que el usuario acostumbra a utilizar
      *  3. Usuario tiene sesión activa....si es así retorna -2 y aborta
-     * 
-     * 
      */
     
     /* ex4palys :: Adicionado $em
@@ -46,7 +43,8 @@ class Login
     public function loginUsuario($pSolicitud, EntityManager $em)
     {   
         $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
+        //ex4plays :: Nuevo llamado del servicio, de manera estática
+        //$objLogica = $this->get('logica_service');
         setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;
         try {
@@ -57,42 +55,39 @@ class Login
             $actsesion = new Actsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
-            if (!($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em))){
+            if (($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em))){
                 $respuesta->setArrUsuarios($usuario);
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Verifica si el usuario está activo
-                if ($estado == GamesController::inUsuActi)
-                {
+                if ($estado == GamesController::inUsuActi) {
                     
                     //Verifica si la clave es correcta
-                    if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
+                    if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
-                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device, NULL)){
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, NULL, $em)){
                             
                             //$respuesta->setRespuesta(GamesController::inUSeActi);
                             //Si tiene sesion activa, la recupera para reutilizarla
-                            $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,NULL);
+                            $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario : Sesion ACTIVA Retomada por el sistema '.$usuario->getTxusuemail().'[Sesion: '.$sesion->getTxsesnumero().'] -  exitoso',$pSolicitud->getAccion(),$fecha,$fecha,NULL);
+                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario : Sesion ACTIVA Retomada por el sistema '.$usuario->getTxmailusuario().'[Sesion: '.'$sesion->gettxsesnumero()'.'] -  exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                             $respuesta->setRespuesta(GamesController::inULogged);    
-                            $respuesta->setSession($sesion->getTxsesnumero());  
+                            $respuesta->setSession($sesion->gettxsesnumero());  
                             
                             //Busca la cantidad de mensajes del usuario sin leer 
                             $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
-                        }
-                        else
-                        {
+                        } else {
                             //AQUI SE LOGUEA FINALMENTE
 
                             //Crea sesion
                             //echo "<script>alert('-----Creará sesion"  .GamesController::inSesActi."')</script>";
-                            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),NULL);
+                            $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),$em);
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,NULL);
+                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                             $respuesta->setRespuesta(GamesController::inULogged);    
-                            $respuesta->setSession($sesion->getTxsesnumero());  
+                            $respuesta->setSession($sesion->gettxsesnumero());  
                             
                             //Busca la cantidad de mensajes del usuario sin leer 
                             $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
@@ -109,14 +104,16 @@ class Login
             //Usuario no existe
             else {$respuesta->setRespuesta(GamesController::inUsClInv);}
 
-            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            //ex4plays :: Nuevo llamado del servicio, de manera estática
+            //return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
         catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
-            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            //ex4plays :: Nuevo llamado del servicio, de manera estática
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }     
-        
     }
     
 
@@ -126,7 +123,8 @@ class Login
     public function logoutUsuario($pSolicitud, EntityManager $em)
     {   
         $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
+        //ex4plays :: Nuevo llamado del servicio, de manera estática
+        //$objLogica = $this->get('logica_service');
         setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;
         try {
@@ -160,7 +158,7 @@ class Login
                             //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud);
                             $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud, NULL));
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, NULL);
+                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, $em);
                             $respuesta->setRespuesta(GamesController::inULogged);    
                         }
                     }
@@ -176,12 +174,14 @@ class Login
 
             //Flush al entity manager
             
-            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            //ex4plays :: Nuevo llamado del servicio, de manera estática
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
         catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
-            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            //ex4plays :: Nuevo llamado del servicio, de manera estática
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }     
         
     }

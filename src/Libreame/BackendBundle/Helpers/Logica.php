@@ -58,9 +58,10 @@ class Logica {
                 //accion de login en el sistema
                 case GamesController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
-                    $objLogin = $this->get(Login::class);
+                    //$objLogin = $this->get(Login::class);
+                    //$respuesta = $objLogin::loginUsuario($solicitud, $em);
                     //ex4plays :: Adicionado $em
-                    $respuesta = $objLogin::loginUsuario($solicitud, $em);
+                    $respuesta = Login::loginUsuario($solicitud, $em);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
@@ -398,11 +399,12 @@ class Logica {
      */
     public function respuestaLogin(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
+            //$usuario = new Usuario();
             $usuario = $respuesta->RespUsuarios[0];
             if ($usuario == NULL)  {
                 $idusuario = NULL;
             } else {
-                $idusuario = $usuario->getInusuario();
+                $idusuario = $usuario->getIdusuario();
             }
                 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),

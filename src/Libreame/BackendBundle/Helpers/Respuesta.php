@@ -2,8 +2,7 @@
 
 namespace Libreame\BackendBundle\Helpers;
 
-use Libreame\BackendBundle\Entity\LbUsuarios;
-use Libreame\BackendBundle\Entity\LbGrupos;
+use Libreame\BackendBundle\Entity\Usuario;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 
 /**
@@ -282,7 +281,7 @@ class Respuesta {
         return $this;
     }   
 
-    public function setArrUsuarios(LbUsuarios $usuario)
+    public function setArrUsuarios(Usuario $usuario)
     {
         $this->RespUsuarios[] = $usuario;
         return $this;

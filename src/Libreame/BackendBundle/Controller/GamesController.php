@@ -284,29 +284,20 @@ class GamesController extends Controller
         try {
             //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
             if ($jsonValido != self::inJsonInv) {
-                //echo "<script>alert('Ejecuta accion ')</script>"; 
-                //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
-                //$objLogica = new Logica($em);
-                //$objLogica = $this->container->get(Logica::class);
+
                 $objLogica = $this->container->get('logica_service');
-                //$objLogica = new Logica($em);
-                //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
-                //$respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
                 $respuesta = $objLogica->ejecutaAccion($this->objSolicitud, $em);
-                //echo "genera respuesta: ".$this->objSolicitud->getAccion();
+                
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
-                //echo "<script>alert('.......ELSE..........')</script>";
-                $objLogica = $this->get(Logica::class);
+                
                 $jrespuesta = new Respuesta();
                 $jrespuesta->setRespuesta($jsonValido);    
-                $respuesta = json_encode($objLogica::respuestaGenerica($jrespuesta, $this->objSolicitud));
-                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
+                $objLogica = $this->container->get('logica_service');
+                $respuesta = json_encode($objLogica->respuestaGenerica($jrespuesta, $this->objSolicitud));
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
-            //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>";
-
+            
             return new RESPONSE($respuesta);
-            //return new RESPONSE("Normal ".$datos);
                     
         } catch (Exception $ex) {
             return new RESPONSE($jsonValido);
@@ -810,6 +801,39 @@ class GamesController extends Controller
                     return false;
                     break;
         }
+    }
+
+    /*
+     * enviaMailRegistro 
+     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     */
+    public function enviaMailRegistro(Usuario $usuario, $cadena)
+    {   
+        try{
+            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
+            $message = \Swift_Message::newInstance()
+                ->setContentType('text/html')
+                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
+                ->setFrom('registro@ex4read.co')
+                ->setBcc('registro@ex4read.co')
+                //->setFrom('baisicasas@gmail.com')
+                //->setBcc('baisicasas@gmail.com')
+                ->setTo($usuario->getTxmailusuario())
+                ->setBody('Prueba '.$cadena);
+/*                ->setBody($this->renderView(
+                    'LibreameBackendBundle:Registro:regi$stro.html.twig',
+                    array('usuario' => $usuario->getTxmailusuario(), 
+                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
+                ),'text/html');
+*/
+            $this->get('mailer')->send($message);
+        
+            return 0;
+        } catch (Exception $ex) {
+                return GamesController::inPlatCai;
+        } 
     }
 
 }

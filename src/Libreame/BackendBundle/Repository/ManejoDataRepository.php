@@ -149,34 +149,28 @@ class ManejoDataRepository extends EntityRepository {
 
     /*
      * usuarioSesionActiva 
-     *Indica si una sesion para un usuario esta activa
-     * 
+     * Indica si una sesion para un usuario esta activa
+     * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
-    public function usuarioSesionActiva($psolicitud, $device, $idsesion)
+    public function usuarioSesionActiva($psolicitud, $idsesion, $em)
     {   
         try {
-            $em = $this->getDoctrine()->getManager();
-            //Identifica el dispositivo // a este es al que se asocia la sesion
 
             //echo "<script>alert('usuarioSesionActiva - Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
-            $id = $device->getIndispusuario();
-            //echo "<script>alert('Dispositivo ID ".$id." - MAC: ".$psolicitud->getDeviceMAC()."')</script>";
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
             //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
             
             if ($idsesion == NULL)
             {
-                $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-                'insesdispusuario' => $id,
+                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                'sesionusuario' => $usuario,
                 'insesactiva' => GamesController::inSesActi));
             } else {
-                $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-                'insesdispusuario' => $id,
+                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                'sesionusuario' => $usuario,
                 'txsesnumero' => $idsesion,
                 'insesactiva' => GamesController::inSesActi));
             }
-            
-            
-            //if ($sesion != NULL) {echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";}
 
             //Flush al entity manager
             $em->flush(); 
@@ -233,7 +227,7 @@ class ManejoDataRepository extends EntityRepository {
      * GeneraActSesion 
      * ex4play :: Ajustado al modelo
      */
-    public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
+    public function generaActSesion(Sesion $pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
     {
         //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
@@ -243,7 +237,7 @@ class ManejoDataRepository extends EntityRepository {
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
             $actsesion->setactsesionInsesion($pSesion);
             $actsesion->setinactaccion($pAccion);
-            $actsesion->setfeactfecha($pSesion->getFesesfechaini());
+            $actsesion->setfeactfecha($pSesion->getfesesfechaini());
             $actsesion->setinactfinalizada($pFinalizada);
             $actsesion->settxactmensaje($pMensaje);
             //echo "<script>alert('::::Antes de persist act sesion')</script>";
@@ -265,35 +259,28 @@ class ManejoDataRepository extends EntityRepository {
     /*
      * recuperaSesionUsuario 
      * Valida los datos de la sesion verificando que sea veridica
-     * 
+     * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
-    public function recuperaSesionUsuario($pusuario, $psolicitud, $em)
+    public function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
     {   
         try{
-            //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
-            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            if ($flEm) {$em = $this->getDoctrine()->getManager();}
-
-            //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
-            $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $psolicitud->getDeviceMAC(), 
-                        'indisusuario' => $pusuario));
-            //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getSession()." ::')</script>";
-            $respuesta = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-                            'txsesnumero' =>  $psolicitud->getSession(),
-                            'insesdispusuario' => $device,
-                            'insesactiva' => GamesController::inSesActi));
-            if ($respuesta == NULL) {
-                $respuesta = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-                                'insesdispusuario' => $device,
-                                'insesactiva' => GamesController::inSesActi));            
+            //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
+            if ($psolicitud->getSession() != NULL) {
+                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                                'txsesnumero' =>  $psolicitud->getSession(),
+                                'sesionusuario' => $pusuario,
+                                'insesactiva' => GamesController::inSesActi));
+            } else {
+                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                                'sesionusuario' => $pusuario,
+                                'insesactiva' => GamesController::inSesActi));
             }
             //Flush al entity manager
-            if ($flEm) {$em->flush();}
+            $em->flush();
 
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
-                return new LbSesiones();
+                return new Sesion();
         } 
     }
 
@@ -2249,7 +2236,7 @@ class ManejoDataRepository extends EntityRepository {
             $usuario->setTxusuvalidacion($usuario->getTxusuvalidacion().'OK');
 
             //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
-            $sesion = ManejoDataRepository::generaSesion(GamesController::inSesInac, $fecha, $fecha, GamesController::txMeNoIdS, $em);
+            $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesInac, $fecha, $fecha, GamesController::txMeNoIdS, $em);
             //Guarda la actividad de la sesion:: 
             ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), GamesController::txAccConfRegi, $fecha, $fecha, $em);
             
