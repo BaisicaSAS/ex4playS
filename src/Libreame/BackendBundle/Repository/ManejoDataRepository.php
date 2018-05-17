@@ -77,7 +77,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    /*public function validaSesionUsuario($psolicitud)
+    public function validaSesionUsuario($psolicitud, $em)
     {   
         //$respuesta = GamesController::inPlatCai;
         try{
@@ -86,55 +86,40 @@ class ManejoDataRepository extends EntityRepository {
 
             //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
             $respuesta = GamesController::inUsSeIna; //Inicializa como sesion logueada
-            $em = $this->getDoctrine()->getManager();
-            //echo "<script>alert('validaSesionUsuario :: ingreso')</script>";
+
+            $usuario = new Usuario();
             if (!$em->getRepository('LibreameBackendBundle:usuario')->
-                        findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
+                        findOneBy(array('txmailusuario' => $psolicitud->getEmail()))){
                 //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
                 $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
             } else {    
-                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                        findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+                $usuario = $em->getRepository('LibreameBackendBundle:usuario')->
+                        findOneBy(array('txmailusuario' => $psolicitud->getEmail()));
 
                 $estado = $usuario->getInusuestado();
-                //echo "<script>alert('encontro el usuario: estado : ".$estado." ')</script>";
+                //echo "<script>alert('encontro el usuario): estado : ".$estado." ')</script>";
 
-                //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
-                if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $psolicitud->getDeviceMAC(), 
-                        'indisusuario' => $usuario))){
-                        //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
-                        //echo "<script>alert(' usuario ".$usuario->getTxusuemail()."')</script>";
-                        $respuesta = GamesController::inUsSeIna; //Si la sesion no existe para el dispositivo
+                //Si el usuario está INACTIVO
+                if ($estado != GamesController::inUsuActi)
+                {
+                    //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
+                    $respuesta = GamesController::inUsuConf; //Usuario Inactiva
                 } else {
-                    //Si el usuario está INACTIVO
-                    if ($estado != GamesController::inUsuActi)
-                    {
-                        //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
-                        $respuesta = GamesController::inUsuConf; //Usuario Inactiva
+                    //Si la clave enviada es inválida
+                    if ($usuario->getTxclaveusuario() != $psolicitud->getClave()){
+                        //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
+                        $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
                     } else {
-                        //Si la clave enviada es inválida
-                        if ($usuario->getTxusuclave() != $psolicitud->getClave()){
-                            //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
-                            $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
-                        } else {
-                            //Valida si la sesion está activa
-                            $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                                'txdisid' => $psolicitud->getDeviceMAC(), 
-                                'indisusuario' => $usuario));
-                            if (!$em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-                                'txsesnumero' =>  $psolicitud->getSession(),
-                                'insesdispusuario' => $device,
-                                'insesactiva' => GamesController::inSesActi))){
-                                //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
-                                $respuesta = GamesController::inUsSeIna; //Usuario o clave inválidos
+                        //Valida si la sesion está activa
+                        if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, NULL, $em)){
+                            //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
+                            $respuesta = GamesController::inUsSeIna; //Sesion inactiva
 
-                            } else {
-                                $respuesta = GamesController::inULogged; //Usuario o clave inválidos
-                                //echo "<script>alert('La sesion es VALIDA')</script>";
-                            }
-                        }   
-                    }
+                        } else {
+                            $respuesta = GamesController::inULogged; //Sesion activa
+                            //echo "<script>alert('La sesion es VALIDA')</script>";
+                        }
+                    }   
                 }
             }
 
@@ -145,7 +130,7 @@ class ManejoDataRepository extends EntityRepository {
         } catch (Exception $ex) {
             return ($respuesta);
         }    
-    }*/
+    }
 
     /*
      * usuarioSesionActiva 

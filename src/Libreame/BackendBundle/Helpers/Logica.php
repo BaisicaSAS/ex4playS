@@ -58,8 +58,6 @@ class Logica {
                 //accion de login en el sistema
                 case GamesController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
-                    //$objLogin = $this->get(Login::class);
-                    //$respuesta = $objLogin::loginUsuario($solicitud, $em);
                     //ex4plays :: Adicionado $em
                     $respuesta = Login::loginUsuario($solicitud, $em);
                     break;
@@ -67,8 +65,7 @@ class Logica {
                 //accion de recuperar datos y parametros de usuario
                 case GamesController::txAccRecParam: {//Dato:3 : Recuperar datos de usuario (Propio)
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestUsuarios = $this->get('gest_usuarios_service');
-                    $respuesta = $objGestUsuarios::obtenerParametros($solicitud);
+                    $respuesta = GestionUsuarios::obtenerParametros($solicitud, $em);
                     break;
                 } 
 
@@ -231,7 +228,7 @@ class Logica {
         } 
     }   
     
-    public function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    public function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
 
         try {
             //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
@@ -252,7 +249,7 @@ class Logica {
 
                 //accion de recuperar datos y parametros de usuario
                 case GamesController::txAccRecParam:  //Dato: 3
-                    $JSONResp = Logica::respuestaDatosUsuario($respuesta, $pSolicitud, $parreglo);
+                    $JSONResp = Logica::respuestaDatosUsuario($respuesta, $pSolicitud, $parreglo, $em);
                     break;
 
                 //accion de recuperar los feeds de publicaciones nuevas
@@ -429,19 +426,19 @@ class Logica {
 
         try {
             //Recupera el lugar, de la tabla de Lugares
-            
+            //$em = Logica::getDoctrine()->getManager();
             //echo "Va a generar respusta DatosUsuari0 \n";
-            $usuario = new LbUsuarios();
+            $usuario = new Usuario();
             $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
-            $lugar = new LbLugares();
+            $lugar = new Lugar();
             if ($respuesta->getRespuesta()== GamesController::inULogged){
-                $lugar = ManejoDataRepository::getLugar($usuario->getInusulugar());
+                $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
             }
             if (!is_null($usuario)){
-                if (is_null($usuario->getFeusunacimiento())) {
+                if (is_null($usuario->getFecreacionusuario())) {
                     $fecha = "";
                 } else {
-                    $fecha = $usuario->getFeusunacimiento()->format('Y-m-d H:i:s');
+                    $fecha = $usuario->getFecreacionusuario()->format('Y-m-d H:i:s');
                 }
             }
             //echo "genero fecha \n";
@@ -449,20 +446,20 @@ class Logica {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
-                    'usuario' => array('idusuario' => $usuario->getInusuario(), 
-                        'nomusuario' => utf8_encode($usuario->getTxusunombre()),
-                        'nommostusuario' => utf8_encode($usuario->getTxusunommostrar()), 
-                        'email' => utf8_encode($usuario->getTxusuemail()),
-                        'usutelefono' => utf8_encode($usuario->getTxusutelefono()), 
-                        'usugenero' => $usuario->getInusugenero(),
+                    'usuario' => array('idusuario' => $usuario->getIdusuario(), 
+                        'nomusuario' => utf8_encode($usuario->getTxnomusuario()),
+                        'nommostusuario' => utf8_encode($usuario->getTxnickname()), 
+                        'email' => utf8_encode($usuario->getTxmailusuario()),
+                        'usutelefono' => utf8_encode($usuario->getTxmailusuario()), 
+                        'usugenero' => $usuario->getInusuestado(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => utf8_encode(base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen())), 
                         'usuimagen' => utf8_encode($usuario->getTxusuimagen()), 
                         'usufecnac' => $fecha,
-                        'usulugar' => $lugar->getInlugar(), 
-                        'usunomlugar' => utf8_encode($lugar->getTxlugnombre()),
+                        'usulugar' => $lugar->getinlugar(), 
+                        'usunomlugar' => utf8_encode($lugar->gettxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'puntosusuario' => $respuesta->getPunUsuario(),
+                        'puntosusuario' => $respuesta->getPunUsuarioo(),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
                         'planusuario' => $respuesta->getArrPlanUsuario(),

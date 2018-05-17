@@ -53,7 +53,62 @@ class Lugar
      */
     private $inlugpadre;
 
+    /*
+     * getter y setter
+     */
+    public function getinlugar()
+    {
+        return $this->inlugar;
+    }
     
+    public function gettxlugcodigo()
+    {
+        return $this->txlugcodigo;
+    }
+    
+    public function gettxlugnombre()
+    {
+        return $this->txlugnombre;
+    }
+    
+    public function getinlugelegible()
+    {
+        return $this->inlugelegible;
+    }
+    
+    public function getinlugpadre()
+    {
+        return $this->inlugpadre;
+    }
+ 
+    //setter
+    public function settxlugcodigo($txlugcodigo)
+    {
+        $this->txlugcodigo = $txlugcodigo;
 
+        return $this;
+    }
+
+    public function settxlugnombre($txlugnombre)
+    {
+        $this->txlugnombre = $txlugnombre;
+
+        return $this;
+    }
+
+     public function setinlugelegible($inlugelegible)
+    {
+        $this->inlugelegible = $inlugelegible;
+
+        return $this;
+    }
+
+    public function setinlugpadre($inlugpadre)
+    {
+        $this->inlugpadre = $inlugpadre;
+
+        return $this;
+    }
+    
 }
 
