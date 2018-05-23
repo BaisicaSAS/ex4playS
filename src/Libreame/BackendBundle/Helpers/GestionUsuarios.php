@@ -35,24 +35,24 @@ class GestionUsuarios {
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
-           //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==GamesController::inULogged) 
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 if ($usuario != NULL) 
                 {
-                    $calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    //$calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
 
-                    $respuesta->setRespuesta(AccesoController::inExitoso);
+                    $respuesta->setRespuesta(GamesController::inExitoso);
 
                     //Ingresa el usuario en el arreglo de la Clase respuesta
                     //echo "<script>alert('ALEX ')</script>";
                     $respuesta->setArrUsuarios($usuario);
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                     
-                    $arrCalifica = array();
+                    /*$arrCalifica = array();
                     foreach ($calificaciones as $califica) {
                        $arrCalifica[] = array("idcalifica"=>$califica->getIncalificacion(),
                                             "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
@@ -61,9 +61,10 @@ class GestionUsuarios {
                                             "comentario" => $califica->getTxcalobservacion(),
                                             "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
                     }
+                    */
+                    //$respuesta->setArrCalificaciones($arrCalifica);
+                    //$respuesta->setArrGrupos($grupos);
                     
-                    $respuesta->setArrCalificaciones($arrCalifica);
-                    $respuesta->setArrGrupos($grupos);
                 } else {
                     $usuario = new Usuario();
                     $respuesta->setRespuesta(GamesController::inMenNoEx);
@@ -77,7 +78,7 @@ class GestionUsuarios {
         } catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
         } finally {
-            return Logica::generaRespuesta($respuesta, $psolicitud, $usuario);
+            return Logica::generaRespuesta($respuesta, $psolicitud, $usuario, $em);
         }
     }
     

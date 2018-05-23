@@ -35,15 +35,16 @@ class EnviaMailController extends Controller{
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxmailusuario())
-                //->setBody('Prueba '.$cadena);
-                ->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
+                ->setBody('Prueba '.$cadena);
+                /*->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxmailusuario(), 
                         'crurl' => "http://baisica.co/ex4play/services/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
                 ),'text/html');
-
-            $this->get('email_service.class')->sendEmail($message);    
+*/
+            $objmail = $this->container->get('EnviaMail_service');
+            $objmail->sendEmail($message);    
         
             return 0;
         } catch (Exception $ex) {

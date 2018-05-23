@@ -433,7 +433,10 @@ class Logica {
             $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             $lugar = new Lugar();
             if ($respuesta->getRespuesta()== GamesController::inULogged){
+                //echo "LUGAR ".$usuario->getUsuarioInlugar()->getinlugar();
                 $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
+                $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
+                //echo "plan usuario  ".$planusuario->gettxnomplan();
             }
             if (!is_null($usuario)){
                 if (is_null($usuario->getFecreacionusuario())) {
@@ -460,10 +463,10 @@ class Logica {
                         'usulugar' => $lugar->getinlugar(), 
                         'usunomlugar' => utf8_encode($lugar->gettxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'puntosusuario' => $respuesta->getPunUsuarioo(),
+                        'puntosusuario' => ManejoDataRepository::getPuntosUsuario($usuario,$em),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
-                        'planusuario' => $respuesta->getArrPlanUsuario(),
+                        'planusuario' => utf8_encode($planusuario->gettxnomplan()),
                         'resumen' => $respuesta->getArrResumenU(),
                         'preferencias' => $respuesta->getArrPreferenciasU()))
                 );
@@ -1298,7 +1301,7 @@ class Logica {
                 //$Logica = new Logica();
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
-                EnviaMailController::enviaMailRegistroAction($usuario);
+                //EnviaMailController::enviaMailRegistroAction($usuario);
                 //echo "<script>alert('Envió mail ')</script>";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);

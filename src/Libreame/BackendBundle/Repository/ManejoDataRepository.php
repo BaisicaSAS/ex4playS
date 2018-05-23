@@ -16,6 +16,7 @@ use Libreame\BackendBundle\Entity\Actsesion;
 use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
+use Libreame\BackendBundle\Entity\Puntosusuario;
  
 
 /*use AppBundle\Entity\LbEjemplares;
@@ -72,7 +73,7 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             return $em->getRepository('LibreameBackendBundle:Lugar')->
-                    findOneBy(array('inlugar' => $inlugar));
+                    findOneBy(array('inlugar' => $inlugar->getinlugar()));
         } catch (Exception $ex) {
                 return new Lugar();
         } 
@@ -317,34 +318,58 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    //Obtiene todos los grupos a los que pertenece el usuario
-    public function getPlanUsuario(Usuario $usuario)
+    //Obtiene el plan del usuario
+    public function getPlanUsuario(Usuario $usuario, $em)
     {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
+        try{            
             $planus = new Planusuario();
             $planus = $em->getRepository('LibreameBackendBundle:Planusuario')->
-                    findOneBy(array('plausuario_idusuario' => $usuario));
+                    findOneBy(array('planusuariousuario' => $usuario));
             
-            $plan = new Plansuscripcion();
-            $plan = $planus->getInplusplanes();
+            $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
+                    findOneBy(array('idplansuscripcion' => $planus->getidplanusuario()));
             
-            
-            $q = $em->createQueryBuilder()
+            /*$q = $em->createQueryBuilder()
                 ->select('p')
                 ->from('LibreameBackendBundle:LbPlanes', 'p')
                 ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
                 ->Where(' p.inplan = :plan ')
                 ->setParameter('plan', $plan);
-            return $q->getQuery()->getOneOrNullResult();
-
+            return $q->getQuery()->getOneOrNullResult();*/
+            
+            return $plan;
+            
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
-                return new LbPlanes();
+                return new Plansuscripcion();
         } 
     }
                 
+    //Obtiene la suma de puntos de usuario
+    public function getPuntosUsuario(Usuario $pUsuario, $em)
+    {   
+        try{
+    
+            $qpu = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->setParameter('pusuario', $pUsuario)
+                ->setMaxResults(1);
+            
+            $puntos = GamesController::inDatoCer;
+            if($qpu->getQuery()->getOneOrNullResult() == NULL){
+                $puntos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $puntos = (int)$qpu->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            return $puntos;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+
 
     
     ///********************* LO QUE NO SE USA ********************************///
@@ -434,6 +459,8 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    
+    
     //Obtiene el máximo ID en ejemplares 
     public function getMaxEjemplar()
     {  
@@ -488,31 +515,6 @@ class ManejoDataRepository extends EntityRepository {
             
             //echo "megusta ".$meg;
             return $meg;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-
-    //Obtiene la suma de puntos de usuario
-    public function getPuntosUsuario(LbUsuarios $pUsuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qpu = $em->createQueryBuilder()
-                ->select('COALESCE(SUM(a.inpuuscantpuntos), 0) AS inpuuscantpuntos')
-                ->from('LibreameBackendBundle:LbPuntosusuario', 'a')
-                ->Where('a.inpuususuario = :pusuario')
-                ->setParameter('pusuario', $pUsuario)
-                ->setMaxResults(1);
-            
-            $puntos = GamesController::inDatoCer;
-            if($qpu->getQuery()->getOneOrNullResult() == NULL){
-                $puntos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
-            } else {
-                $puntos = (int)$qpu->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
-            }    
-            
-            return $puntos;
         } catch (Exception $ex) {
                 return GamesController::inDatoCer;
         } 

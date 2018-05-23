@@ -64,7 +64,6 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.default_manager_configurator' => 'getDoctrine_Orm_DefaultManagerConfiguratorService',
             'doctrine.orm.validator.unique' => 'getDoctrine_Orm_Validator_UniqueService',
             'doctrine.orm.validator_initializer' => 'getDoctrine_Orm_ValidatorInitializerService',
-            'email_service.class' => 'getEmailService_ClassService',
             'enviamail_service' => 'getEnviamailServiceService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
@@ -698,29 +697,16 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'email_service.class' service.
+     * Gets the 'enviamail_service' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
      * @return \Libreame\BackendBundle\Helpers\EmailServiceClass A Libreame\BackendBundle\Helpers\EmailServiceClass instance.
      */
-    protected function getEmailService_ClassService()
-    {
-        return $this->services['email_service.class'] = new \Libreame\BackendBundle\Helpers\EmailServiceClass($this->get('swiftmailer.mailer.default'));
-    }
-
-    /**
-     * Gets the 'enviamail_service' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return \Libreame\BackendBundle\Controller\EnviaMailController A Libreame\BackendBundle\Controller\EnviaMailController instance.
-     */
     protected function getEnviamailServiceService()
     {
-        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Controller\EnviaMailController();
+        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Helpers\EmailServiceClass($this->get('swiftmailer.mailer.default'));
     }
 
     /**
