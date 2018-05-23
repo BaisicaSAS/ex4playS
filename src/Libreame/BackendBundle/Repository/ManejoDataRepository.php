@@ -17,7 +17,7 @@ use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
 use Libreame\BackendBundle\Entity\Puntosusuario;
- 
+use Libreame\BackendBundle\Entity\Calificatrato; 
 
 /*use AppBundle\Entity\LbEjemplares;
 use AppBundle\Entity\LbGeneros;
@@ -370,36 +370,34 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+    //Obtiene las calificaciones RECIBIDAS por un usuario
+    public function getCalificaUsuarioRecibidas(Usuario $usuario, $em)
+    {
+        try{
+            return $em->getRepository('LibreameBackendBundle:Calificatrato')->
+                    findBy(array('calificatrUsrcalificado' => $usuario));
+        } catch (Exception $ex) {
+                //echo "error";
+                return new Calificatrato();
+        } 
+    }
+    
+    //Obtiene las calificaciones REALIZADAS por un usuario
+    public function getCalificaUsuarioRealizadas(Usuario $usuario, $em)
+    {
+        try{
+            return $em->getRepository('LibreameBackendBundle:Calificatrato')->
+                    findBy(array('calificatrUsrcalifica' => $usuario));
+
+        } catch (Exception $ex) {
+                return new Calificatrato();
+        } 
+    }
+
 
     
     ///********************* LO QUE NO SE USA ********************************///
     
-    /*
-     * validaSesionUsuario 
-     * Valida los datos de la sesion verificando que sea veridica
-     * Credenciales está compuesto por: 1.usr,2.pass,3-device,4.session,5-opcion a despachar,
-     * parametros para la url a despachar, cantidad de caracteres de cada uno 
-     * de los anteriores cada uno con 4 digitos.
-     * 
-     */
-
-        
-    //Obtiene varios objetos Genero según el ID del libro 
-    public function getGenerosLibro($inlibro)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('g')
-                ->from('LibreameBackendBundle:LbGeneros', 'g')
-                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
-                ->Where(' gl.inglilibro = :plibro ')
-                ->setParameter('plibro', $inlibro);
-            return $q->getQuery()->getResult();
-        } catch (Exception $ex) {
-                return new LbGeneros();
-        } 
-    }
     
     //Obtiene varios objetos Editorial según el ID del libro 
     public function getEditorialesLibro($inlibro)
@@ -417,49 +415,6 @@ class ManejoDataRepository extends EntityRepository {
                 return new LbEditoriales();
         } 
     }
-    
-    //Obtiene un autor por el nombre
-    public function getAutorByNombre($autnombre)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbAutores')->
-                findOneBy(array('txautnombre' => $autnombre));
-        } catch (Exception $ex) {
-                return new LbAutores();
-        } 
-    }
-    
-    //Obtiene una editorial por el nombre
-    public function getEditorialByNombre($edinombre)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbAutores')->
-                findOneBy(array('txedinombre' => $edinombre));
-        } catch (Exception $ex) {
-                return new LbEditoriales();
-        } 
-    }
-    
-    //Obtiene varios objetos Autor según el ID del libro 
-    public function getAutoresLibro($inlibro)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('a')
-                ->from('LibreameBackendBundle:LbAutores', 'a')
-                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'a.inidautor = al.inautlidautor ')
-                ->Where(' al.inautlidlibro = :plibro ')
-                ->setParameter('plibro', $inlibro);
-            return $q->getQuery()->getResult();
-        } catch (Exception $ex) {
-                return new LbAutores();
-        } 
-    }
-    
-    
     
     //Obtiene el máximo ID en ejemplares 
     public function getMaxEjemplar()
@@ -1488,32 +1443,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    //Obtiene las calificaciones RECIBIDAS por un usuario
-    public function getCalificaUsuarioRecibidas(LbUsuarios $usuario)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
-                    findBy(array('incalusucalificado' => $usuario));
-        } catch (Exception $ex) {
-                //echo "error";
-                return new LbCalificausuarios();
-        } 
-    }
-    
-    //Obtiene las calificaciones REALIZADAS por un usuario
-    public function getCalificaUsuarioRealizadas(LbUsuarios $usuario)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
-                    findBy(array('incalusucalifica' => $usuario));
-
-        } catch (Exception $ex) {
-                return new LbCalificausuarios();
-        } 
-    }
-
     //Publica un mensaje
     public function publicaMensajes(LbMensajes $mensaje)
     {   

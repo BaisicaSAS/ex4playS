@@ -9,8 +9,8 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Entity\Usuario;
 use Libreame\BackendBundle\Entity\Sesion;
 use Libreame\BackendBundle\Entity\Lugar;
+use Libreame\BackendBundle\Entity\Calificatrato;
 use Libreame\BackendBundle\Entity\LbMensajes;
-use Libreame\BackendBundle\Entity\LbCalificausuarios;
 /**
  * Description of Gestion Usuarios
  *
@@ -42,7 +42,6 @@ class GestionUsuarios {
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 if ($usuario != NULL) 
                 {
-                    //$calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
 
                     $respuesta->setRespuesta(GamesController::inExitoso);
@@ -52,17 +51,33 @@ class GestionUsuarios {
                     $respuesta->setArrUsuarios($usuario);
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                     
-                    /*$arrCalifica = array();
-                    foreach ($calificaciones as $califica) {
-                       $arrCalifica[] = array("idcalifica"=>$califica->getIncalificacion(),
-                                            "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
-                                            "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
-                                            "incalificacion" => $califica->getIncalcalificacion(),
-                                            "comentario" => $califica->getTxcalobservacion(),
-                                            "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
+                    //Calificaciones recibidas
+                    $calificacionesrec = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario, $em);
+                    $arrCalificarec = array();
+                    foreach ($calificacionesrec as $califica) { 
+                       $arrCalificarec[] = array("idcalifica"=>$califica->getidcalificatrato(),
+                                            "idusrcalif" => $califica->getcalificatrUsrcalifica()->getIdusuario(),
+                                            "nomusrcalif" => $califica->getcalificatrUsrcalifica()->getTxnickname(),
+                                            "incalificacion" => $califica->getincalificacion(),
+                                            "comentario" => $califica->gettxobservacioncalifica(),
+                                            "fecha" => $califica->getfecalifica()->format('d/m/Y H:i:s'));
                     }
-                    */
-                    //$respuesta->setArrCalificaciones($arrCalifica);
+                    
+                    $respuesta->setArrCalificacionesReci($arrCalificarec);
+                    
+                    //Calificaicones realizadas
+                    $calificacionesrea = ManejoDataRepository::getCalificaUsuarioRealizadas($usuario, $em);
+                    $arrCalificarea = array();
+                    foreach ($calificacionesrea as $calificar) { 
+                       $arrCalificarea[] = array("idcalifica"=>$calificar->getidcalificatrato(),
+                                            "idusrcalif" => $calificar->getcalificatrUsrcalifica()->getIdusuario(),
+                                            "nomusrcalif" => $calificar->getcalificatrUsrcalifica()->getTxnickname(),
+                                            "incalificacion" => $calificar->getincalificacion(),
+                                            "comentario" => $calificar->gettxobservacioncalifica(),
+                                            "fecha" => $calificar->getfecalifica()->format('d/m/Y H:i:s'));
+                    }
+                    
+                    $respuesta->setArrCalificacionesReali($arrCalificarea);
                     //$respuesta->setArrGrupos($grupos);
                     
                 } else {
@@ -177,7 +192,7 @@ class GestionUsuarios {
                 $usuario = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariover());
                 if ($usuario != NULL)
                 {
-                    $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario, $em);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
                     //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
 

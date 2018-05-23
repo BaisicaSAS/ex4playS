@@ -79,6 +79,97 @@ class Calificatrato
      */
     private $calificatrUsrcalificado;
 
+    
+    //getter y setter
+    public function getidcalificatrato()
+    {
+        return $this->idcalificatrato;
+    }
+ 
+    public function getfecalifica()
+    {
+        return $this->fecalifica;
+    }
+ 
+    public function getidtrato()
+    {
+        return $this->idtrato;
+    }
+ 
+    public function getincalificacion()
+    {
+        return $this->incalificacion;
+    }
+ 
+    public function gettxobservacioncalifica()
+    {
+        return $this->txobservacioncalifica;
+    }
+ 
+    public function getcalificatratotrato()
+    {
+        return $this->calificatratotrato;
+    }
+ 
+    public function getcalificatrUsrcalifica()
+    {
+        return $this->calificatrUsrcalifica;
+    }
+ 
+    public function getcalificatrUsrcalificado()
+    {
+        return $this->calificatrUsrcalificado;
+    }
+ 
+    //setter
+    public function setfecalifica($fecalifica)
+    {
+        $this->fecalifica = $fecalifica;
+
+        return $this;
+    }
+
+    public function setidtrato($idtrato)
+    {
+        $this->idtrato = $idtrato;
+
+        return $this;
+    }
+
+    public function setincalificacion($incalificacion)
+    {
+        $this->incalificacion = $incalificacion;
+
+        return $this;
+    }
+
+    public function settxobservacioncalifica($txobservacioncalifica)
+    {
+        $this->txobservacioncalifica = $txobservacioncalifica;
+
+        return $this;
+    }
+
+    public function setcalificatratotrato($calificatratotrato)
+    {
+        $this->calificatratotrato = $calificatratotrato;
+
+        return $this;
+    }
+
+    public function setcalificatrUsrcalifica($calificatrUsrcalifica)
+    {
+        $this->calificatrUsrcalifica = $calificatrUsrcalifica;
+
+        return $this;
+    }
+
+    public function setcalificatrUsrcalificado($calificatrUsrcalificado)
+    {
+        $this->calificatrUsrcalificado = $calificatrUsrcalificado;
+
+        return $this;
+    }
 
 }
 
