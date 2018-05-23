@@ -435,8 +435,6 @@ class Logica {
             if ($respuesta->getRespuesta()== GamesController::inULogged){
                 //echo "LUGAR ".$usuario->getUsuarioInlugar()->getinlugar();
                 $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
-                $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
-                //echo "plan usuario  ".$planusuario->gettxnomplan();
             }
             if (!is_null($usuario)){
                 if (is_null($usuario->getFecreacionusuario())) {
@@ -463,10 +461,10 @@ class Logica {
                         'usulugar' => $lugar->getinlugar(), 
                         'usunomlugar' => utf8_encode($lugar->gettxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'puntosusuario' => ManejoDataRepository::getPuntosUsuario($usuario,$em),
+                        'puntosusuario' => $respuesta->getPunUsuario(),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
-                        'planusuario' => utf8_encode($planusuario->gettxnomplan()),
+                        'planusuario' => $respuesta->getArrPlanUsuario(),
                         'resumen' => $respuesta->getArrResumenU(),
                         'preferencias' => $respuesta->getArrPreferenciasU()))
                 );

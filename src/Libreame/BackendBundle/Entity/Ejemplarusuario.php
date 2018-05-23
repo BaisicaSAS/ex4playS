@@ -68,6 +68,87 @@ class Ejemplarusuario
      * })
      */
     private $ejemplarusuariousuario;
+    
+    ///getter y setter
+    
+    public function getidejemplarusuario()
+    {
+        return $this->inlugpadre;
+    }
+ 
+    public function getinvigente()
+    {
+        return $this->invigente;
+    }
+
+    public function getfeduenodesde()
+    {
+        return $this->feduenodesde;
+    }
+ 
+    public function getinpublicado()
+    {
+        return $this->inpublicado;
+    }
+
+    public function getfepublicacion()
+    {
+        return $this->fepublicacion;
+    }
+ 
+    public function getejemplarusuarioejemplar()
+    {
+        return $this->ejemplarusuarioejemplar;
+    }
+ 
+    public function getejemplarusuariousuario()
+    {
+        return $this->ejemplarusuariousuario;
+    }
+ 
+    //setter
+    public function setinvigente($invigente)
+    {
+        $this->invigente = $invigente;
+
+        return $this;
+    }
+
+    public function setfeduenodesde($feduenodesde)
+    {
+        $this->feduenodesde = $feduenodesde;
+
+        return $this;
+    }
+
+    public function setinpublicado($inpublicado)
+    {
+        $this->inpublicado = $inpublicado;
+
+        return $this;
+    }
+
+    public function setfepublicacion($fepublicacion)
+    {
+        $this->fepublicacion = $fepublicacion;
+
+        return $this;
+    }
+
+    public function setejemplarusuarioejemplar($ejemplarusuarioejemplar)
+    {
+        $this->ejemplarusuarioejemplar = $ejemplarusuarioejemplar;
+
+        return $this;
+    }
+
+    public function setejemplarusuariousuario($ejemplarusuariousuario)
+    {
+        $this->ejemplarusuariousuario = $ejemplarusuariousuario;
+
+        return $this;
+    }
+
 
 
 }

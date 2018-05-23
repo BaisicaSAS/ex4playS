@@ -18,6 +18,9 @@ use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
 use Libreame\BackendBundle\Entity\Puntosusuario;
 use Libreame\BackendBundle\Entity\Calificatrato; 
+use Libreame\BackendBundle\Entity\Ejemplarusuario;
+use Libreame\BackendBundle\Entity\Ejemplar;
+use Libreame\BackendBundle\Entity\Videojuego;
 
 /*use AppBundle\Entity\LbEjemplares;
 use AppBundle\Entity\LbGeneros;
@@ -73,7 +76,7 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             return $em->getRepository('LibreameBackendBundle:Lugar')->
-                    findOneBy(array('inlugar' => $inlugar->getinlugar()));
+                    findOneBy(array('inlugar' => $inlugar));
         } catch (Exception $ex) {
                 return new Lugar();
         } 
@@ -319,6 +322,20 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene el plan del usuario
+    public function getPlansuscripcion(Planusuario $planusuario, $em)
+    {   
+        try{            
+            $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
+                    findOneBy(array('idplansuscripcion' => $planusuario->getidplanusuario()));
+            return $plan;
+            
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return new Plansuscripcion();
+        } 
+    }
+
+    //Obtiene el plan del usuario
     public function getPlanUsuario(Usuario $usuario, $em)
     {   
         try{            
@@ -326,18 +343,7 @@ class ManejoDataRepository extends EntityRepository {
             $planus = $em->getRepository('LibreameBackendBundle:Planusuario')->
                     findOneBy(array('planusuariousuario' => $usuario));
             
-            $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
-                    findOneBy(array('idplansuscripcion' => $planus->getidplanusuario()));
-            
-            /*$q = $em->createQueryBuilder()
-                ->select('p')
-                ->from('LibreameBackendBundle:LbPlanes', 'p')
-                ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
-                ->Where(' p.inplan = :plan ')
-                ->setParameter('plan', $plan);
-            return $q->getQuery()->getOneOrNullResult();*/
-            
-            return $plan;
+            return $planus;
             
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
@@ -394,7 +400,159 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+    //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
+    public function getPromedioCalifica($inusuario, $em)
+    {   
+        try{
+            //echo "getPromCalificaciones :: ".":: \n";
 
+            $qs = $em->createQueryBuilder()
+                ->select('sum(a.incalificacion)')
+                ->from('LibreameBackendBundle:Calificatrato', 'a')
+                ->Where('a.calificatrUsrcalificado = :pusuario')
+                ->setParameter('pusuario', $inusuario);
+            $suma = $qs->getQuery()->getSingleScalarResult();
+            
+            $qc = $em->createQueryBuilder()
+                ->select('count(a)')
+                ->from('LibreameBackendBundle:Calificatrato', 'a')
+                ->Where('a.calificatrUsrcalificado = :pusuario')
+                ->setParameter('pusuario', $inusuario);
+            $cant = $qc->getQuery()->getSingleScalarResult();
+            if($cant == 0)
+                $promedio = 0;
+            else    
+                $promedio = $suma / $cant;
+            //echo "\n promedio:".$promedio;
+            return $promedio;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
+    //Obtiene el resumen de ejemplares del usuario
+    public function getResumenUsuario(Usuario $usuario, $em)
+    {   
+        try{
+            //Arreglo para almacenar el resumen
+            $arrResumen = array();
+            //Cantidad de ejemplares de un usuario
+            
+            $qej = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:ejemplarusuario', 'e')
+                ->Where(' e.ejemplarusuariousuario = :usuario ')
+                ->setParameter('usuario', $usuario)
+                ->setMaxResults(1);
+            $ejemplares = (Int)$qej->getQuery()->getSingleScalarResult();
+            
+            $qen = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:trato', 'e')
+                ->Where(' e.tratousrdueno = :usuario ')
+                ->setParameter('usuario', $usuario)
+                ->andWhere(' e.inestadotrato = :entregado ')
+                ->setParameter('entregado', GamesController::inDatoCer) // 0 es trato Cerrado
+                ->setMaxResults(1);
+            $entregados = (Int)$qen->getQuery()->getSingleScalarResult();
+            
+            $qre = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:trato', 'e')
+                ->Where(' e.tratousrsolicita = :usuario ')
+                ->setParameter('usuario', $usuario)
+                ->andWhere(' e.inestadotrato = :recibido ')
+                ->setParameter('recibido', GamesController::inDatoCer) // 0 es trato Cerrado
+                ->setMaxResults(1);
+            $recibidos = (Int)$qre->getQuery()->getSingleScalarResult();
+            
+            
+            $arrResumen[] = array('ejemplares' => $ejemplares, 'entregados' => $entregados, 
+                'recibidos' => $recibidos);
+
+        return $arrResumen;
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return array();
+        } 
+    }
+                
+    //Obtiene las preferencias del usuario
+    public function getPreferenciasUsuario(Usuario $usuario, $numpref, $em)
+    {   
+        //echo "Dentro de preferencias  \n";
+        try{
+            //Arreglo para almacenar el resumen
+            $arrPreferencias = array();
+
+            //Cantidad de ejemplares de un usuario
+            
+            //Ejemplar del usuario
+            $ejeusu  = new Ejemplarusuario();
+            $ejeusu = $em->getRepository('LibreameBackendBundle:Ejemplarusuario')->
+                    findBy(array('ejemplarusuariousuario' => $usuario));
+            
+            $ejemplar = new Ejemplar();
+            $ejemplar = $em->getRepository('LibreameBackendBundle:Ejemplar')->
+                    findBy(array('idejemplar' => $ejeusu->getejemplarusuarioejemplar()));
+            
+            echo "Dentro de preferencias  \n";
+            $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
+                    findBy(array('idvideojuego' => $ejemplar->getejemplarVideojuego()));
+            
+            //generos
+            /*$qg = $em->createQueryBuilder()
+                ->select('g.ingenero, g.txgennombre, count(g.ingenero) as num')
+                ->from('LibreameBackendBundle:LbGeneros', 'g')
+                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
+                ->Where(' gl.inglilibro in (:libro) ')
+                ->setParameter('libro', $libusu)
+                ->groupBy('g.ingenero')
+                //->having(' count(g.ingenero) > 1')
+                ->orderBy(' num ', 'DESC')
+                ->setMaxResults($numpref);
+            
+            $generos = $qg->getQuery()->getResult();*/
+            $arrGeneros = array();
+            /*foreach ($generos as $gen){
+                if (!in_array($gen, $arrGeneros)) {
+                    $arrGeneros[] = array("idgenero" => $gen['ingenero'],"nomgenero" => utf8_encode($gen['txgennombre']));
+                }
+            }*/
+            //echo "Cargó arreglo generos \n";
+            
+        
+            //Consolas
+            $qc = $em->createQueryBuilder()
+                ->select('c.idconsola, c.txnombreconsola, count(c.idconsola) as num')
+                ->from('LibreameBackendBundle:consola', 'c')
+                ->leftJoin('LibreameBackendBundle:videojuego', 'cv', \Doctrine\ORM\Query\Expr\Join::WITH, 'cv.videojuegoConsola = c.idconsola')
+                ->Where(' cv.idvideojuego in (:videojuego) ')
+                ->setParameter('videojuego', $videojuego)
+                ->groupBy('c.idconsola')
+                ->orderBy(' num ', 'DESC')
+                ->setMaxResults($numpref);
+            $consolas = $qc->getQuery()->getResult();
+            //echo "editoriales-[".count($editoriales)."]  \n";
+            
+            $arrConsolas = array();
+            foreach ($consolas as $con){
+                if (!in_array($con, $arrConsolas)) {
+                    $arrConsolas[] = array("idconsola" => $con['idconsola'],"txnombreconsola" => utf8_encode($con['txnombreconsola']));
+                }
+            }
+            //echo "Cargó arreglo editoriales  \n";
+            
+            $arrPreferencias[] = array('consolas' => $arrConsolas, 'generos' => $arrGeneros);
+            echo "Fin preferencias  \n";
+
+            return $arrPreferencias;
+        } catch (Exception $ex) {
+                //ECHO "ERROR PREFERENCIAS ".$ex;
+                return array();
+        } 
+    }
+ 
     
     ///********************* LO QUE NO SE USA ********************************///
     
@@ -759,35 +917,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
-    public function getPromedioCalifica($inusuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qs = $em->createQueryBuilder()
-                ->select('sum(a.incalcalificacion)')
-                ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
-                ->Where('a.incalusucalificado = :pusuario')
-                ->setParameter('pusuario', $inusuario);
-            $suma = $qs->getQuery()->getSingleScalarResult();
-            
-            $qc = $em->createQueryBuilder()
-                ->select('count(a)')
-                ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
-                ->Where('a.incalusucalificado = :pusuario')
-                ->setParameter('pusuario', $inusuario);
-            $cant = $qc->getQuery()->getSingleScalarResult();
-            if($cant == 0)
-                $promedio = 0;
-            else    
-                $promedio = $suma / $cant;
-            //echo "\n promedio:".$promedio;
-            return $promedio;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
     //Obtiene el indicador de si el usuario ha aceptado 1, rechazado 0, o no ha indicado el trato -1
     public function getUsAceptTrato($usrescribe, $idconversa)
     {
@@ -994,159 +1123,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    //Obtiene el resumen de ejemplares del usuario
-    public function getResumenUsuario(LbUsuarios $usuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            //Arreglo para almacenar el resumen
-            $arrResumen = array();
-            //Cantidad de ejemplares de un usuario
-            
-            $qej = $em->createQueryBuilder()
-                ->select('COALESCE(count(e), 0)')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->Where(' e.inejeusudueno = :usuario ')
-                ->setParameter('usuario', $usuario)
-                ->setMaxResults(1);
-            $ejemplares = (Int)$qej->getQuery()->getSingleScalarResult();
-            
-            $qen = $em->createQueryBuilder()
-                ->select('COALESCE(count(e), 0)')
-                ->from('LibreameBackendBundle:LbHistejemplar', 'e')
-                ->Where(' e.inhisejeusuario = :usuario ')
-                ->setParameter('usuario', $usuario)
-                //Movimiento = Entregado
-                ->andWhere(' e.inhisejemovimiento = :entregado ')
-                ->setParameter('entregado', GamesController::inMovEntrEje)
-                ->setMaxResults(1);
-            $entregados = (Int)$qen->getQuery()->getSingleScalarResult();
-            
-            $qre = $em->createQueryBuilder()
-                ->select('COALESCE(count(e), 0)')
-                ->from('LibreameBackendBundle:LbHistejemplar', 'e')
-                ->Where(' e.inhisejeusuario = :usuario ')
-                ->setParameter('usuario', $usuario)
-                //Movimiento = Recibido = 5
-                ->andWhere(' e.inhisejemovimiento = :recibido ')
-                ->setParameter('recibido', GamesController::inMovReciEje)
-                ->setMaxResults(1);
-            $recibidos = (Int)$qre->getQuery()->getSingleScalarResult();
-            
-            
-            $donados = 0;
-            /*AUN NO SE ACTIVA ESTA OPCION :: POR AHORA ES CERO
-             * $qdo = $em->createQueryBuilder()
-                ->select('count(e)')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->Where(' e.inejeusudueno = :usuario ')
-                ->setParameter('usuario', $usuario);
-            $donados = $qre->getQuery()->getOneOrNullResult();
-             */
-            
-            $arrResumen[] = array('ejemplares' => $ejemplares, 'entregados' => $entregados, 
-                'recibidos' => $recibidos, 'donados' => $donados);
-
-        return $arrResumen;
-        } catch (Exception $ex) {
-                //ECHO "ERROR PLANES";
-                return array();
-        } 
-    }
-                
-    //Obtiene las preferencias del usuario
-    public function getPreferenciasUsuario(LbUsuarios $usuario, $numpref)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            //Arreglo para almacenar el resumen
-            $arrPreferencias = array();
-            //Cantidad de ejemplares de un usuario
-            
-            //$ejeusu = new LbEjemplares();
-            $ejeusu = $em->getRepository('LibreameBackendBundle:LbEjemplares')->
-                    findBy(array('inejeusudueno' => $usuario));
-            
-            $libusu = $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findBy(array('inlibro' => $ejeusu));
-            
-            //generos
-            $qg = $em->createQueryBuilder()
-                ->select('g.ingenero, g.txgennombre, count(g.ingenero) as num')
-                ->from('LibreameBackendBundle:LbGeneros', 'g')
-                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
-                ->Where(' gl.inglilibro in (:libro) ')
-                ->setParameter('libro', $libusu)
-                ->groupBy('g.ingenero')
-                //->having(' count(g.ingenero) > 1')
-                ->orderBy(' num ', 'DESC')
-                ->setMaxResults($numpref);
-            
-            $generos = $qg->getQuery()->getResult();
-            //echo "generos-[".count($generos)."]  \n";
-            
-            //autores
-            $qa = $em->createQueryBuilder()
-                ->select('a.inidautor, a.txautnombre, count(a.inidautor) as num')
-                ->from('LibreameBackendBundle:LbAutores', 'a')
-                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'al.inautlidautor = a.inidautor')
-                ->Where(' al.inautlidlibro in (:libro) ')
-                ->setParameter('libro', $libusu)
-                ->groupBy('a.inidautor')
-                //->having(' count(a.inidautor) > 1')
-                ->orderBy(' num ', 'DESC')
-                ->setMaxResults($numpref);
-            $autores = $qa->getQuery()->getResult();
-            //echo "autores-[".count($autores)."]  \n";
-            
-            //editoriales
-            $qe = $em->createQueryBuilder()
-                ->select('e.inideditorial, e.txedinombre, count(e.inideditorial) as num')
-                ->from('LibreameBackendBundle:LbEditoriales', 'e')
-                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'el.inedilibroeditorial = e.inideditorial')
-                ->Where(' el.inediliblibro in (:libro) ')
-                ->setParameter('libro', $libusu)
-                ->groupBy('e.inideditorial')
-                //->having(' count(e.inideditorial) > 2')
-                ->orderBy(' num ', 'DESC')
-                ->setMaxResults($numpref);
-            $editoriales = $qe->getQuery()->getResult();
-            //echo "editoriales-[".count($editoriales)."]  \n";
-
-            $arrGeneros = array();
-            foreach ($generos as $gen){
-                if (!in_array($gen, $arrGeneros)) {
-                    $arrGeneros[] = array("idgenero" => $gen['ingenero'],"nomgenero" => utf8_encode($gen['txgennombre']));
-                }
-            }
-            //echo "Cargó arreglo generos \n";
-            
-            $arrAutores = array();
-            foreach ($autores as $aut){
-                if (!in_array($aut, $arrAutores)) {
-                    $arrAutores[] = array("idautor" => $aut['inidautor'],"nomautor" => utf8_encode($aut['txautnombre']));
-                }
-            }
-            //echo "Cargó arreglo autores \n";
-            
-            $arrEditoriales = array();
-            foreach ($editoriales as $edi){
-                if (!in_array($edi, $arrEditoriales)) {
-                    $arrEditoriales[] = array("ideditorial" => $edi['inideditorial'],"nomeditorial" => utf8_encode($edi['txedinombre']));
-                }
-            }
-            //echo "Cargó arreglo editoriales  \n";
-            
-            $arrPreferencias[] = array('generos' => $arrGeneros, 'autores' => $arrAutores, 
-                'editoriales' => $arrEditoriales);
-
-        return $arrPreferencias;
-        } catch (Exception $ex) {
-                //ECHO "ERROR PREFERENCIAS ".$ex;
-                return array();
-        } 
-    }
-                
+               
     //Obtiene la fecha en que el usuario publicó el ejemplar
     public function getFechaPublicacion($pejemplar, $pusuario)
     {   

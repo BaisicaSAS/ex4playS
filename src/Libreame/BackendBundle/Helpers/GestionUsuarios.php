@@ -10,6 +10,8 @@ use Libreame\BackendBundle\Entity\Usuario;
 use Libreame\BackendBundle\Entity\Sesion;
 use Libreame\BackendBundle\Entity\Lugar;
 use Libreame\BackendBundle\Entity\Calificatrato;
+use Libreame\BackendBundle\Entity\Planusuario;
+use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\LbMensajes;
 /**
  * Description of Gestion Usuarios
@@ -42,14 +44,21 @@ class GestionUsuarios {
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 if ($usuario != NULL) 
                 {
-                    //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
+                    //echo "Usuario no es NULL :: ".$usuario->getTxnickname().":: \n";
+                    //echo "<script>alert('RESP cali ".count($usuario)." ')</script>";
 
                     $respuesta->setRespuesta(GamesController::inExitoso);
 
                     //Ingresa el usuario en el arreglo de la Clase respuesta
                     //echo "<script>alert('ALEX ')</script>";
                     $respuesta->setArrUsuarios($usuario);
+                    //echo "SetArrUsuarios :: ".":: \n";
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+                    //echo "Calculó promedio :: ".":: \n";
+                    $respuesta->setPromCalificaciones(ManejoDataRepository::getPromedioCalifica($usuario->getIdusuario(),$em));
+                    //echo "setPromCalificaciones :: ".":: \n";
+                    $respuesta->setPunUsuario(ManejoDataRepository::getPuntosUsuario($usuario, $em));
+                    //echo "setPunUsuario"." \n";
                     
                     //Calificaciones recibidas
                     $calificacionesrec = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario, $em);
@@ -62,6 +71,7 @@ class GestionUsuarios {
                                             "comentario" => $califica->gettxobservacioncalifica(),
                                             "fecha" => $califica->getfecalifica()->format('d/m/Y H:i:s'));
                     }
+                    //echo "Calificaciones Recibidas"." \n";
                     
                     $respuesta->setArrCalificacionesReci($arrCalificarec);
                     
@@ -77,9 +87,32 @@ class GestionUsuarios {
                                             "fecha" => $calificar->getfecalifica()->format('d/m/Y H:i:s'));
                     }
                     
+                    //echo "Calificaciones Realizadas"." \n";
                     $respuesta->setArrCalificacionesReali($arrCalificarea);
-                    //$respuesta->setArrGrupos($grupos);
                     
+//                    $planusuario = new Planusuario();
+                    $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
+                    
+//                    $plansuscrip = new Plansuscripcion();
+                    $plansuscrip = ManejoDataRepository::getPlanSuscripcion($planusuario, $em);
+                    //echo "Plan :: ".utf8_encode($plansuscrip->gettxnomplan());
+                    //$arrPlanUsuario = array();
+                    //foreach ($planusuario as $plan) {
+                    $arrPlanUsuario = array("inplan"=>$plansuscrip->getidplansuscripcion(),
+                                            "txplannombre" => utf8_encode($plansuscrip->gettxnomplan()),
+                                            "txplandescripcion" => utf8_encode($plansuscrip->gettxdescripcionplan()),
+                                            "gratis" => $plansuscrip->getingratis(),
+                                            "cantmeses" => $plansuscrip->getinmesesplan(),
+                                            //"vigencia" => utf8_encode($planusuario->getFeplanfinvigencia()->format('Y-m-d H:i:s')),
+                                            "fecha" => utf8_encode($planusuario->getfevigencia()->format('Y-m-d H:i:s')));
+                    //echo "<script>alert('RESP PLANES ".count($planusuario)." ')</script>";
+
+                    $ar = ManejoDataRepository::getPreferenciasUsuario($usuario, 5, $em);
+                    //echo "Fin preferencias  \n";
+                    
+                    $respuesta->setArrPlanUsuario($arrPlanUsuario);
+                    $respuesta->setArrPreferenciasU($ar); //Solo 5 registros de preferencias máximo
+                    $respuesta->setArrResumenU(ManejoDataRepository::getResumenUsuario($usuario, $em)); 
                 } else {
                     $usuario = new Usuario();
                     $respuesta->setRespuesta(GamesController::inMenNoEx);

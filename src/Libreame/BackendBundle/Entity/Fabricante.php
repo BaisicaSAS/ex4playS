@@ -35,6 +35,38 @@ class Fabricante
      */
     private $txpaisfabricante;
 
+    //getter y setter
+    
+    public function getidfabricante()
+    {
+        return $this->idfabricante;
+    }
+ 
+    public function gettxnomfabricante()
+    {
+        return $this->txnomfabricante;
+    }
+ 
+    public function gettxpaisfabricante()
+    {
+        return $this->txpaisfabricante;
+    }
+ 
+    //setter
+    public function settxnomfabricante($txnomfabricante)
+    {
+        $this->txnomfabricante = $txnomfabricante;
+
+        return $this;
+    }
+
+    public function settxpaisfabricante($txpaisfabricante)
+    {
+        $this->txpaisfabricante = $txpaisfabricante;
+
+        return $this;
+    }
+
 
 }
 
