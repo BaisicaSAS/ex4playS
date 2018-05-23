@@ -24,6 +24,13 @@ Libreame\BackendBundle\Entity\Planusuario:
             nullable: false
             options:
                 comment: 'Fecha de fin de la vigencia del plan...permite controlar que está vigente 31 Dic 2060 (Para indefinido)'
+        dbvalsuscripcion:
+            type: float
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Precio de la suscripción. Se guarda en la suscripcion al usuario, para que se mantenga el precio contratado.'
+                default: '0'
     manyToOne:
         planusuarioplan:
             targetEntity: Plansuscripcion

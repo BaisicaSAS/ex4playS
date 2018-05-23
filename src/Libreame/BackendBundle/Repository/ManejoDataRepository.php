@@ -14,6 +14,8 @@ use Libreame\BackendBundle\Entity\Usuario;
 use Libreame\BackendBundle\Entity\Sesion;
 use Libreame\BackendBundle\Entity\Actsesion;
 use Libreame\BackendBundle\Helpers\Logica;
+use Libreame\BackendBundle\Entity\Plansuscripcion;
+use Libreame\BackendBundle\Entity\Planusuario;
  
 
 /*use AppBundle\Entity\LbEjemplares;
@@ -298,8 +300,52 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    
-    
+    //Obtiene el plan gratuito básico :: el de ID = 1
+    public function getPlanGratuito($em)
+    {   
+        try{
+            //El de ID uno es el plan gratuito por ahora
+            //$plan = new Plansuscripcion();
+            $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
+                    findOneBy(array('idplansuscripcion' => GamesController::inDatoUno));
+            
+            return $plan;
+
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return new Plansuscripcion();
+        } 
+    }
+                
+    //Obtiene todos los grupos a los que pertenece el usuario
+    public function getPlanUsuario(Usuario $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $planus = new Planusuario();
+            $planus = $em->getRepository('LibreameBackendBundle:Planusuario')->
+                    findOneBy(array('plausuario_idusuario' => $usuario));
+            
+            $plan = new Plansuscripcion();
+            $plan = $planus->getInplusplanes();
+            
+            
+            $q = $em->createQueryBuilder()
+                ->select('p')
+                ->from('LibreameBackendBundle:LbPlanes', 'p')
+                ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
+                ->Where(' p.inplan = :plan ')
+                ->setParameter('plan', $plan);
+            return $q->getQuery()->getOneOrNullResult();
+
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return new LbPlanes();
+        } 
+    }
+                
+
     
     ///********************* LO QUE NO SE USA ********************************///
     
@@ -988,36 +1034,6 @@ class ManejoDataRepository extends EntityRepository {
                     findBy(array('inedilibroeditorial' => $editorial));
         } catch (Exception $ex) {
                 return new LbEditorialeslibros();
-        } 
-    }
-                
-    //Obtiene todos los grupos a los que pertenece el usuario
-    public function getPlanUsuario(LbUsuarios $usuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $planus = new LbPlanesusuarios();
-            $planus = $em->getRepository('LibreameBackendBundle:LbPlanesusuarios')->
-                    findOneBy(array('inusuplan' => $usuario));
-            //echo "****** usuario ".$usuario->getInusuario(). " *************";
-            //echo "****** plan ".$planus->getInplusplanes()->getInplan(). " *************";
-            
-            $plan = new LbPlanes();
-            $plan = $planus->getInplusplanes();
-            
-            
-            $q = $em->createQueryBuilder()
-                ->select('p')
-                ->from('LibreameBackendBundle:LbPlanes', 'p')
-                ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
-                ->Where(' p.inplan = :plan ')
-                ->setParameter('plan', $plan);
-            return $q->getQuery()->getOneOrNullResult();
-
-        } catch (Exception $ex) {
-                //ECHO "ERROR PLANES";
-                return new LbPlanes();
         } 
     }
                 

@@ -20,3 +20,13 @@ ALTER TABLE `ex4play`.`videojuego`
 ADD COLUMN `txurlinformacion` VARCHAR(1000) NOT NULL DEFAULT 'SIN INFORMACION' COMMENT 'URL donde encuentra informacion : Administrador\n' AFTER `videojuego_consola`,
 ADD COLUMN `txobservaciones` VARCHAR(1000) NOT NULL DEFAULT 'NINGUNA' COMMENT 'Observaciones' AFTER `txurlinformacion`,
 ADD COLUMN `txgenerovideojuego` VARCHAR(200) NOT NULL DEFAULT 'SIN CLASIFICAR' COMMENT 'Genero del videojuego' AFTER `txobservaciones`;
+
+ALTER TABLE `ex4play`.`plansuscripcion` 
+ADD COLUMN `inmesesplan` INT NULL DEFAULT 0 COMMENT 'Cantidad de meses que incluye la suscripción, 0 Ilimitado' AFTER `ingratis`,
+ADD COLUMN `dbvalsuscripcion` DOUBLE NULL DEFAULT 0 COMMENT 'Precio de la suscripción. Se guarda en la suscripcion al usuario, para que se mantenga el precio contratado.' AFTER `inmesesplan`;
+
+ALTER TABLE `ex4play`.`planusuario` 
+ADD COLUMN `dbvalsuscripcion` DOUBLE NOT NULL DEFAULT 0 COMMENT 'Precio de la suscripción que posee el usuario' AFTER `planusuario_idusuario`;
+
+ALTER TABLE `ex4play`.`puntosusuario` 
+ADD COLUMN `inefectivos` INT NOT NULL DEFAULT 0 COMMENT 'Puntos efectivos 1, Puntos NO efectivos 0' AFTER `insumaresta`;

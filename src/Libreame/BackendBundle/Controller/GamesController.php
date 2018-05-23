@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Swift_Mailer;
 use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
@@ -791,37 +792,5 @@ class GamesController extends Controller
         }
     }
 
-    /*
-     * enviaMailRegistro 
-     * Se encarga de enviar el email con el que el usuario confirmara su registro
-     */
-    public function enviaMailRegistro(Usuario $usuario, $cadena)
-    {   
-        try{
-            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
-            $message = \Swift_Message::newInstance()
-                ->setContentType('text/html')
-                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
-                ->setFrom('registro@ex4read.co')
-                ->setBcc('registro@ex4read.co')
-                //->setFrom('baisicasas@gmail.com')
-                //->setBcc('baisicasas@gmail.com')
-                ->setTo($usuario->getTxmailusuario())
-                ->setBody('Prueba '.$cadena);
-/*                ->setBody($this->renderView(
-                    'LibreameBackendBundle:Registro:regi$stro.html.twig',
-                    array('usuario' => $usuario->getTxmailusuario(), 
-                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
-                ),'text/html');
-*/
-            $this->get('mailer')->send($message);
-        
-            return 0;
-        } catch (Exception $ex) {
-                return GamesController::inPlatCai;
-        } 
-    }
-
+    
 }

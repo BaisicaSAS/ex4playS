@@ -30,3 +30,6 @@ services:
     #    class: Libreame\BackendBundle\Helpers\GestionEjemplares
 #        arguments: [@service_id, "plain_value", %parameter%]
 
+    email_service.class:
+        class: Libreame\BackendBundle\Helpers\EmailServiceClass
+        arguments: ['@mailer']

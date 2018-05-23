@@ -64,6 +64,8 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.default_manager_configurator' => 'getDoctrine_Orm_DefaultManagerConfiguratorService',
             'doctrine.orm.validator.unique' => 'getDoctrine_Orm_Validator_UniqueService',
             'doctrine.orm.validator_initializer' => 'getDoctrine_Orm_ValidatorInitializerService',
+            'email_service.class' => 'getEmailService_ClassService',
+            'enviamail_service' => 'getEnviamailServiceService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
             'form.csrf_provider' => 'getForm_CsrfProviderService',
@@ -693,6 +695,32 @@ class appDevDebugProjectContainer extends Container
     protected function getDoctrine_Orm_ValidatorInitializerService()
     {
         return $this->services['doctrine.orm.validator_initializer'] = new \Symfony\Bridge\Doctrine\Validator\DoctrineInitializer($this->get('doctrine'));
+    }
+
+    /**
+     * Gets the 'email_service.class' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Libreame\BackendBundle\Helpers\EmailServiceClass A Libreame\BackendBundle\Helpers\EmailServiceClass instance.
+     */
+    protected function getEmailService_ClassService()
+    {
+        return $this->services['email_service.class'] = new \Libreame\BackendBundle\Helpers\EmailServiceClass($this->get('swiftmailer.mailer.default'));
+    }
+
+    /**
+     * Gets the 'enviamail_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Libreame\BackendBundle\Controller\EnviaMailController A Libreame\BackendBundle\Controller\EnviaMailController instance.
+     */
+    protected function getEnviamailServiceService()
+    {
+        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Controller\EnviaMailController();
     }
 
     /**

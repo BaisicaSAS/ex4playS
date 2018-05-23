@@ -9,6 +9,7 @@ use Swift_Transport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Libreame\BackendBundle\Controller\GamesController;
+use Libreame\BackendBundle\Controller\EnviaMailController;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Helpers\Respuesta;
 use Libreame\BackendBundle\Helpers\Logica;
@@ -1269,7 +1270,19 @@ class Logica {
 
                 ManejoDataRepository::persistEntidad($usuario, $em);
                 //echo "<script>alert('Persiste usuario')</script>";
-
+                
+                //Selecciona el plan gratuito por ahora
+                //$plan = new Plansuscripcion();
+                $plan = ManejoDataRepository::getPlanGratuito($em);
+                
+                $planusuario = new Planusuario();
+                $planusuario->setplanusuarioplan($plan);
+                $planusuario->setdbvalsuscripcion($plan->getdbvalsuscripcion());
+                $planusuario->setfevigencia($plan->getfevigencia());
+                $planusuario->setplanusuariousuario($usuario);
+                
+                ManejoDataRepository::persistEntidad($planusuario, $em);
+                
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                 setlocale (LC_TIME, "es_CO");
                 $fecha = new \DateTime('c');
@@ -1285,62 +1298,27 @@ class Logica {
                 //$Logica = new Logica();
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
-                //Logica::enviaMailRegistro($usuario);
+                EnviaMailController::enviaMailRegistroAction($usuario);
                 //echo "<script>alert('Envió mail ')</script>";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 
                 //echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
-                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL, $em);
 
             } catch (Exception $ex) {
                 //echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
                 $respuesta->setRespuesta(GamesController::inPlatCai);
-                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL, $em);
             } 
         } else {
             //El usuario existe y no es posible registrarlo de nuevo:: el email.
             //echo "<script>alert('Usuario existe')</script>";
             $respuesta->setRespuesta(GamesController::inFallido);
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL, $em);
         }
             
     }
+
     
-    /*
-     * enviaMailRegistro 
-     * Se encarga de enviar el email con el que el usuario confirmara su registro
-     */
-    protected function enviaMailRegistro(Usuario $usuario)
-    {   
-        try{
-            $cadena = Logica::generaCadenaURL($usuario);
-            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
-            $message = \Swift_Message::newInstance()
-                ->setContentType('text/html')
-                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxnomusuario())
-                ->setFrom('registro@ex4read.co')
-                ->setBcc('registro@ex4read.co')
-                //->setFrom('baisicasas@gmail.com')
-                //->setBcc('baisicasas@gmail.com')
-                ->setTo($usuario->getTxmailusuario())
-                ->setBody('Probando '.$cadena);
-                /*->setBody($this->renderView(
-                    'LibreameBackendBundle:Registro:registro.html.twig',
-                    array('usuario' => $usuario->getTxmailusuario(), 
-                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
-                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
-                
-                ),'text/html');*/
-
-            //$this->container->get('mailer')->send($message);
-            $this->get('mailer')->send($message);
-            
-            return 0;
-        } catch (Exception $ex) {
-                return GamesController::inPlatCai;
-        } 
-    }
-
 }

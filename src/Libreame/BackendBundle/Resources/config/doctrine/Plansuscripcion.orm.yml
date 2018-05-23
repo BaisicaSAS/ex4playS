@@ -38,4 +38,18 @@ Libreame\BackendBundle\Entity\Plansuscripcion:
                 unsigned: false
                 comment: '0: Pago - 1 : Gratis'
                 default: '1'
+        inmesesplan:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: 'Cantidad de meses que incluye la suscripción, 0 Ilimitado'
+                default: '0'
+        dbvalsuscripcion:
+            type: float
+            nullable: true
+            options:
+                unsigned: false
+                comment: 'Precio de la suscripción. Se guarda en la suscripcion al usuario, para que se mantenga el precio contratado.'
+                default: '0'
     lifecycleCallbacks: {  }
