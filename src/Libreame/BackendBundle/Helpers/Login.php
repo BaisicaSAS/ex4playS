@@ -170,13 +170,13 @@ class Login
             //Flush al entity manager
             
             //ex4plays :: Nuevo llamado del servicio, de manera estática
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL, $em);
             
         }
         catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
             //ex4plays :: Nuevo llamado del servicio, de manera estática
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL, $em);
         }     
         
     }

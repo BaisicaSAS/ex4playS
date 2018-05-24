@@ -33,3 +33,5 @@ ADD COLUMN `inefectivos` INT NOT NULL DEFAULT 0 COMMENT 'Puntos efectivos 1, Pun
 
 ALTER TABLE `ex4play`.`videojuego` 
 ADD COLUMN `tximagen` VARCHAR(300) NOT NULL DEFAULT 'PENDIENTE' AFTER `txgenerovideojuego`;
+
+ALTER TABLE `ex4play`.`videojuego`  ADD FULLTEXT(txnomvideojuego,txurlinformacion, txobservaciones,txgenerovideojuego,tximagen);

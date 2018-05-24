@@ -172,16 +172,16 @@ class GestionEjemplares {
                 //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
             $ejemplares = array();
-            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
         }
        
     }

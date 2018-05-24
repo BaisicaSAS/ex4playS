@@ -602,10 +602,10 @@ class ManejoDataRepository extends EntityRepository {
                          ." txobservaciones,txgenerovideojuego,tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
                 $query = $em->createNativeQuery( $txsql, $rsm ); 
                 $videojuegos = $query->getResult();
-                foreach ($videojuegos as $videojuego) {
+                foreach ($videojuegos as $vj) {
                     //echo "ENTRO:"."\n";
-                    $arVideojuegos[] = $videojuego->getidvideojuego();
-                    $libroID = $videojuego->getidvideojuego();
+                    $arVideojuegos[] = $vj->getidvideojuego();
+                    $libroID = $vj->getidvideojuego();
                     //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
                 }
 
@@ -642,12 +642,11 @@ class ManejoDataRepository extends EntityRepository {
                  */
                 $q = $em->createQueryBuilder()
                     ->select('e')
-                    ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                    ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                    ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                    ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                    ->where(' e.inejelibro in (:plibros)')  
-                    ->setParameter('plibros', $arLibros)
+                    ->from('LibreameBackendBundle:Ejemplar', 'e')
+                    ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                    ->leftJoin('LibreameBackendBundle:Trato', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                    ->where(' e.inejelibro in (:pvideojuegos)')  
+                    ->setParameter('pvideojuegos', $arVideojuegos)
                     ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                     ->setParameter('estado', 1)//Solo los usuarios con estado 1
                     ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
