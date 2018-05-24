@@ -30,3 +30,6 @@ ADD COLUMN `dbvalsuscripcion` DOUBLE NOT NULL DEFAULT 0 COMMENT 'Precio de la su
 
 ALTER TABLE `ex4play`.`puntosusuario` 
 ADD COLUMN `inefectivos` INT NOT NULL DEFAULT 0 COMMENT 'Puntos efectivos 1, Puntos NO efectivos 0' AFTER `insumaresta`;
+
+ALTER TABLE `ex4play`.`videojuego` 
+ADD COLUMN `tximagen` VARCHAR(300) NOT NULL DEFAULT 'PENDIENTE' AFTER `txgenerovideojuego`;

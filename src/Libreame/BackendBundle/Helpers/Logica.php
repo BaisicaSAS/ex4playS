@@ -20,6 +20,9 @@ use Libreame\BackendBundle\Entity\Detalleplan;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
 use Libreame\BackendBundle\Entity\Lugar;
+use Libreame\BackendBundle\Entity\Ejemplar;
+use Libreame\BackendBundle\Entity\Ejemplarusuario;
+use Libreame\BackendBundle\Entity\Videojuego;
 
 
 
@@ -72,8 +75,7 @@ class Logica {
 
                 case GamesController::txAccRecFeeds: {//Dato:4 : Recuperar Feeds de ejemplares
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::recuperarFeedEjemplares($solicitud);
+                   $respuesta = GestionEjemplares::recuperarFeedEjemplares($solicitud, $em);
                     break;
                 } 
 
@@ -86,8 +88,8 @@ class Logica {
 
                 case GamesController::txAccBusEjemp: {//Dato:7 : Buscar
                     //echo "<script>alert('Antes de entrar a Buscar Ejemplares Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::buscarEjemplares($solicitud);
+                    //$objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = GestionEjemplares::buscarEjemplares($solicitud, $em);
                     break;
                 } 
 
@@ -255,7 +257,7 @@ class Logica {
 
                 //accion de recuperar los feeds de publicaciones nuevas
                 case GamesController::txAccRecFeeds:  //Dato: 4
-                    $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo);
+                    $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo, $em);
                     break;
 
                 //accion de recuperar mensajes
@@ -265,7 +267,7 @@ class Logica {
 
                 //accion de buscar ejemplares
                 case GamesController::txAccBusEjemp:  //Dato: 7
-                    $JSONResp = Logica::respuestaBuscarEjemplares($respuesta, $pSolicitud, $parreglo);
+                    $JSONResp = Logica::respuestaBuscarEjemplares($respuesta, $pSolicitud, $parreglo, $em);
                     break;
 
                 //accion de recuperar oferta
@@ -480,26 +482,17 @@ class Logica {
     public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
-            $ejemplar = new LbEjemplares();
+            $ejemplar = new Ejemplar();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $generos = new LbGeneros();
-                $autores = new LbAutores();
-                $editoriales = new LbEditoriales();
-                $libros = new LbLibros();
-                $usuario = new LbUsuarios();
+
+                $videojuegos = new Videojuego();
+                $usuario = new Usuario();
                 if ($respuesta->getRespuesta()== GamesController::inULogged){
-                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "titulo libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...generos \n";
-                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...autores \n";
-                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...editoriales \n";
+                    $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego());
+
                     $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
                     //echo "...megusta \n";
                     $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
@@ -594,7 +587,7 @@ class Logica {
     public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
-            $ejemplar = new LbEjemplares();
+            $ejemplar = new \Libreame\BackendBundle\Entity\Ejemplar();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){

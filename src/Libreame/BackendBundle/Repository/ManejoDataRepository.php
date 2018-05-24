@@ -488,17 +488,17 @@ class ManejoDataRepository extends EntityRepository {
             //Cantidad de ejemplares de un usuario
             
             //Ejemplar del usuario
-            $ejeusu  = new Ejemplarusuario();
+            //$ejeusu  = new Ejemplarusuario();
             $ejeusu = $em->getRepository('LibreameBackendBundle:Ejemplarusuario')->
                     findBy(array('ejemplarusuariousuario' => $usuario));
             
-            $ejemplar = new Ejemplar();
+            //$ejemplar = new Ejemplar();
             $ejemplar = $em->getRepository('LibreameBackendBundle:Ejemplar')->
-                    findBy(array('idejemplar' => $ejeusu->getejemplarusuarioejemplar()));
+                    findBy(array('idejemplar' => $ejeusu));
             
-            echo "Dentro de preferencias  \n";
+            //echo "Dentro de preferencias  \n";
             $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
-                    findBy(array('idvideojuego' => $ejemplar->getejemplarVideojuego()));
+                    findBy(array('idvideojuego' => $ejemplar));
             
             //generos
             /*$qg = $em->createQueryBuilder()
@@ -544,7 +544,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "Cargó arreglo editoriales  \n";
             
             $arrPreferencias[] = array('consolas' => $arrConsolas, 'generos' => $arrGeneros);
-            echo "Fin preferencias  \n";
+            //echo "Fin preferencias  \n";
 
             return $arrPreferencias;
         } catch (Exception $ex) {
@@ -554,6 +554,214 @@ class ManejoDataRepository extends EntityRepository {
     }
  
     
+   //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
+    public function getBuscarEjemplares(Usuario $usuario, $texto, $em)
+    {   
+        //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
+        //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
+        try{
+            //Si la palabra de búsqueda viene en cero, el resultset es los 30 ejemplares más recientes
+            if ($texto == "") {
+                $resejemplares = ManejoDataRepository::getEjemplaresDisponibles(GamesController::inDatoCer, $em);
+                return $resejemplares;
+            } else {
+
+                setlocale (LC_TIME, "es_CO");
+                $fecha = new \DateTime;
+                $arVideojuegos =[];
+
+                $rsm  = new ResultSetMapping();
+                $rsm->addEntityResult('LibreameBackendBundle:Videojuego', 'vj');
+                $rsm->addFieldResult('vj', 'idvideojuego', 'idvideojuego');
+                $rsm->addFieldResult('vj', 'txnomvideojuego', 'txnomvideojuego');
+                $rsm->addFieldResult('vj', 'txurlinformacion', 'txurlinformacion');
+                $rsm->addFieldResult('vj', 'txobservaciones', 'txobservaciones');
+                $rsm->addFieldResult('vj', 'txgenerovideojuego', 'txgenerovideojuego');
+                $rsm->addFieldResult('vj', 'tximagen', 'tximagen');
+                /*$rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
+                $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
+                $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
+                $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
+                $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
+                $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
+                //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
+                $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
+                //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
+                $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
+                $rsm->addFieldResult('a', 'inidautor', 'inidautor');
+                $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
+                $rsm->addFieldResult('a', 'txautpais', 'txautpais');
+                $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
+                $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
+                $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
+                $rsm->addFieldResult('e', 'txedipais', 'txedipais');*/
+                //Consulta libros por indice en tabla libro
+                $txsql = "SELECT idvideojuego, txnomvideojuego, txurlinformacion, txobservaciones, txgenerovideojuego, "
+                        . "tximagen FROM videojuego "
+                         ." WHERE MATCH(txnomvideojuego,txurlinformacion, " 
+                         ." txobservaciones,txgenerovideojuego,tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $videojuegos = $query->getResult();
+                foreach ($videojuegos as $videojuego) {
+                    //echo "ENTRO:"."\n";
+                    $arVideojuegos[] = $videojuego->getidvideojuego();
+                    $libroID = $videojuego->getidvideojuego();
+                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                }
+
+                //Consulta libros por indice en tabla autores
+                /*$txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
+                         ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $autores = $query->getResult();
+                foreach ($autores as $autor) {
+                    $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
+                    foreach ($aut_libros as $autlibro) {
+                        //echo "ENTRO:"."\n";
+                        $arLibros[] = $autlibro->getInautlidlibro();
+                        $libroID = $autlibro->getInautlidlibro();
+                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                    }
+                }
+
+                //Consulta libros por indice en tabla editoriales
+                $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
+                         ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $editoriales = $query->getResult();
+                foreach ($editoriales as $editorial) {
+                    $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
+                    foreach ($edi_libros as $edilibro) {
+                        //echo "ENTRO:"."\n";
+                        $arLibros[] = $edilibro->getInediliblibro();
+                        $libroID = $edilibro->getInediliblibro();
+                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                    }
+                }
+                 * 
+                 */
+                $q = $em->createQueryBuilder()
+                    ->select('e')
+                    ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                    ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                    ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                    ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                    ->where(' e.inejelibro in (:plibros)')  
+                    ->setParameter('plibros', $arLibros)
+                    ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
+                    ->setParameter('estado', 1)//Solo los usuarios con estado 1
+                    ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                    ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
+                    ->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                    ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                    ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                    ->setParameter('grupos', $grupos)
+                    ->setMaxResults(30)
+                    ->orderBy(' h.fehisejeregistro ', 'DESC');
+
+                //echo "ACABO: "."\n";
+                $resejemplares = $q->getQuery()->getResult();  
+                $em->flush();
+
+                return $resejemplares;
+            }
+            
+        } catch (Exception $ex) {
+                return new Ejemplar();
+        } 
+    }
+                
+        //Obtiene todos los Ejemplares, con ID mayor al parámetro
+    public function getEjemplaresDisponibles($inultejemplar, $em)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            //Los ejemplares cuya membresías coincidan con las del usuario que solicita
+            //El usuario debe estar activo
+            
+            //Si el ultimo ejemplar es 0, la lista es de los 30 más recientes, 
+            //si es positivo la lista los 30 superiores al numero y si es negativo
+            //lista los 30 anteriores
+            if ($inultejemplar == 0){ //Si es cero, trae los 30 más recientes
+                $limiteSup = ManejoDataRepository::getMaxEjemplar($em);
+                $limiteInf = $limiteSup - 30;
+            } else if($inultejemplar > 0) { //Si es Positivo trae los 30 siguientes al numero
+                $limiteInf = $inultejemplar + 1;
+                $limiteSup = $limiteInf + 30;
+            } else if ($inultejemplar < 0) { //Si es negativo trae los 30 anteriores 
+                $limiteSup = ($inultejemplar*-1) - 1;
+                $limiteInf =  $limiteSup -30;
+            }
+            
+            $nulo = "NULL";
+            $blanco = "";
+            
+            $q = $em->createQueryBuilder()
+                ->select('e')
+                ->from('LibreameBackendBundle:Ejemplar', 'e')
+                ->leftJoin('LibreameBackendBundle:Videojuego', 'vj', \Doctrine\ORM\Query\Expr\Join::WITH, 'vj.idvideojuego = e.ejemplarVideojuego ')
+                ->leftJoin('LibreameBackendBundle:Ejemplarusuario', 'eu', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = eu.ejemplarusuarioejemplar and t.tratousrdueno = eu.ejemplarusuariousuario')
+                //Ojo falta adicionar la imagen
+                ->where(' (vj.tximagen IS NOT NULL) AND (vj.tximagen <> :nulo) AND (vj.tximagen <> :blanco)')
+                ->setParameter('nulo', $nulo)
+                ->setParameter('blanco', $blanco)
+                ->andWhere(' e.idejemplar BETWEEN :pejemplar AND :pFejemplar')
+                ->setParameter('pejemplar', $limiteInf)
+                ->setParameter('pFejemplar', $limiteSup)
+                ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
+                ->setParameter('estado', 1)//Solo los usuarios con estado 1
+                ->andWhere(' eu.inpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
+                    
+                ->setMaxResults(30)
+                //->orderBy(' h.fehisejeregistro ', 'DESC');
+                ->orderBy(' e.idejemplar ', 'DESC');
+
+            return $q->getQuery()->getResult();
+            //return $q->getArrayResult();
+        } catch (Exception $ex) {
+                //echo "retorna error";
+                return new Ejemplar();
+        } 
+    }
+                
+    //Obtiene el máximo ID en ejemplares 
+    public function getMaxEjemplar($em)
+    {  
+        try{
+            $qmx = $em->createQueryBuilder()
+                ->select('MAX(e.idejemplar)')
+                ->from('LibreameBackendBundle:Ejemplar', 'e');
+            
+            $max = (int)$qmx->getQuery()->getSingleScalarResult();//Si hay registro devuelve lo que hay
+            
+            return $max;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+
+   //Obtiene el objeto Videojuego según su ID 
+    public function getVideojuego($idvideojuego, $em)
+    {   
+        try{
+
+            //$libro = new LbLibros();
+            $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
+                //findOneBy(array("inlibro"=>$inlibro));
+                findOneByIdvideojuego($idvideojuego);
+  
+            //echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
+            return $videojuego;
+        } catch (Exception $ex) {
+                return new Videojuego();
+        } 
+    }
+    
+
+
     ///********************* LO QUE NO SE USA ********************************///
     
     
@@ -574,23 +782,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene el máximo ID en ejemplares 
-    public function getMaxEjemplar()
-    {  
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qmx = $em->createQueryBuilder()
-                ->select('MAX(e.inejemplar)')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e');
-            
-            $max = (int)$qmx->getQuery()->getSingleScalarResult();//Si hay registro devuelve lo que hay
-            
-            return $max;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-
     //Obtiene el registro de Megusta del ejemplar
     public function getRegMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
     {   
@@ -1004,24 +1195,6 @@ class ManejoDataRepository extends EntityRepository {
         }   
     }
     
-    //Obtiene el objeto Libro según su ID 
-    public function getLibro($inlibro)
-    {   
-        try{
-            //echo "El libro solicitado: -[".$inlibro."]- \n";
-            $em = $this->getDoctrine()->getManager();
-            //$libro = new LbLibros();
-            $libro = $em->getRepository('LibreameBackendBundle:LbLibros')->
-                //findOneBy(array("inlibro"=>$inlibro));
-                findOneByInlibro($inlibro);
-  
-            //echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
-            return $libro;
-        } catch (Exception $ex) {
-                return new LbLibros();
-        } 
-    }
-    
     //Obtiene el objeto Libro según su nombre 
     public function getLibroByTitulo($titulo)
     {   
@@ -1138,188 +1311,6 @@ class ManejoDataRepository extends EntityRepository {
             return $fecha['fecha'];
         } catch (Exception $ex) {
                 return $fecha;
-        } 
-    }
-                
-    //Obtiene todos los Ejemplares, con ID mayor al parámetro
-    public function getEjemplaresDisponibles(Array $grupos, $inultejemplar)
-    {   
-        try{
-            //Recupera cada uno de los ejemplares con ID > al del parametro
-            //Los ejemplares cuya membresías coincidan con las del usuario que solicita
-            //El usuario debe estar activo
-            
-            //Si el ultimo ejemplar es 0, la lista es de los 30 más recientes, 
-            //si es positivo la lista los 30 superiores al numero y si es negativo
-            //lista los 30 anteriores
-            if ($inultejemplar == 0){ //Si es cero, trae los 30 más recientes
-                $limiteSup = ManejoDataRepository::getMaxEjemplar();
-                $limiteInf = $limiteSup - 30;
-            } else if($inultejemplar > 0) { //Si es Positivo trae los 30 siguientes al numero
-                $limiteInf = $inultejemplar + 1;
-                $limiteSup = $limiteInf + 30;
-            } else if ($inultejemplar < 0) { //Si es negativo trae los 30 anteriores 
-                $limiteSup = ($inultejemplar*-1) - 1;
-                $limiteInf =  $limiteSup -30;
-            }
-            
-            $nulo = "NULL";
-            $blanco = "";
-            $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('e')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' (e.txejeimagen IS NOT NULL) AND (e.txejeimagen <> :nulo) AND (e.txejeimagen <> :blanco)')
-                ->setParameter('nulo', $nulo)
-                ->setParameter('blanco', $blanco)
-                ->andWhere(' e.inejemplar BETWEEN :pejemplar AND :pFejemplar')
-                ->setParameter('pejemplar', $limiteInf)
-                ->setParameter('pFejemplar', $limiteSup)
-                ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
-                ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
-                ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
-                ->andWhere(' h.inhisejemovimiento = :pmovimiento')
-                ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
-                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                ->setParameter('grupos', $grupos)
-                    
-                ->setMaxResults(30)
-                //->orderBy(' h.fehisejeregistro ', 'DESC');
-                ->orderBy(' e.inejemplar ', 'DESC');
-
-            return $q->getQuery()->getResult();
-            //return $q->getArrayResult();
-        } catch (Exception $ex) {
-                //echo "retorna error";
-                return new LbEjemplares();
-        } 
-    }
-                
-   //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
-    public function getBuscarEjemplares(LbUsuarios $usuario, Array $grupos, $texto)
-    {   
-        //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
-        //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
-        try{
-            //Si la palabra de búsqueda viene en cero, el resultset es los 30 ejemplares más recientes
-            if ($texto == "") {
-                $resejemplares = ManejoDataRepository::getEjemplaresDisponibles($grupos, GamesController::inDatoCer);
-                return $resejemplares;
-            } else {
-                $em = $this->getDoctrine()->getManager();
-                setlocale (LC_TIME, "es_CO");
-                $fecha = new \DateTime;
-                $objBusqueda = new LbBusquedasusuarios();
-                $objBusqueda->setFebusfecha($fecha);
-                $objBusqueda->setInbususuario($usuario);
-                $objBusqueda->setTxbuspalabra(utf8_encode($texto));
-                $em->persist($objBusqueda);
-                $em->flush();
-                $arLibros =[];
-
-                $em = $this->getDoctrine()->getManager();
-                $rsm   = new ResultSetMapping();
-                $rsm->addEntityResult('LibreameBackendBundle:LbLibros', 'l');
-                $rsm->addFieldResult('l', 'inlibro', 'inlibro');
-                $rsm->addFieldResult('l', 'txlibtipopublica', 'txlibtipopublica');
-                $rsm->addFieldResult('l', 'txlibtitulo', 'txlibtitulo');
-                $rsm->addFieldResult('l', 'txlibedicionanio', 'txlibedicionanio');
-                $rsm->addFieldResult('l', 'txlibedicionnum', 'txlibedicionnum');
-                $rsm->addFieldResult('l', 'txlibedicionpais', 'txlibedicionpais');
-                $rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
-                $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
-                $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
-                $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
-                $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
-                $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
-                //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
-                $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
-                //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
-                $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
-                $rsm->addFieldResult('a', 'inidautor', 'inidautor');
-                $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
-                $rsm->addFieldResult('a', 'txautpais', 'txautpais');
-                $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
-                $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
-                $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
-                $rsm->addFieldResult('e', 'txedipais', 'txedipais');
-                //Consulta libros por indice en tabla libro
-                $txsql = "SELECT inlibro, txlibtipopublica, txlibtitulo,txlibedicionanio, txlibedicionnum, "
-                        . "txlibedicionpais, txediciondescripcion, txlibcodigoofic, txlibcodigoofic13, "
-                        . "txlibresumen, txlibtomo, txlibvolumen, txlibpaginas FROM lb_libros "
-                         ." WHERE MATCH(txlibtitulo,txlibedicionpais, " 
-                         ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
-                         ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $libros = $query->getResult();
-                foreach ($libros as $libro) {
-                    //echo "ENTRO:"."\n";
-                    $arLibros[] = $libro->getInlibro();
-                    $libroID = $libro->getInlibro();
-                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                }
-
-                //Consulta libros por indice en tabla autores
-                $txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
-                         ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $autores = $query->getResult();
-                foreach ($autores as $autor) {
-                    $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
-                    foreach ($aut_libros as $autlibro) {
-                        //echo "ENTRO:"."\n";
-                        $arLibros[] = $autlibro->getInautlidlibro();
-                        $libroID = $autlibro->getInautlidlibro();
-                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                    }
-                }
-
-                //Consulta libros por indice en tabla editoriales
-                $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
-                         ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $editoriales = $query->getResult();
-                foreach ($editoriales as $editorial) {
-                    $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
-                    foreach ($edi_libros as $edilibro) {
-                        //echo "ENTRO:"."\n";
-                        $arLibros[] = $edilibro->getInediliblibro();
-                        $libroID = $edilibro->getInediliblibro();
-                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                    }
-                }
-                $q = $em->createQueryBuilder()
-                    ->select('e')
-                    ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                    ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                    ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                    ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                    ->where(' e.inejelibro in (:plibros)')  
-                    ->setParameter('plibros', $arLibros)
-                    ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
-                    ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                    ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
-                    ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
-                    ->andWhere(' h.inhisejemovimiento = :pmovimiento')
-                    ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
-                    ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                    ->setParameter('grupos', $grupos)
-                    ->setMaxResults(30)
-                    ->orderBy(' h.fehisejeregistro ', 'DESC');
-
-                //echo "ACABO: "."\n";
-                $resejemplares = $q->getQuery()->getResult();  
-                $em->flush();
-
-                return $resejemplares;
-            }
-            
-        } catch (Exception $ex) {
-                return new LbEjemplares();
         } 
     }
                 

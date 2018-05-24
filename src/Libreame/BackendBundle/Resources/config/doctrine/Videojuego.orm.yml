@@ -58,6 +58,14 @@ Libreame\BackendBundle\Entity\Videojuego:
                 fixed: false
                 comment: 'Genero del videojuego'
                 default: 'SIN CLASIFICAR'
+        tximagen:
+            type: string
+            nullable: false
+            length: 300
+            options:
+                fixed: false
+                comment: 'Imagen del juego'
+                default: 'PENDIENTE'
     manyToOne:
         videojuegoConsola:
             targetEntity: Consola

@@ -73,7 +73,116 @@ class Videojuego
      */
     private $txgenerovideojuego;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tximagen", type="string", length=300, nullable=false)
+     */
+    private $tximagen;
 
+    //getter y setter
     
+    public function getidvideojuego()
+    {
+        return $this->idvideojuego;
+    }
+ 
+    public function gettxnomvideojuego()
+    {
+        return $this->txnomvideojuego;
+    }
+
+    public function getfelanzamiento()
+    {
+        return $this->felanzamiento;
+    }
+ 
+    public function getincategvideojuego()
+    {
+        return $this->incategvideojuego;
+    }
+
+    public function getvideojuegoConsola()
+    {
+        return $this->videojuegoConsola;
+    }
+ 
+    public function gettxurlinformacion()
+    {
+        return $this->txurlinformacion;
+    }
+ 
+    public function gettxobservaciones()
+    {
+        return $this->txobservaciones;
+    }
+ 
+    public function gettxgenerovideojuego()
+    {
+        return $this->txgenerovideojuego;
+    }
+ 
+    public function gettximagen()
+    {
+        return $this->tximagen;
+    }
+ 
+    //setter
+    public function settxnomvideojuego($txnomvideojuego)
+    {
+        $this->txnomvideojuego = $txnomvideojuego;
+
+        return $this;
+    }
+   
+    public function setfelanzamiento($felanzamiento)
+    {
+        $this->felanzamiento = $felanzamiento;
+
+        return $this;
+    }
+   
+    public function setincategvideojuego($incategvideojuego)
+    {
+        $this->incategvideojuego = $incategvideojuego;
+
+        return $this;
+    }
+
+    public function setvideojuegoConsola($videojuegoConsola)
+    {
+        $this->videojuegoConsola = $videojuegoConsola;
+
+        return $this;
+    }
+
+    public function settxurlinformacion($txurlinformacion)
+    {
+        $this->txurlinformacion = $txurlinformacion;
+
+        return $this;
+    }
+
+    public function settxobservaciones($txobservaciones)
+    {
+        $this->txobservaciones = $txobservaciones;
+
+        return $this;
+    }
+
+    public function settxgenerovideojuego($txgenerovideojuego)
+    {
+        $this->txgenerovideojuego = $txgenerovideojuego;
+
+        return $this;
+    }
+
+    public function settximagen($tximagen)
+    {
+        $this->tximagen = $tximagen;
+
+        return $this;
+    }
+
 }
 
