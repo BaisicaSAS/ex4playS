@@ -482,33 +482,36 @@ class Logica {
     public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
-            $ejemplar = new Ejemplar();
+            $ejemplarusuario = new Ejemplarusuario();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
-            foreach ($parreglo as $ejemplar){
+            foreach ($parreglo as $ejemplarusuario){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
 
                 $videojuegos = new Videojuego();
                 $usuario = new Usuario();
+                $ejemplar = new Ejemplar();
+                $ejemplar = $ejemplarusuario->getejemplarusuarioejemplar();
                 if ($respuesta->getRespuesta()== GamesController::inULogged){
-                    $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego());
+                    $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
 
-                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //ex4play :: Implementar megusta
+                    //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
                     //echo "...megusta \n";
-                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
                     //echo "...cantmegusta \n";
-                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
+                    //$cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
                     //echo "...cantcomment \n";
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario());
                     //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
-                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
+                    //$promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
                     //echo "...promcalifica \n";
                     $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
                     //echo "...$fecpublica \n";
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
-                $arrAutores = array();
+                /*$arrAutores = array();
                 foreach ($autores as $autor) {
                     //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
                     $arrAutores[] = array('inidautor' => $autor->getInidautor(),
@@ -526,20 +529,20 @@ class Logica {
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
                         'txgennombre' => utf8_encode($genero->getTxgennombre()));
                 }
-                
-                $titulo = utf8_encode($libros->getTxlibtitulo());
-                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
-                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
-                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
-                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
-                $edicion = utf8_encode($libros->getTxediciondescripcion());
-                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
-                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
-                $imagen = utf8_encode($ejemplar->getTxejeimagen());
-                $lugar = $usuario->getInusulugar();
-                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                */
+                $titulo = utf8_encode($videojuegos->gettxnomvideojuego());
+                //$precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
+                $puntos = utf8_encode($videojuegos->getincategvideojuego()*50); //Cantidad de puntos
+                //$estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
+                //$usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
+                //$vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
+                //$edicion = utf8_encode($libros->getTxediciondescripcion());
+                //$isbn10 = utf8_encode($libros->getTxlibcodigoofic());
+                //$isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
+                $imagen = utf8_encode($videojuegos->gettximagen());
+                $lugar = $usuario->getUsuarioInlugar();
+                //$condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                //$desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 

@@ -632,7 +632,7 @@ class ManejoDataRepository extends EntityRepository {
                 foreach ($editoriales as $editorial) {
                     $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
                     foreach ($edi_libros as $edilibro) {
-                        //echo "ENTRO:"."\n";
+                        //echo "ENTRO:"."\nt";
                         $arLibros[] = $edilibro->getInediliblibro();
                         $libroID = $edilibro->getInediliblibro();
                         //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
@@ -641,22 +641,23 @@ class ManejoDataRepository extends EntityRepository {
                  * 
                  */
                 $q = $em->createQueryBuilder()
-                    ->select('e')
-                    ->from('LibreameBackendBundle:Ejemplar', 'e')
-                    ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                    ->leftJoin('LibreameBackendBundle:Trato', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                    ->where(' e.inejelibro in (:pvideojuegos)')  
+                    ->select('eu')
+                    ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                    ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                    ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                    ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                    ->where(' e.ejemplarvideojuego in (:pvideojuegos)')  
                     ->setParameter('pvideojuegos', $arVideojuegos)
                     ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                     ->setParameter('estado', 1)//Solo los usuarios con estado 1
                     ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
                     ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
-                    ->andWhere(' h.inhisejemovimiento = :pmovimiento')
-                    ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
-                    ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                    ->setParameter('grupos', $grupos)
+                    //->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                    //->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                    //->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                    //->setParameter('grupos', $grupos)
                     ->setMaxResults(30)
-                    ->orderBy(' h.fehisejeregistro ', 'DESC');
+                    ->orderBy(' t.fefechatrato ', 'DESC');
 
                 //echo "ACABO: "."\n";
                 $resejemplares = $q->getQuery()->getResult();  
