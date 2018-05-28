@@ -483,33 +483,22 @@ class Logica {
         try{
             $arrTmp = array();
             $ejemplarusuario = new Ejemplarusuario();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
+            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplarusuario){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
 
                 $videojuegos = new Videojuego();
-                $usuario = new Usuario();
-                $ejemplar = new Ejemplar();
-                $ejemplar = $ejemplarusuario->getejemplarusuarioejemplar();
+                //$usuario = new Usuario();
+                //echo "id del ejemplar : ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
+                $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
                 if ($respuesta->getRespuesta()== GamesController::inULogged){
+                    //echo "\n ejemplar: ".$ejemplar->getidejemplar();
+                    //echo "\n ejemplarusuario: ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
+                    //echo "\n ejemplar - videojuego:  ".$ejemplar->getejemplarVideojuego();
                     $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
-
-                    //ex4play :: Implementar megusta
-                    //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
-                    //echo "...megusta \n";
-                    //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
-                    //echo "...cantmegusta \n";
-                    //$cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
-                    //echo "...cantcomment \n";
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario());
-                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
-                    //$promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
-                    //echo "...promcalifica \n";
-                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
-                    //echo "...$fecpublica \n";
-                    //echo "RECUPERO DATOS\n";*/
-                }
+                    //echo "\n id videojuego -> ".$videojuegos->getidvideojuego(); 
+                //}
                 
                 /*$arrAutores = array();
                 foreach ($autores as $autor) {
@@ -530,7 +519,11 @@ class Logica {
                         'txgennombre' => utf8_encode($genero->getTxgennombre()));
                 }
                 */
+                //echo "\n videojuego ".$videojuegos->getidvideojuego();
+                //echo "\n ejemplar -> id videojuego: ".$ejemplar->getejemplarVideojuego()->getidvideojuego();    
+
                 $titulo = utf8_encode($videojuegos->gettxnomvideojuego());
+                //$titulo = $videojuegos->gettxnomvideojuego();
                 //$precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
                 $puntos = utf8_encode($videojuegos->getincategvideojuego()*50); //Cantidad de puntos
                 //$estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
@@ -540,28 +533,35 @@ class Logica {
                 //$isbn10 = utf8_encode($libros->getTxlibcodigoofic());
                 //$isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($videojuegos->gettximagen());
-                $lugar = $usuario->getUsuarioInlugar();
+                echo "lugar: ".$usuario->getUsuarioInlugar()->getinlugar();
+                $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
                 //$condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //$desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                //ex4play :: Implementar megusta
+                //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                //echo "...megusta \n";
+                //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                //echo "...cantmegusta \n";
+                //$cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
+                //echo "...cantcomment \n";
+                $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario(), $em);
+                //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
+                //$promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
+                //echo "...promcalifica \n";
+                $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario, $em);
+                //echo "\n fecha publicación... $fecpublica \n";
+                //echo "RECUPERO DATOS\n";*/
+                $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
                     'titulo' => $titulo, 
-                    'precio' => $precio, 
                     'puntos' => $puntos, 
-                    'estado' => $estado, 
-                    'usado' => $usado, 
-                    'vencam' => $vencam, 
+                    //'estado' => $estado, 
                     'imagen' => $imagen, 
-                    'edicion' => $edicion,
-                    'isbn10' => $isbn10,
-                    'isbn13' => $isbn13,
-                    'megusta' => $megusta,
+                    //'megusta' => $megusta,
                     'fechapublica' => $fecpublica,
-                    'cantmegusta' => $cantmegusta,
-                    'cantcomment' => $cantcomment,
-                    'condactual' => $condactual,
-                    'desccondactual' => $desccondactual,
-                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
+                    //'cantcomment' => $cantcomment,
+                    //'desccondactual' => $desccondactual,
+                    'lugar' => array('inlugar' => $lugar->getinlugar(), 'txlugnombre' => utf8_encode($lugar->gettxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,
                     'generos' => $arrGeneros,
@@ -570,7 +570,8 @@ class Logica {
                         'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
                         'calificacion' => $promcalifica)
                 );
-                
+                }
+            
             }
             
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),

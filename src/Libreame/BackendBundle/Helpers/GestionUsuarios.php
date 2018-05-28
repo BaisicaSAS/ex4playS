@@ -222,7 +222,7 @@ class GestionUsuarios {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //Busca el usuario 
-                $usuario = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariover());
+                $usuario = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariover(), $em);
                 if ($usuario != NULL)
                 {
                     $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario, $em);

@@ -596,17 +596,17 @@ class ManejoDataRepository extends EntityRepository {
                 $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
                 $rsm->addFieldResult('e', 'txedipais', 'txedipais');*/
                 //Consulta libros por indice en tabla libro
-                $txsql = "SELECT idvideojuego, txnomvideojuego, txurlinformacion, txobservaciones, txgenerovideojuego, "
-                        . "tximagen FROM videojuego "
-                         ." WHERE MATCH(txnomvideojuego,txurlinformacion, " 
-                         ." txobservaciones,txgenerovideojuego,tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $txsql = "SELECT v.idvideojuego, v.txnomvideojuego, v.txurlinformacion, v.txobservaciones, v.txgenerovideojuego, "
+                        . "v.tximagen FROM videojuego v join ejemplar e ON (v.idvideojuego = e.ejemplar_videojuego)"
+                         ." WHERE MATCH(v.txnomvideojuego,v.txurlinformacion, " 
+                         ." v.txobservaciones,v.txgenerovideojuego,v.tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
                 $query = $em->createNativeQuery( $txsql, $rsm ); 
                 $videojuegos = $query->getResult();
                 foreach ($videojuegos as $vj) {
                     //echo "ENTRO:"."\n";
                     $arVideojuegos[] = $vj->getidvideojuego();
-                    $libroID = $vj->getidvideojuego();
-                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                    $idvideojugo = $vj->getidvideojuego();
+                    //echo "**BUSCAR VIDEOJUEGO:".$idvideojugo."-".$vj->gettxnomvideojuego()."\n";
                 }
 
                 //Consulta libros por indice en tabla autores
@@ -646,11 +646,11 @@ class ManejoDataRepository extends EntityRepository {
                     ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
                     ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
                     ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
-                    ->where(' e.ejemplarvideojuego in (:pvideojuegos)')  
+                    ->where(' e.ejemplarVideojuego in (:pvideojuegos)')  
                     ->setParameter('pvideojuegos', $arVideojuegos)
                     ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                     ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                    ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                    ->andWhere(' e.inejemplarpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
                     ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
                     //->andWhere(' h.inhisejemovimiento = :pmovimiento')
                     //->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
@@ -658,16 +658,18 @@ class ManejoDataRepository extends EntityRepository {
                     //->setParameter('grupos', $grupos)
                     ->setMaxResults(30)
                     ->orderBy(' t.fefechatrato ', 'DESC');
+                
+                //echo $q->getQuery()->getSql();
 
-                //echo "ACABO: "."\n";
                 $resejemplares = $q->getQuery()->getResult();  
-                $em->flush();
+                //echo "ACABO: ".count($resejemplares)."\n";
+                //$em->flush();
 
                 return $resejemplares;
             }
             
         } catch (Exception $ex) {
-                return new Ejemplar();
+                return new Ejemplarusuario();
         } 
     }
                 
@@ -697,7 +699,7 @@ class ManejoDataRepository extends EntityRepository {
             $blanco = "";
             
             $q = $em->createQueryBuilder()
-                ->select('e')
+                ->select('eu')
                 ->from('LibreameBackendBundle:Ejemplar', 'e')
                 ->leftJoin('LibreameBackendBundle:Videojuego', 'vj', \Doctrine\ORM\Query\Expr\Join::WITH, 'vj.idvideojuego = e.ejemplarVideojuego ')
                 ->leftJoin('LibreameBackendBundle:Ejemplarusuario', 'eu', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
@@ -747,13 +749,12 @@ class ManejoDataRepository extends EntityRepository {
     public function getVideojuego($idvideojuego, $em)
     {   
         try{
-
-            //$libro = new LbLibros();
             $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
-                //findOneBy(array("inlibro"=>$inlibro));
-                findOneByIdvideojuego($idvideojuego);
-  
-            //echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
+                findOneBy(array("idvideojuego"=>$idvideojuego));
+                //findOneByIdvideojuego($idvideojuego);
+            
+            //echo "\n ManejoDataRepository::getVideojuego: idVideojuego: ".$idvideojuego->getidvideojuego();
+            //echo "\n ManejoDataRepository::getVideojuego: cuenta: ".count($videojuego);
             return $videojuego;
         } catch (Exception $ex) {
                 return new Videojuego();
@@ -1214,14 +1215,13 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene el objeto Usuario según su ID 
-    public function getUsuarioById($inusuario)
+    public function getUsuarioById($inusuario, $em)
     {   
         try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('inusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
+            return $em->getRepository('LibreameBackendBundle:Usuario')->
+                findOneBy(array('idusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
         } catch (Exception $ex) {
-                return new LbUsuarios();
+                return new Usuario();
         } 
     }
     
@@ -1237,14 +1237,13 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
         
-    public function getEjemplarById($ejemplar)
+    public function getEjemplarById($ejemplar, $em)
     {   
         try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbEjemplares')->
-                    findOneBy(array('inejemplar' => $ejemplar));
+            return $em->getRepository('LibreameBackendBundle:Ejemplar')->
+                    findOneBy(array('idejemplar' => $ejemplar));
         } catch (Exception $ex) {
-                return new LbEjemplares();
+                return new Ejemplar();
         } 
     }
                 
@@ -1298,12 +1297,11 @@ class ManejoDataRepository extends EntityRepository {
                 
                
     //Obtiene la fecha en que el usuario publicó el ejemplar
-    public function getFechaPublicacion($pejemplar, $pusuario)
+    public function getFechaPublicacion($pejemplar, $pusuario, $em)
     {   
         try{
-            $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT max(h.fehisejeregistro) AS fecha FROM LibreameBackendBundle:LbHistejemplar h"
-                    ." WHERE h.inhisejeejemplar = :ejemplar AND h.inhisejeusuario = :usuario";
+            $sql = "SELECT max(eu.fepublicacion) AS fecha FROM LibreameBackendBundle:ejemplarusuario eu"
+                    ." WHERE eu.ejemplarusuarioejemplar = :ejemplar AND eu.ejemplarusuariousuario = :usuario";
             $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
             
             $fecha = $query->getOneOrNullResult();

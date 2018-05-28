@@ -26,7 +26,7 @@ class Videojuego
      *
      * @ORM\Column(name="txnomvideojuego", type="string", length=300, nullable=false)
      */
-    private $txnomvideojuego;
+    private $txnomvideojuego = "";
 
     /**
      * @var \DateTime
@@ -184,5 +184,13 @@ class Videojuego
         return $this;
     }
 
+    function __construct(){ 
+        $strBlanco = "";
+        $this->txnomvideojuego = $strBlanco;
+        $this->txobservaciones = $strBlanco;
+        $this->tximagen = $strBlanco;
+    } 
+    
+    
 }
 
