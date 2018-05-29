@@ -184,12 +184,12 @@ class Videojuego
         return $this;
     }
 
-    function __construct(){ 
+    /*function __construct(){ 
         $strBlanco = "";
         $this->txnomvideojuego = $strBlanco;
         $this->txobservaciones = $strBlanco;
         $this->tximagen = $strBlanco;
-    } 
+    } */
     
     
 }

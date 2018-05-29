@@ -21,6 +21,8 @@ use Libreame\BackendBundle\Entity\Calificatrato;
 use Libreame\BackendBundle\Entity\Ejemplarusuario;
 use Libreame\BackendBundle\Entity\Ejemplar;
 use Libreame\BackendBundle\Entity\Videojuego;
+use Libreame\BackendBundle\Entity\Consola;
+use Libreame\BackendBundle\Entity\Fabricante;
 
 /*use AppBundle\Entity\LbEjemplares;
 use AppBundle\Entity\LbGeneros;
@@ -758,6 +760,32 @@ class ManejoDataRepository extends EntityRepository {
             return $videojuego;
         } catch (Exception $ex) {
                 return new Videojuego();
+        } 
+    }
+    
+   //Obtiene la consola por su Id
+    public function getConsola($idconsola, $em)
+    {   
+        try{
+            echo "\n getConsola : ".$idconsola;
+            $consola = $em->getRepository('LibreameBackendBundle:Consola')->
+                findOneBy(array("idconsola"=>$idconsola));
+            
+            return $consola;
+        } catch (Exception $ex) {
+                return new Consola();
+        } 
+    }
+    
+   //Obtiene el objeto Fabricante según su ID 
+    public function getFabricante($idfabricante, $em)
+    {   
+        try{
+            $fabricante = $em->getRepository('LibreameBackendBundle:Fabricante')->
+                findOneBy(array("idfabricante"=>$idfabricante));
+            return $fabricante;
+        } catch (Exception $ex) {
+                return new Fabricante();
         } 
     }
     

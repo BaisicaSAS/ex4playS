@@ -23,8 +23,8 @@ use Libreame\BackendBundle\Entity\Lugar;
 use Libreame\BackendBundle\Entity\Ejemplar;
 use Libreame\BackendBundle\Entity\Ejemplarusuario;
 use Libreame\BackendBundle\Entity\Videojuego;
-
-
+use Libreame\BackendBundle\Entity\Consola;
+use Libreame\BackendBundle\Entity\Fabricante;
 
 class Logica {   
 
@@ -488,7 +488,7 @@ class Logica {
             foreach ($parreglo as $ejemplarusuario){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
 
-                $videojuegos = new Videojuego();
+                //$videojuegos = new Videojuego();
                 //$usuario = new Usuario();
                 //echo "id del ejemplar : ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
                 $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
@@ -497,16 +497,18 @@ class Logica {
                     //echo "\n ejemplarusuario: ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
                     //echo "\n ejemplar - videojuego:  ".$ejemplar->getejemplarVideojuego();
                     $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
-                    //echo "\n id videojuego -> ".$videojuegos->getidvideojuego(); 
+                    echo "\n id videojuego -> ".$videojuegos->getidvideojuego(); 
                 //}
                 
-                /*$arrAutores = array();
-                foreach ($autores as $autor) {
-                    //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
-                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
-                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
-                }
-                $arrEditoriales = array();
+                //$consola = $videojuegos->getvideojuegoConsola()->getidconsola(), $em);
+                $consola = ManejoDataRepository::getConsola($videojuegos->getvideojuegoConsola(), $em);
+                //echo "\n consola [".utf8_encode($videojuegos->getvideojuegoConsola()->getidconsola())."] \n";
+                echo "\n consola [".utf8_encode($videojuegos->getvideojuegoConsola()->getidconsola())."] \n";
+                //echo "\n consola [".utf8_encode($consola->getidconsola())."] \n";
+                $fabricante = ManejoDataRepository::getFabricante($consola->getconsolafabricante(), $em);
+                echo "\n fabricante [".utf8_encode($consola->getconsolafabricante())."] \n";
+                
+                /*$arrEditoriales = array();
                 foreach ($editoriales as $editorial) {
                     //echo "...editorial [".utf8_encode($editorial->getTxedinombre())."] \n";
                     $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
@@ -562,13 +564,13 @@ class Logica {
                     //'cantcomment' => $cantcomment,
                     //'desccondactual' => $desccondactual,
                     'lugar' => array('inlugar' => $lugar->getinlugar(), 'txlugnombre' => utf8_encode($lugar->gettxlugnombre())),
-                    'autores' => $arrAutores,
-                    'editoriales' => $arrEditoriales,
-                    'generos' => $arrGeneros,
-                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
-                        'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
-                        'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
-                        'calificacion' => $promcalifica)
+                    'consola' => $consola,
+                    'fabricante' => $fabricante,
+                    'generos' => $videojuegos->gettxgenerovideojuego(),
+                    //'usrdueno' => array('inusuario' => $usuario->getIdusuario(),
+                    //    'txusunommostrar' => utf8_encode($usuario->getTxnickname()),
+                    //    'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
+                    //    'calificacion' => '0' )
                 );
                 }
             
@@ -591,13 +593,11 @@ class Logica {
     public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
-            $ejemplar = new \Libreame\BackendBundle\Entity\Ejemplar();
+            $ejemplar = new Ejemplar();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $generos = new LbGeneros();
-                $autores = new LbAutores();
                 $editoriales = new LbEditoriales();
                 $libros = new LbLibros();
                 $usuario = new LbUsuarios();

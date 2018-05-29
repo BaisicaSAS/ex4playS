@@ -45,6 +45,49 @@ class Consola
      */
     private $consolaFabricante;
 
+    //getter y setter
+    public function getidconsola()
+    {
+        return $this->idconsola;
+    }
+ 
+    public function gettxnombreconsola()
+    {
+        return $this->txnombreconsola;
+    }
+ 
+    public function getfelanzamiento()
+    {
+        return $this->felanzamiento;
+    }
+ 
+    public function getconsolafabricante()
+    {
+        return $this->consolaFabricante;
+    }
+ 
+    //setter
+    public function settxnombreconsola($txnombreconsola)
+    {
+        $this->txnombreconsola = $txnombreconsola;
 
+        return $this;
+    }
+
+    public function setfelanzamiento($felanzamiento)
+    {
+        $this->felanzamiento = $felanzamiento;
+
+        return $this;
+    }
+
+    public function setconsolafabricante($consolaFabricante)
+    {
+        $this->consolaFabricante = $consolaFabricante;
+
+        return $this;
+    }
+
+    
 }
 
