@@ -57,11 +57,11 @@ class __TwigTemplate_5537eb00ddaffbf9b5bc936aa66825ce727ada17740fae5f6c5e8468087
                             <strong>Profile for:</strong>
                             ";
             // line 18
-            echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute((isset($context["profile"]) ? $context["profile"] : $this->getContext($context, "profile")), "method")), "html", null, true);
+            echo twig_escape_filter($this->env, strtoupper($this->getAttribute((isset($context["profile"]) ? $context["profile"] : $this->getContext($context, "profile")), "method")), "html", null, true);
             echo "
                             ";
             // line 19
-            if (twig_in_filter(twig_upper_filter($this->env, $this->getAttribute((isset($context["profile"]) ? $context["profile"] : $this->getContext($context, "profile")), "method")), array(0 => "GET", 1 => "HEAD"))) {
+            if (twig_in_filter(strtoupper($this->getAttribute((isset($context["profile"]) ? $context["profile"] : $this->getContext($context, "profile")), "method")), array(0 => "GET", 1 => "HEAD"))) {
                 // line 20
                 echo "                                <a href=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["profile"]) ? $context["profile"] : $this->getContext($context, "profile")), "url"), "html", null, true);

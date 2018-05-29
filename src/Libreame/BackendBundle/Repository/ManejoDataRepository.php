@@ -349,7 +349,7 @@ class ManejoDataRepository extends EntityRepository {
             
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
-                return new Plansuscripcion();
+                return new Planusuario();
         } 
     }
                 
@@ -576,39 +576,26 @@ class ManejoDataRepository extends EntityRepository {
                 $rsm->addEntityResult('LibreameBackendBundle:Videojuego', 'vj');
                 $rsm->addFieldResult('vj', 'idvideojuego', 'idvideojuego');
                 $rsm->addFieldResult('vj', 'txnomvideojuego', 'txnomvideojuego');
+                $rsm->addFieldResult('vj', 'felanzamiento', 'felanzamiento');
+                $rsm->addFieldResult('vj', 'incategvideojuego', 'incategvideojuego');
+                $rsm->addFieldResult('vj', 'videojuegoConsola', 'videojuego_consola');
                 $rsm->addFieldResult('vj', 'txurlinformacion', 'txurlinformacion');
                 $rsm->addFieldResult('vj', 'txobservaciones', 'txobservaciones');
                 $rsm->addFieldResult('vj', 'txgenerovideojuego', 'txgenerovideojuego');
                 $rsm->addFieldResult('vj', 'tximagen', 'tximagen');
-                /*$rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
-                $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
-                $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
-                $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
-                $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
-                $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
-                //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
-                $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
-                //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
-                $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
-                $rsm->addFieldResult('a', 'inidautor', 'inidautor');
-                $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
-                $rsm->addFieldResult('a', 'txautpais', 'txautpais');
-                $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
-                $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
-                $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
-                $rsm->addFieldResult('e', 'txedipais', 'txedipais');*/
-                //Consulta libros por indice en tabla libro
-                $txsql = "SELECT v.idvideojuego, v.txnomvideojuego, v.txurlinformacion, v.txobservaciones, v.txgenerovideojuego, "
-                        . "v.tximagen FROM videojuego v join ejemplar e ON (v.idvideojuego = e.ejemplar_videojuego)"
+                $txsql = "SELECT v.idvideojuego, v.txnomvideojuego, v.felanzamiento, v.incategvideojuego, v.videojuego_consola, "
+                        . "v.txurlinformacion, v.txobservaciones, v.txgenerovideojuego,v.tximagen FROM videojuego v join ejemplar e ON (v.idvideojuego = e.ejemplar_videojuego)"
                          ." WHERE MATCH(v.txnomvideojuego,v.txurlinformacion, " 
                          ." v.txobservaciones,v.txgenerovideojuego,v.tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
                 $query = $em->createNativeQuery( $txsql, $rsm ); 
                 $videojuegos = $query->getResult();
                 foreach ($videojuegos as $vj) {
-                    //echo "ENTRO:"."\n";
+                    echo "ENTRO:"."\n";
                     $arVideojuegos[] = $vj->getidvideojuego();
-                    $idvideojugo = $vj->getidvideojuego();
-                    //echo "**BUSCAR VIDEOJUEGO:".$idvideojugo."-".$vj->gettxnomvideojuego()."\n";
+                    $idvideojuego = $vj->getidvideojuego();
+                    echo "**BUSCAR VIDEOJUEGO:".$idvideojuego." - ".$vj->gettxnomvideojuego()."\n";
+                    $consola = ManejoDataRepository::getConsola($vj, $em);
+                    echo "**CONSOLA:".$consola->getidconsola()."\n";
                 }
 
                 //Consulta libros por indice en tabla autores
@@ -764,14 +751,23 @@ class ManejoDataRepository extends EntityRepository {
     }
     
    //Obtiene la consola por su Id
-    public function getConsola($idconsola, $em)
+    public function getConsola(Videojuego $videojuego, $em)
     {   
         try{
-            echo "\n getConsola : ".$idconsola;
-            $consola = $em->getRepository('LibreameBackendBundle:Consola')->
-                findOneBy(array("idconsola"=>$idconsola));
             
-            return $consola;
+            $vj = $em->getRepository('LibreameBackendBundle:Videojuego')->
+                findOneBy(array("idvideojuego"=>$videojuego->getidvideojuego()));
+            echo "\n categoria : [".$vj->getincategvideojuego()."]";
+            echo "\n url : ".$vj->gettxurlinformacion();
+            echo "\n consola : ".$vj->getvideojuegoconsola();
+            echo "\n imagen : ".$vj->gettximagen();
+            echo "\n nombre : ".$vj->gettxnomvideojuego();
+            
+            $consola = $em->getRepository('LibreameBackendBundle:Consola')->
+                findOneBy(array("idconsola"=>$videojuego->getvideojuegoconsola()));
+                //findOneByidconsola($videojuego->getvideojuegoConsola());
+            
+            return $vj->getvideojuegoconsola();
         } catch (Exception $ex) {
                 return new Consola();
         } 

@@ -496,14 +496,14 @@ class Logica {
                     //echo "\n ejemplar: ".$ejemplar->getidejemplar();
                     //echo "\n ejemplarusuario: ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
                     //echo "\n ejemplar - videojuego:  ".$ejemplar->getejemplarVideojuego();
-                    $videojuegos = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
-                    echo "\n id videojuego -> ".$videojuegos->getidvideojuego(); 
+                    $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                    echo "\n id videojuego -> ".$videojuego->getidvideojuego(); 
                 //}
                 
                 //$consola = $videojuegos->getvideojuegoConsola()->getidconsola(), $em);
-                $consola = ManejoDataRepository::getConsola($videojuegos->getvideojuegoConsola(), $em);
-                //echo "\n consola [".utf8_encode($videojuegos->getvideojuegoConsola()->getidconsola())."] \n";
-                echo "\n consola [".utf8_encode($videojuegos->getvideojuegoConsola()->getidconsola())."] \n";
+                $consola = ManejoDataRepository::getConsola($videojuego, $em);
+                echo "\n consola [".utf8_encode($consola->getidconsola())."] \n";
+                echo "\n consola [".utf8_encode($videojuego->getvideojuegoConsola()->getidconsola())."] \n";
                 //echo "\n consola [".utf8_encode($consola->getidconsola())."] \n";
                 $fabricante = ManejoDataRepository::getFabricante($consola->getconsolafabricante(), $em);
                 echo "\n fabricante [".utf8_encode($consola->getconsolafabricante())."] \n";
@@ -524,17 +524,17 @@ class Logica {
                 //echo "\n videojuego ".$videojuegos->getidvideojuego();
                 //echo "\n ejemplar -> id videojuego: ".$ejemplar->getejemplarVideojuego()->getidvideojuego();    
 
-                $titulo = utf8_encode($videojuegos->gettxnomvideojuego());
+                $titulo = utf8_encode($videojuego->gettxnomvideojuego());
                 //$titulo = $videojuegos->gettxnomvideojuego();
                 //$precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $puntos = utf8_encode($videojuegos->getincategvideojuego()*50); //Cantidad de puntos
+                $puntos = utf8_encode($videojuego->getincategvideojuego()*50); //Cantidad de puntos
                 //$estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
                 //$usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
                 //$vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
                 //$edicion = utf8_encode($libros->getTxediciondescripcion());
                 //$isbn10 = utf8_encode($libros->getTxlibcodigoofic());
                 //$isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
-                $imagen = utf8_encode($videojuegos->gettximagen());
+                $imagen = utf8_encode($videojuego->gettximagen());
                 echo "lugar: ".$usuario->getUsuarioInlugar()->getinlugar();
                 $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
                 //$condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido

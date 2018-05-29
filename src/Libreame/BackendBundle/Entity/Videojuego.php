@@ -50,7 +50,7 @@ class Videojuego
      *   @ORM\JoinColumn(name="videojuego_consola", referencedColumnName="idconsola")
      * })
      */
-    private $videojuegoConsola;
+    protected $videojuegoConsola;
 
     /**
      * @var string
@@ -102,7 +102,7 @@ class Videojuego
         return $this->incategvideojuego;
     }
 
-    public function getvideojuegoConsola()
+    public function getvideojuegoconsola()
     {
         return $this->videojuegoConsola;
     }
@@ -184,13 +184,6 @@ class Videojuego
         return $this;
     }
 
-    /*function __construct(){ 
-        $strBlanco = "";
-        $this->txnomvideojuego = $strBlanco;
-        $this->txobservaciones = $strBlanco;
-        $this->tximagen = $strBlanco;
-    } */
-    
     
 }
 
