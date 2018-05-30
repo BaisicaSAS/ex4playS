@@ -64,10 +64,10 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola');
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', 'videojuegoConsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txurlinformacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txobservaciones', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txgenerovideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'tximagen');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'videojuegoConsola');
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'idvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txnomvideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'felanzamiento', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'incategvideojuego', 'videojuegoConsola', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txurlinformacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txobservaciones', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'txgenerovideojuego', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Videojuego' . "\0" . 'tximagen');
     }
 
     /**
@@ -173,4 +173,195 @@ class Videojuego extends \Libreame\BackendBundle\Entity\Videojuego implements \D
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidvideojuego()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getidvideojuego();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidvideojuego', array());
+
+        return parent::getidvideojuego();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxnomvideojuego()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxnomvideojuego', array());
+
+        return parent::gettxnomvideojuego();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfelanzamiento()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfelanzamiento', array());
+
+        return parent::getfelanzamiento();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getincategvideojuego()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getincategvideojuego', array());
+
+        return parent::getincategvideojuego();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getvideojuegoconsola()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getvideojuegoconsola', array());
+
+        return parent::getvideojuegoconsola();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxurlinformacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxurlinformacion', array());
+
+        return parent::gettxurlinformacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxobservaciones()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxobservaciones', array());
+
+        return parent::gettxobservaciones();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxgenerovideojuego()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxgenerovideojuego', array());
+
+        return parent::gettxgenerovideojuego();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettximagen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettximagen', array());
+
+        return parent::gettximagen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxnomvideojuego($txnomvideojuego)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxnomvideojuego', array($txnomvideojuego));
+
+        return parent::settxnomvideojuego($txnomvideojuego);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfelanzamiento($felanzamiento)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfelanzamiento', array($felanzamiento));
+
+        return parent::setfelanzamiento($felanzamiento);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setincategvideojuego($incategvideojuego)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setincategvideojuego', array($incategvideojuego));
+
+        return parent::setincategvideojuego($incategvideojuego);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setvideojuegoConsola(\Libreame\BackendBundle\Entity\Consola $videojuegoConsola)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setvideojuegoConsola', array($videojuegoConsola));
+
+        return parent::setvideojuegoConsola($videojuegoConsola);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxurlinformacion($txurlinformacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxurlinformacion', array($txurlinformacion));
+
+        return parent::settxurlinformacion($txurlinformacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxobservaciones($txobservaciones)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxobservaciones', array($txobservaciones));
+
+        return parent::settxobservaciones($txobservaciones);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxgenerovideojuego($txgenerovideojuego)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxgenerovideojuego', array($txgenerovideojuego));
+
+        return parent::settxgenerovideojuego($txgenerovideojuego);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settximagen($tximagen)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settximagen', array($tximagen));
+
+        return parent::settximagen($tximagen);
+    }
+
 }

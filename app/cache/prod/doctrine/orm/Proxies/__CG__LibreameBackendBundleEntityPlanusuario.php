@@ -64,10 +64,10 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario');
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'dbvalsuscripcion');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario');
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'idplanusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuarioplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'planusuariousuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Planusuario' . "\0" . 'dbvalsuscripcion');
     }
 
     /**
@@ -173,4 +173,107 @@ class Planusuario extends \Libreame\BackendBundle\Entity\Planusuario implements 
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidplanusuario()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getidplanusuario();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidplanusuario', array());
+
+        return parent::getidplanusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfevigencia()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfevigencia', array());
+
+        return parent::getfevigencia();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getplanusuarioplan()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getplanusuarioplan', array());
+
+        return parent::getplanusuarioplan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getplanusuariousuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getplanusuariousuario', array());
+
+        return parent::getplanusuariousuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getdbvalsuscripcion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getdbvalsuscripcion', array());
+
+        return parent::getdbvalsuscripcion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfevigencia($fevigencia)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfevigencia', array($fevigencia));
+
+        return parent::setfevigencia($fevigencia);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setplanusuarioplan($planusuarioplan)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setplanusuarioplan', array($planusuarioplan));
+
+        return parent::setplanusuarioplan($planusuarioplan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setplanusuariousuario($planusuariousuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setplanusuariousuario', array($planusuariousuario));
+
+        return parent::setplanusuariousuario($planusuariousuario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setdbvalsuscripcion($dbvalsuscripcion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setdbvalsuscripcion', array($dbvalsuscripcion));
+
+        return parent::setdbvalsuscripcion($dbvalsuscripcion);
+    }
+
 }

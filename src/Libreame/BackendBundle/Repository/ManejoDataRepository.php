@@ -573,62 +573,37 @@ class ManejoDataRepository extends EntityRepository {
                 $arVideojuegos =[];
 
                 $rsm  = new ResultSetMapping();
+                //$rsm->addEntityResult('LibreameBackendBundle:Videojuego', 'vj');
                 $rsm->addEntityResult('LibreameBackendBundle:Videojuego', 'vj');
-                $rsm->addFieldResult('vj', 'idvideojuego', 'idvideojuego');
-                $rsm->addFieldResult('vj', 'txnomvideojuego', 'txnomvideojuego');
-                $rsm->addFieldResult('vj', 'felanzamiento', 'felanzamiento');
-                $rsm->addFieldResult('vj', 'incategvideojuego', 'incategvideojuego');
-                $rsm->addFieldResult('vj', 'videojuegoConsola', 'videojuego_consola');
-                $rsm->addFieldResult('vj', 'txurlinformacion', 'txurlinformacion');
-                $rsm->addFieldResult('vj', 'txobservaciones', 'txobservaciones');
-                $rsm->addFieldResult('vj', 'txgenerovideojuego', 'txgenerovideojuego');
-                $rsm->addFieldResult('vj', 'tximagen', 'tximagen');
-                $txsql = "SELECT v.idvideojuego, v.txnomvideojuego, v.felanzamiento, v.incategvideojuego, v.videojuego_consola, "
-                        . "v.txurlinformacion, v.txobservaciones, v.txgenerovideojuego,v.tximagen FROM videojuego v join ejemplar e ON (v.idvideojuego = e.ejemplar_videojuego)"
-                         ." WHERE MATCH(v.txnomvideojuego,v.txurlinformacion, " 
-                         ." v.txobservaciones,v.txgenerovideojuego,v.tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $videojuegos = $query->getResult();
+                $rsm->addFieldResult('vj', 'idvideojuego', 'idvideojuego', Videojuego::class);
+                $rsm->addFieldResult('vj', 'txnomvideojuego', 'txnomvideojuego', Videojuego::class);
+                $rsm->addFieldResult('vj', 'felanzamiento', 'felanzamiento', Videojuego::class);
+                $rsm->addFieldResult('vj', 'incategvideojuego', 'incategvideojuego', Videojuego::class);
+                $rsm->addFieldResult('vj', 'videojuegoConsola', 'videojuego_consola', Videojuego::class);
+                $rsm->addFieldResult('vj', 'txurlinformacion', 'txurlinformacion', Videojuego::class);
+                $rsm->addFieldResult('vj', 'txobservaciones', 'txobservaciones', Videojuego::class);
+                $rsm->addFieldResult('vj', 'txgenerovideojuego', 'txgenerovideojuego', Videojuego::class);
+                $rsm->addFieldResult('vj', 'tximagen', 'tximagen', Videojuego::class);
+                $rsm->addJoinedEntityResult('LibreameBackendBundle:Consola' , 'c', 'vj', 'videojuegoConsola');
+                $rsm->addFieldResult('c','idconsola','idconsola');
+                $rsm->addFieldResult('c','txnombreconsola','txnombreconsola');                
+                
+                $txsql = "SELECT v.idvideojuego, v.txnomvideojuego, v.felanzamiento, v.incategvideojuego, "
+                        . "v.videojuego_consola, v.txurlinformacion, v.txobservaciones, v.txgenerovideojuego,"
+                        . "v.tximagen,c.idconsola,c.txnombreconsola "
+                        . "FROM videojuego v join ejemplar e ON (v.idvideojuego = e.ejemplar_videojuego) "
+                        . "join consola c ON (v.videojuego_consola = c.idconsola) "
+                        ." WHERE MATCH(v.txnomvideojuego,v.txurlinformacion, " 
+                        ." v.txobservaciones,v.txgenerovideojuego,v.tximagen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm); 
+                $videojuegos = $query->getArrayResult();
                 foreach ($videojuegos as $vj) {
-                    echo "ENTRO:"."\n";
-                    $arVideojuegos[] = $vj->getidvideojuego();
-                    $idvideojuego = $vj->getidvideojuego();
-                    echo "**BUSCAR VIDEOJUEGO:".$idvideojuego." - ".$vj->gettxnomvideojuego()."\n";
-                    $consola = ManejoDataRepository::getConsola($vj, $em);
-                    echo "**CONSOLA:".$consola->getidconsola()."\n";
+                    //echo "ENTRO:"."\n";
+                    $arVideojuegos[] = $vj['idvideojuego'];
+                    $consola = ManejoDataRepository::getConsola($vj['videojuegoConsola']['idconsola'], $em);
+                    //var_dump($vj['videojuegoConsola']);
                 }
 
-                //Consulta libros por indice en tabla autores
-                /*$txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
-                         ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $autores = $query->getResult();
-                foreach ($autores as $autor) {
-                    $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
-                    foreach ($aut_libros as $autlibro) {
-                        //echo "ENTRO:"."\n";
-                        $arLibros[] = $autlibro->getInautlidlibro();
-                        $libroID = $autlibro->getInautlidlibro();
-                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                    }
-                }
-
-                //Consulta libros por indice en tabla editoriales
-                $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
-                         ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                $query = $em->createNativeQuery( $txsql, $rsm ); 
-                $editoriales = $query->getResult();
-                foreach ($editoriales as $editorial) {
-                    $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
-                    foreach ($edi_libros as $edilibro) {
-                        //echo "ENTRO:"."\nt";
-                        $arLibros[] = $edilibro->getInediliblibro();
-                        $libroID = $edilibro->getInediliblibro();
-                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                    }
-                }
-                 * 
-                 */
                 $q = $em->createQueryBuilder()
                     ->select('eu')
                     ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
@@ -751,23 +726,15 @@ class ManejoDataRepository extends EntityRepository {
     }
     
    //Obtiene la consola por su Id
-    public function getConsola(Videojuego $videojuego, $em)
+    public function getConsola($idconsola, $em)
     {   
         try{
             
-            $vj = $em->getRepository('LibreameBackendBundle:Videojuego')->
-                findOneBy(array("idvideojuego"=>$videojuego->getidvideojuego()));
-            echo "\n categoria : [".$vj->getincategvideojuego()."]";
-            echo "\n url : ".$vj->gettxurlinformacion();
-            echo "\n consola : ".$vj->getvideojuegoconsola();
-            echo "\n imagen : ".$vj->gettximagen();
-            echo "\n nombre : ".$vj->gettxnomvideojuego();
-            
             $consola = $em->getRepository('LibreameBackendBundle:Consola')->
-                findOneBy(array("idconsola"=>$videojuego->getvideojuegoconsola()));
+                findOneBy(array("idconsola"=>$idconsola));
                 //findOneByidconsola($videojuego->getvideojuegoConsola());
             
-            return $vj->getvideojuegoconsola();
+            return $consola;
         } catch (Exception $ex) {
                 return new Consola();
         } 
@@ -1329,7 +1296,7 @@ class ManejoDataRepository extends EntityRepository {
             $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
             
             $fecha = $query->getOneOrNullResult();
-            //echo "fecha : ".$fecha['fecha'];
+            //echo "\n fecha : ".$fecha['fecha'];
             return $fecha['fecha'];
         } catch (Exception $ex) {
                 return $fecha;

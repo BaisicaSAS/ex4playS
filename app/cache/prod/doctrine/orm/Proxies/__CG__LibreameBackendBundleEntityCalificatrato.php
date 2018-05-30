@@ -173,4 +173,173 @@ class Calificatrato extends \Libreame\BackendBundle\Entity\Calificatrato impleme
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidcalificatrato()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getidcalificatrato();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidcalificatrato', array());
+
+        return parent::getidcalificatrato();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfecalifica()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfecalifica', array());
+
+        return parent::getfecalifica();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getidtrato()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidtrato', array());
+
+        return parent::getidtrato();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getincalificacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getincalificacion', array());
+
+        return parent::getincalificacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxobservacioncalifica()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxobservacioncalifica', array());
+
+        return parent::gettxobservacioncalifica();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getcalificatratotrato()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getcalificatratotrato', array());
+
+        return parent::getcalificatratotrato();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getcalificatrUsrcalifica()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getcalificatrUsrcalifica', array());
+
+        return parent::getcalificatrUsrcalifica();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getcalificatrUsrcalificado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getcalificatrUsrcalificado', array());
+
+        return parent::getcalificatrUsrcalificado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfecalifica($fecalifica)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfecalifica', array($fecalifica));
+
+        return parent::setfecalifica($fecalifica);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setidtrato($idtrato)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setidtrato', array($idtrato));
+
+        return parent::setidtrato($idtrato);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setincalificacion($incalificacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setincalificacion', array($incalificacion));
+
+        return parent::setincalificacion($incalificacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxobservacioncalifica($txobservacioncalifica)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxobservacioncalifica', array($txobservacioncalifica));
+
+        return parent::settxobservacioncalifica($txobservacioncalifica);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setcalificatratotrato($calificatratotrato)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setcalificatratotrato', array($calificatratotrato));
+
+        return parent::setcalificatratotrato($calificatratotrato);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setcalificatrUsrcalifica($calificatrUsrcalifica)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setcalificatrUsrcalifica', array($calificatrUsrcalifica));
+
+        return parent::setcalificatrUsrcalifica($calificatrUsrcalifica);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setcalificatrUsrcalificado($calificatrUsrcalificado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setcalificatrUsrcalificado', array($calificatrUsrcalificado));
+
+        return parent::setcalificatrUsrcalificado($calificatrUsrcalificado);
+    }
+
 }

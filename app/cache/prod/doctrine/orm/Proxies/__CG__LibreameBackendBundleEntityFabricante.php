@@ -173,4 +173,63 @@ class Fabricante extends \Libreame\BackendBundle\Entity\Fabricante implements \D
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidfabricante()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getidfabricante();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidfabricante', array());
+
+        return parent::getidfabricante();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxnomfabricante()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxnomfabricante', array());
+
+        return parent::gettxnomfabricante();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxpaisfabricante()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxpaisfabricante', array());
+
+        return parent::gettxpaisfabricante();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxnomfabricante($txnomfabricante)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxnomfabricante', array($txnomfabricante));
+
+        return parent::settxnomfabricante($txnomfabricante);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxpaisfabricante($txpaisfabricante)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxpaisfabricante', array($txpaisfabricante));
+
+        return parent::settxpaisfabricante($txpaisfabricante);
+    }
+
 }

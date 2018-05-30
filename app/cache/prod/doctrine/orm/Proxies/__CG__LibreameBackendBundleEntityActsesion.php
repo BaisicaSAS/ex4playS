@@ -173,4 +173,140 @@ class Actsesion extends \Libreame\BackendBundle\Entity\Actsesion implements \Doc
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getinactsesion()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getinactsesion();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinactsesion', array());
+
+        return parent::getinactsesion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinactaccion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinactaccion', array());
+
+        return parent::getinactaccion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxactmensaje()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxactmensaje', array());
+
+        return parent::gettxactmensaje();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfeactfecha()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfeactfecha', array());
+
+        return parent::getfeactfecha();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinactfinalizada()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinactfinalizada', array());
+
+        return parent::getinactfinalizada();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getactsesionInsesion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getactsesionInsesion', array());
+
+        return parent::getactsesionInsesion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinactsesion($inactsesion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinactsesion', array($inactsesion));
+
+        return parent::setinactsesion($inactsesion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinactaccion($inactaccion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinactaccion', array($inactaccion));
+
+        return parent::setinactaccion($inactaccion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxactmensaje($txactmensaje)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxactmensaje', array($txactmensaje));
+
+        return parent::settxactmensaje($txactmensaje);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfeactfecha($feactfecha)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfeactfecha', array($feactfecha));
+
+        return parent::setfeactfecha($feactfecha);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinactfinalizada($inactfinalizada)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinactfinalizada', array($inactfinalizada));
+
+        return parent::setinactfinalizada($inactfinalizada);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setactsesionInsesion($actsesionInsesion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setactsesionInsesion', array($actsesionInsesion));
+
+        return parent::setactsesionInsesion($actsesionInsesion);
+    }
+
 }

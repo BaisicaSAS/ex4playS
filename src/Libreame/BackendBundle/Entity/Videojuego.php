@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Libreame\BackendBundle\Entity\Consola;
 
 /**
  * Videojuego
@@ -149,7 +150,7 @@ class Videojuego
         return $this;
     }
 
-    public function setvideojuegoConsola($videojuegoConsola)
+    public function setvideojuegoConsola(Consola $videojuegoConsola)
     {
         $this->videojuegoConsola = $videojuegoConsola;
 

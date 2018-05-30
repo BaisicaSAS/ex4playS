@@ -173,4 +173,107 @@ class Lugar extends \Libreame\BackendBundle\Entity\Lugar implements \Doctrine\OR
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getinlugar()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getinlugar();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinlugar', array());
+
+        return parent::getinlugar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxlugcodigo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxlugcodigo', array());
+
+        return parent::gettxlugcodigo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxlugnombre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxlugnombre', array());
+
+        return parent::gettxlugnombre();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinlugelegible()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinlugelegible', array());
+
+        return parent::getinlugelegible();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinlugpadre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinlugpadre', array());
+
+        return parent::getinlugpadre();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxlugcodigo($txlugcodigo)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxlugcodigo', array($txlugcodigo));
+
+        return parent::settxlugcodigo($txlugcodigo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxlugnombre($txlugnombre)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxlugnombre', array($txlugnombre));
+
+        return parent::settxlugnombre($txlugnombre);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinlugelegible($inlugelegible)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinlugelegible', array($inlugelegible));
+
+        return parent::setinlugelegible($inlugelegible);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinlugpadre($inlugpadre)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinlugpadre', array($inlugpadre));
+
+        return parent::setinlugpadre($inlugpadre);
+    }
+
 }

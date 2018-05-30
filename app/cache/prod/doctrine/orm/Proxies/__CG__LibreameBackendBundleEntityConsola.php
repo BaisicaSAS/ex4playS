@@ -173,4 +173,85 @@ class Consola extends \Libreame\BackendBundle\Entity\Consola implements \Doctrin
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidconsola()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getidconsola();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidconsola', array());
+
+        return parent::getidconsola();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxnombreconsola()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxnombreconsola', array());
+
+        return parent::gettxnombreconsola();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfelanzamiento()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfelanzamiento', array());
+
+        return parent::getfelanzamiento();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getconsolafabricante()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getconsolafabricante', array());
+
+        return parent::getconsolafabricante();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxnombreconsola($txnombreconsola)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxnombreconsola', array($txnombreconsola));
+
+        return parent::settxnombreconsola($txnombreconsola);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfelanzamiento($felanzamiento)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfelanzamiento', array($felanzamiento));
+
+        return parent::setfelanzamiento($felanzamiento);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setconsolafabricante($consolaFabricante)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setconsolafabricante', array($consolaFabricante));
+
+        return parent::setconsolafabricante($consolaFabricante);
+    }
+
 }

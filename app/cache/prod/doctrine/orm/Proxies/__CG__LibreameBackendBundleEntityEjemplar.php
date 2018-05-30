@@ -173,4 +173,85 @@ class Ejemplar extends \Libreame\BackendBundle\Entity\Ejemplar implements \Doctr
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidejemplar()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getidejemplar();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidejemplar', array());
+
+        return parent::getidejemplar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfecargue()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfecargue', array());
+
+        return parent::getfecargue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinejemplarpublicado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinejemplarpublicado', array());
+
+        return parent::getinejemplarpublicado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getejemplarVideojuego()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getejemplarVideojuego', array());
+
+        return parent::getejemplarVideojuego();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfecargue($fecargue)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfecargue', array($fecargue));
+
+        return parent::setfecargue($fecargue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinejemplarpublicado($inejemplarpublicado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinejemplarpublicado', array($inejemplarpublicado));
+
+        return parent::setinejemplarpublicado($inejemplarpublicado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setejemplarVideojuego($ejemplarVideojuego)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setejemplarVideojuego', array($ejemplarVideojuego));
+
+        return parent::setejemplarVideojuego($ejemplarVideojuego);
+    }
+
 }

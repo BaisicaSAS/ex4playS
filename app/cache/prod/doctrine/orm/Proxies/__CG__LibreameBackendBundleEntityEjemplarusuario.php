@@ -173,4 +173,147 @@ class Ejemplarusuario extends \Libreame\BackendBundle\Entity\Ejemplarusuario imp
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidejemplarusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidejemplarusuario', array());
+
+        return parent::getidejemplarusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinvigente()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinvigente', array());
+
+        return parent::getinvigente();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfeduenodesde()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfeduenodesde', array());
+
+        return parent::getfeduenodesde();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinpublicado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinpublicado', array());
+
+        return parent::getinpublicado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfepublicacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfepublicacion', array());
+
+        return parent::getfepublicacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getejemplarusuarioejemplar()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getejemplarusuarioejemplar', array());
+
+        return parent::getejemplarusuarioejemplar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getejemplarusuariousuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getejemplarusuariousuario', array());
+
+        return parent::getejemplarusuariousuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinvigente($invigente)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinvigente', array($invigente));
+
+        return parent::setinvigente($invigente);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfeduenodesde($feduenodesde)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfeduenodesde', array($feduenodesde));
+
+        return parent::setfeduenodesde($feduenodesde);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinpublicado($inpublicado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinpublicado', array($inpublicado));
+
+        return parent::setinpublicado($inpublicado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfepublicacion($fepublicacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfepublicacion', array($fepublicacion));
+
+        return parent::setfepublicacion($fepublicacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setejemplarusuarioejemplar($ejemplarusuarioejemplar)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setejemplarusuarioejemplar', array($ejemplarusuarioejemplar));
+
+        return parent::setejemplarusuarioejemplar($ejemplarusuarioejemplar);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setejemplarusuariousuario($ejemplarusuariousuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setejemplarusuariousuario', array($ejemplarusuariousuario));
+
+        return parent::setejemplarusuariousuario($ejemplarusuariousuario);
+    }
+
 }

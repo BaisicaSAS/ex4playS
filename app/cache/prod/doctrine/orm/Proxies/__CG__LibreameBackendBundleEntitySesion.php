@@ -173,4 +173,151 @@ class Sesion extends \Libreame\BackendBundle\Entity\Sesion implements \Doctrine\
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getinsesion()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getinsesion();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinsesion', array());
+
+        return parent::getinsesion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxsesnumero()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxsesnumero', array());
+
+        return parent::gettxsesnumero();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinsesactiva()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinsesactiva', array());
+
+        return parent::getinsesactiva();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfesesfechaini()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfesesfechaini', array());
+
+        return parent::getfesesfechaini();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfesesfechafin()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfesesfechafin', array());
+
+        return parent::getfesesfechafin();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxipaddr()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxipaddr', array());
+
+        return parent::gettxipaddr();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getsesionusuario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getsesionusuario', array());
+
+        return parent::getsesionusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxsesnumero($txsesnumero)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxsesnumero', array($txsesnumero));
+
+        return parent::settxsesnumero($txsesnumero);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinsesactiva($insesactiva)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinsesactiva', array($insesactiva));
+
+        return parent::setinsesactiva($insesactiva);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfesesfechaini($fesesfechaini)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfesesfechaini', array($fesesfechaini));
+
+        return parent::setfesesfechaini($fesesfechaini);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfesesfechafin($fesesfechafin)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfesesfechafin', array($fesesfechafin));
+
+        return parent::setfesesfechafin($fesesfechafin);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxipaddr($txipaddr)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxipaddr', array($txipaddr));
+
+        return parent::settxipaddr($txipaddr);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setsesionusuario($sesionusuario)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setsesionusuario', array($sesionusuario));
+
+        return parent::setsesionusuario($sesionusuario);
+    }
+
 }

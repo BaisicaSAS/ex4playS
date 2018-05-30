@@ -64,10 +64,10 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis');
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'inmesesplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'dbvalsuscripcion');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis');
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'idplansuscripcion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txnomplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'txdescripcionplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'fevigencia', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'ingratis', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'inmesesplan', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Plansuscripcion' . "\0" . 'dbvalsuscripcion');
     }
 
     /**
@@ -173,4 +173,151 @@ class Plansuscripcion extends \Libreame\BackendBundle\Entity\Plansuscripcion imp
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getidplansuscripcion()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getidplansuscripcion();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getidplansuscripcion', array());
+
+        return parent::getidplansuscripcion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxnomplan()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxnomplan', array());
+
+        return parent::gettxnomplan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gettxdescripcionplan()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'gettxdescripcionplan', array());
+
+        return parent::gettxdescripcionplan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfevigencia()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfevigencia', array());
+
+        return parent::getfevigencia();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getingratis()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getingratis', array());
+
+        return parent::getingratis();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getinmesesplan()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinmesesplan', array());
+
+        return parent::getinmesesplan();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getdbvalsuscripcion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getdbvalsuscripcion', array());
+
+        return parent::getdbvalsuscripcion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxnomplan($txnomplan)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxnomplan', array($txnomplan));
+
+        return parent::settxnomplan($txnomplan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function settxdescripcionplan($txdescripcionplan)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'settxdescripcionplan', array($txdescripcionplan));
+
+        return parent::settxdescripcionplan($txdescripcionplan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfevigencia($fevigencia)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfevigencia', array($fevigencia));
+
+        return parent::setfevigencia($fevigencia);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setingratis($ingratis)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setingratis', array($ingratis));
+
+        return parent::setingratis($ingratis);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinmesesplan($inmesesplan)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinmesesplan', array($inmesesplan));
+
+        return parent::setinmesesplan($inmesesplan);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setdbvalsuscripcion($dbvalsuscripcion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setdbvalsuscripcion', array($dbvalsuscripcion));
+
+        return parent::setdbvalsuscripcion($dbvalsuscripcion);
+    }
+
 }

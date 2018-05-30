@@ -35,6 +35,7 @@ class appProdProjectContainer extends Container
             'doctrine.orm.default_manager_configurator' => 'getDoctrine_Orm_DefaultManagerConfiguratorService',
             'doctrine.orm.validator.unique' => 'getDoctrine_Orm_Validator_UniqueService',
             'doctrine.orm.validator_initializer' => 'getDoctrine_Orm_ValidatorInitializerService',
+            'enviamail_service' => 'getEnviamailServiceService',
             'event_dispatcher' => 'getEventDispatcherService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
@@ -301,6 +302,10 @@ class appProdProjectContainer extends Container
     protected function getDoctrine_Orm_ValidatorInitializerService()
     {
         return $this->services['doctrine.orm.validator_initializer'] = new \Symfony\Bridge\Doctrine\Validator\DoctrineInitializer($this->get('doctrine'));
+    }
+    protected function getEnviamailServiceService()
+    {
+        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Helpers\EmailServiceClass($this->get('swiftmailer.mailer.default'));
     }
     protected function getEventDispatcherService()
     {
