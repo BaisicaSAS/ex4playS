@@ -78,17 +78,7 @@ class GestionEjemplares {
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==GamesController::inULogged) 
             {    
-
-                //Busca el usuario 
-                $usuario = $em->getRepository('LibreameBackendBundle:Usuario')->
-                    findOneBy(array('txmailusuario' => $psolicitud->getEmail()));
-
-                //Recupera cada uno de los ejemplares con ID > al del parametro
-                $sql = "SELECT e FROM LibreameBackendBundle:Ejemplar e, "
-                        . "LibreameBackendBundle:Usuario u WHERE e.idejemplar > ".$psolicitud->getUltEjemplar();
-                
-                $query = $em->createQuery($sql);
-                $ejemplares = $query->getResult();
+                $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($psolicitud->getUltEjemplar(), $em);
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 
                 return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);

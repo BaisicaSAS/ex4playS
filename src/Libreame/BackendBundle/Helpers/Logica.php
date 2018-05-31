@@ -491,69 +491,56 @@ class Logica {
                 $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
                 if ($respuesta->getRespuesta()== GamesController::inULogged){
                     $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
-                    //echo "\n id videojuego -> ".$videojuego->getidvideojuego(); 
-                //}
+                    $consola = ManejoDataRepository::getConsola($videojuego->getvideojuegoconsola(), $em);
+                    //echo "\n consola [".utf8_encode($consola->gettxnombreconsola())."]";
+                    $fabricante = ManejoDataRepository::getFabricante($consola->getconsolafabricante(), $em);
+                    //echo "\n fabricante [".utf8_encode($fabricante->gettxnomfabricante())."]";
                 
-                //$consola = $videojuegos->getvideojuegoConsola()->getidconsola(), $em);
-                $consola = ManejoDataRepository::getConsola($videojuego->getvideojuegoconsola(), $em);
-                //echo "\n consola [".utf8_encode($consola->gettxnombreconsola())."]";
-                $fabricante = ManejoDataRepository::getFabricante($consola->getconsolafabricante(), $em);
-                //echo "\n fabricante [".utf8_encode($fabricante->gettxnomfabricante())."]";
+                    $titulo = utf8_encode($videojuego->gettxnomvideojuego());
+                    //echo "\n titulo [".utf8_encode($titulo)."]";
+                    $categoria = $videojuego->getincategvideojuego(); //Cantidad de puntos
+                    $puntos = ManejoDataRepository::getPuntosCategoria($videojuego->getincategvideojuego()); //Cantidad de puntos
+                    //echo "\n puntos [".utf8_encode($puntos)."]";
+                    $imagen = utf8_encode($videojuego->gettximagen());
+                    //echo "\n imagen [".utf8_encode($videojuego->gettximagen())."]";
+                    $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
+                    //echo "\n lugar: ".$usuario->getUsuarioInlugar()->getinlugar();
+                    //ex4play :: Implementar megusta
+                    //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //echo "...megusta \n";
+                    //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    //echo "...cantmegusta \n";
+                    $cantresenas = ManejoDataRepository::getCantResenas($videojuego->getidvideojuego(), $em);
+                    //echo "...cant_resenas \n";
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario(), $em);
+                    //echo "\n usuario: ".$usuario->getUsuarioInlugar()->getinlugar();
+                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario, $em);
+                    //echo "\n fecha publicación... $fecpublica \n";
+                    //echo "\n RECUPERO DATOS\n";
                 
-                $titulo = utf8_encode($videojuego->gettxnomvideojuego());
-                //echo "\n titulo [".utf8_encode($titulo)."]";
-                //$titulo = $videojuegos->gettxnomvideojuego();
-                //$precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $puntos = utf8_encode($videojuego->getincategvideojuego()); //Cantidad de puntos
-                //echo "\n fabricante [".utf8_encode($puntos)."]";
-                //$estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
-                //$usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
-                //$vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
-                //$edicion = utf8_encode($libros->getTxediciondescripcion());
-                //$isbn10 = utf8_encode($libros->getTxlibcodigoofic());
-                //$isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
-                $imagen = utf8_encode($videojuego->gettximagen());
-                //echo "\n imagen [".utf8_encode($videojuego->gettximagen())."]";
-
-                $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
-                //echo "\n lugar: ".$usuario->getUsuarioInlugar()->getinlugar();
-                //$condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //$desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                //ex4play :: Implementar megusta
-                //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
-                //echo "...megusta \n";
-                //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
-                //echo "...cantmegusta \n";
-                //$cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
-                //echo "...cantcomment \n";
-                $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario(), $em);
-                //echo "\n usuario: ".$usuario->getUsuarioInlugar()->getinlugar();
-                //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
-                //$promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
-                //echo "...promcalifica \n";
-                $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario, $em);
-                //echo "\n fecha publicación... $fecpublica \n";
-                //echo "\n RECUPERO DATOS\n";
-                
-                $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
-                    'titulo' => $titulo, 
-                    'puntos' => $puntos, 
-                    //'estado' => $estado, 
-                    'imagen' => $imagen, 
-                    //'megusta' => $megusta,
-                    'fechapublica' => $fecpublica,
-                    //'cantcomment' => $cantcomment,
-                    //'desccondactual' => $desccondactual,
-                    'lugar' => array('inlugar' => $lugar->getinlugar(), 'txlugnombre' => utf8_encode($lugar->gettxlugnombre())),
-                    'consola' => array('idconsola' => $consola->getidconsola(), 'txnombreconsola' => utf8_encode($consola->gettxnombreconsola())),
-                    'fabricante' => array('idfabricante' => $fabricante->getidfabricante(), 'txombrefabricante' => utf8_encode($fabricante->gettxnomfabricante())),
-                    'generos' => utf8_encode($videojuego->gettxgenerovideojuego()),
-                    'usrdueno' => array('inusuario' => $usuario->getIdusuario(),
-                        'txusunommostrar' => utf8_encode($usuario->getTxnickname()),
-                        'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
-                        'calificacion' => '0' )
-                );
+                    $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
+                        'videojuego' => $videojuego->getidvideojuego(), 
+                        'titulo' => $titulo, 
+                        'categoria' => $categoria, 
+                        'puntos' => $puntos, 
+                        'cant_resenas' => $cantresenas, 
+                        'otra_informacion' => utf8_encode($videojuego->gettxurlinformacion()), 
+                        'observaciones' => utf8_encode($videojuego->gettxobservaciones()), 
+                        'imagen' => $imagen, 
+                        //'megusta' => $megusta,
+                        'fechapublica' => $fecpublica,
+                        //'cantcomment' => $cantcomment,
+                        //'desccondactual' => $desccondactual,
+                        'lugar' => array('inlugar' => $lugar->getinlugar(), 'txlugnombre' => utf8_encode($lugar->gettxlugnombre())),
+                        'consola' => array('idconsola' => $consola->getidconsola(), 'txnombreconsola' => utf8_encode($consola->gettxnombreconsola())),
+                        'fabricante' => array('idfabricante' => $fabricante->getidfabricante(), 'txombrefabricante' => utf8_encode($fabricante->gettxnomfabricante())),
+                        'generos' => utf8_encode($videojuego->gettxgenerovideojuego()),
+                        'usrdueno' => array('inusuario' => $usuario->getIdusuario(),
+                            'txusunommostrar' => utf8_encode($usuario->getTxnickname()),
+                            'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
+                            'calificacion' => '0' )
+                    );
                 }
             
             }
@@ -575,102 +562,71 @@ class Logica {
      */
     public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
+
             $arrTmp = array();
-            $ejemplar = new Ejemplar();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
-            //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
-            foreach ($parreglo as $ejemplar){
-                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $editoriales = new LbEditoriales();
-                $libros = new LbLibros();
-                $usuario = new LbUsuarios();
+            $ejemplarusuario = new Ejemplarusuario();
+            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
+            //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
+            foreach ($parreglo as $ejemplarusuario){
+                //echo "id del ejemplar : ".$ejemplarusuario->getejemplarusuarioejemplar()->getidejemplar();
+                $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
                 if ($respuesta->getRespuesta()== GamesController::inULogged){
-                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "titulo libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...generos \n";
-                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...autores \n";
-                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...editoriales \n";
-                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                    $consola = ManejoDataRepository::getConsola($videojuego->getvideojuegoconsola(), $em);
+                    //echo "\n consola [".utf8_encode($consola->gettxnombreconsola())."]";
+                    $fabricante = ManejoDataRepository::getFabricante($consola->getconsolafabricante(), $em);
+                    //echo "\n fabricante [".utf8_encode($fabricante->gettxnomfabricante())."]";
+                
+                    $titulo = utf8_encode($videojuego->gettxnomvideojuego());
+                    //echo "\n titulo [".utf8_encode($titulo)."]";
+                    $categoria = $videojuego->getincategvideojuego(); //Cantidad de puntos
+                    $puntos = ManejoDataRepository::getPuntosCategoria($videojuego->getincategvideojuego()); //Cantidad de puntos
+                    //echo "\n puntos [".utf8_encode($puntos)."]";
+                    $imagen = utf8_encode($videojuego->gettximagen());
+                    //echo "\n imagen [".utf8_encode($videojuego->gettximagen())."]";
+                    $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
+                    //echo "\n lugar: ".$usuario->getUsuarioInlugar()->getinlugar();
+                    //ex4play :: Implementar megusta
+                    //$megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
                     //echo "...megusta \n";
-                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    //$cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
                     //echo "...cantmegusta \n";
-                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
-                    //echo "...cantcomment \n";
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    $cantresenas = ManejoDataRepository::getCantResenas($videojuego->getidvideojuego(), $em);
+                    //echo "...cant_resenas \n";
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplarusuario->getejemplarusuariousuario()->getIdusuario(), $em);
+                    //echo "\n usuario: ".$usuario->getUsuarioInlugar()->getinlugar();
                     //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
-                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
-                    //echo "...promcalifica \n";
-                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
-                    //echo "...$fecpublica \n";
-                    //echo "RECUPERO DATOS\n";*/
-                }
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario, $em);
+                    //echo "\n fecha publicación... $fecpublica \n";
+                    //echo "\n RECUPERO DATOS\n";
                 
-                $arrAutores = array();
-                foreach ($autores as $autor) {
-                    //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
-                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
-                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
+                    $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
+                        'videojuego' => $videojuego->getidvideojuego(), 
+                        'titulo' => $titulo, 
+                        'categoria' => $categoria, 
+                        'puntos' => $puntos, 
+                        'cant_resenas' => $cantresenas, 
+                        'otra_informacion' => utf8_encode($videojuego->gettxurlinformacion()), 
+                        'observaciones' => utf8_encode($videojuego->gettxobservaciones()), 
+                        'imagen' => $imagen, 
+                        //'megusta' => $megusta,
+                        'fechapublica' => $fecpublica,
+                        //'cantcomment' => $cantcomment,
+                        //'desccondactual' => $desccondactual,
+                        'lugar' => array('inlugar' => $lugar->getinlugar(), 'txlugnombre' => utf8_encode($lugar->gettxlugnombre())),
+                        'consola' => array('idconsola' => $consola->getidconsola(), 'txnombreconsola' => utf8_encode($consola->gettxnombreconsola())),
+                        'fabricante' => array('idfabricante' => $fabricante->getidfabricante(), 'txombrefabricante' => utf8_encode($fabricante->gettxnomfabricante())),
+                        'generos' => utf8_encode($videojuego->gettxgenerovideojuego()),
+                        'usrdueno' => array('inusuario' => $usuario->getIdusuario(),
+                            'txusunommostrar' => utf8_encode($usuario->getTxnickname()),
+                            'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
+                            'calificacion' => '0' )
+                    );
                 }
-                $arrEditoriales = array();
-                foreach ($editoriales as $editorial) {
-                    //echo "...editorial [".utf8_encode($editorial->getTxedinombre())."] \n";
-                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
-                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
-                }
-                $arrGeneros = array();
-                foreach ($generos as $genero) {
-                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
-                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
-                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
-                }
-                
-                $titulo = utf8_encode($libros->getTxlibtitulo());
-                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
-                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
-                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
-                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
-                $edicion = utf8_encode($libros->getTxediciondescripcion());
-                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
-                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
-                $imagen = utf8_encode($ejemplar->getTxejeimagen());
-                $lugar = $usuario->getInusulugar();
-                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                    'titulo' => $titulo, 
-                    'precio' => $precio, 
-                    'puntos' => $puntos, 
-                    'estado' => $estado, 
-                    'usado' => $usado, 
-                    'vencam' => $vencam, 
-                    'imagen' => $imagen, 
-                    'edicion' => $edicion,
-                    'isbn10' => $isbn10,
-                    'isbn13' => $isbn13,
-                    'megusta' => $megusta,
-                    'fechapublica' => $fecpublica,
-                    'cantmegusta' => $cantmegusta,
-                    'cantcomment' => $cantcomment,
-                    'condactual' => $condactual,
-                    'desccondactual' => $desccondactual,
-                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
-                    'autores' => $arrAutores,
-                    'editoriales' => $arrEditoriales,
-                    'generos' => $arrGeneros,
-                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
-                        'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
-                        'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
-                        'calificacion' => $promcalifica)
-                );
-                
+            
             }
             
+            //echo "\n Armó JSON \n";
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 

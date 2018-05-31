@@ -658,35 +658,32 @@ class ManejoDataRepository extends EntityRepository {
                 $limiteSup = ($inultejemplar*-1) - 1;
                 $limiteInf =  $limiteSup -30;
             }
-            
-            $nulo = "NULL";
-            $blanco = "";
-            
             $q = $em->createQueryBuilder()
                 ->select('eu')
-                ->from('LibreameBackendBundle:Ejemplar', 'e')
-                ->leftJoin('LibreameBackendBundle:Videojuego', 'vj', \Doctrine\ORM\Query\Expr\Join::WITH, 'vj.idvideojuego = e.ejemplarVideojuego ')
-                ->leftJoin('LibreameBackendBundle:Ejemplarusuario', 'eu', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
                 ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
-                ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = eu.ejemplarusuarioejemplar and t.tratousrdueno = eu.ejemplarusuariousuario')
-                //Ojo falta adicionar la imagen
-                ->where(' (vj.tximagen IS NOT NULL) AND (vj.tximagen <> :nulo) AND (vj.tximagen <> :blanco)')
-                ->setParameter('nulo', $nulo)
-                ->setParameter('blanco', $blanco)
+                ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                /*->where(' e.ejemplarVideojuego in (:pvideojuegos)')  
+                ->setParameter('pvideojuegos', $arVideojuegos)*/
                 ->andWhere(' e.idejemplar BETWEEN :pejemplar AND :pFejemplar')
                 ->setParameter('pejemplar', $limiteInf)
                 ->setParameter('pFejemplar', $limiteSup)
                 ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                 ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                ->andWhere(' eu.inpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                ->andWhere(' e.inejemplarpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
                 ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
-                    
+                //->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                //->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                //->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                //->setParameter('grupos', $grupos)
                 ->setMaxResults(30)
-                //->orderBy(' h.fehisejeregistro ', 'DESC');
-                ->orderBy(' e.idejemplar ', 'DESC');
+                ->orderBy(' e.idejemplar ', 'ASC');
+                
+            $resejemplares = $q->getQuery()->getResult();
+                
 
-            return $q->getQuery()->getResult();
-            //return $q->getArrayResult();
+            return $resejemplares;
         } catch (Exception $ex) {
                 //echo "retorna error";
                 return new Ejemplar();
@@ -751,6 +748,33 @@ class ManejoDataRepository extends EntityRepository {
                 return new Fabricante();
         } 
     }
+
+    //Obtiene la cantidad de reseñas del videojuego
+    public function getCantResenas($idvideojuego, $em)
+    {   
+        try{
+            $q = $em->createQueryBuilder()
+                ->select('count(r)')
+                ->from('LibreameBackendBundle:Resenavideojuego', 'r')
+                ->Where('r.resenaVideojuego = :pvideojuego')
+                ->setParameter('pvideojuego', $idvideojuego);
+            $resenas = $q->getQuery()->getSingleScalarResult() * 1;
+            return $resenas;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
+    //Obtiene la cantidad de puntos por categoria: TODO: hacer una tabla
+    public function getPuntosCategoria($categoria)
+    {   
+        try{
+            return $categoria * 30;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
     
 
 
@@ -1078,23 +1102,6 @@ class ManejoDataRepository extends EntityRepository {
             //echo "megusta ".$meg." - nomegusta ".$nomeg;
             //return $meg - $nomeg;
             return $meg;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
-    //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
-    public function getCantComment($inejemplar)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('count(a)')
-                ->from('LibreameBackendBundle:LbComentarios', 'a')
-                ->Where('a.incomejemplar = :pejemplar')
-                ->setParameter('pejemplar', $inejemplar);
-            $comm = $q->getQuery()->getSingleScalarResult() * 1;
-            return $comm;
         } catch (Exception $ex) {
                 return GamesController::inDatoCer;
         } 
