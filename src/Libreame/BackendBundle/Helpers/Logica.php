@@ -455,7 +455,8 @@ class Logica {
                         'nomusuario' => utf8_encode($usuario->getTxnomusuario()),
                         'nommostusuario' => utf8_encode($usuario->getTxnickname()), 
                         'email' => utf8_encode($usuario->getTxmailusuario()),
-                        'usutelefono' => utf8_encode($usuario->getTxmailusuario()), 
+                        'usutelefono' => utf8_encode($usuario->getTxtelefono()), 
+                        'usudireccion' => utf8_encode($usuario->getTxdireccion()), 
                         'usugenero' => $usuario->getInusuestado(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => utf8_encode(base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen())), 

@@ -1,4 +1,4 @@
-//Padre de lugar puede ser NULL
+﻿//Padre de lugar puede ser NULL
 
 ALTER TABLE `ex4play`.`lugar` 
 DROP FOREIGN KEY `fk_lugar_lugar1`;
@@ -35,3 +35,8 @@ ALTER TABLE `ex4play`.`videojuego`
 ADD COLUMN `tximagen` VARCHAR(300) NOT NULL DEFAULT 'PENDIENTE' AFTER `txgenerovideojuego`;
 
 ALTER TABLE `ex4play`.`videojuego`  ADD FULLTEXT(txnomvideojuego,txurlinformacion, txobservaciones,txgenerovideojuego,tximagen);
+
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `txtelefono` VARCHAR(45) NOT NULL DEFAULT 'PENDIENTE' COMMENT 'Telefono del usuario' AFTER `txmailusuario`,
+ADD COLUMN `txdireccion` VARCHAR(250) NOT NULL DEFAULT 'PENDIENTE' COMMENT 'Direccion del usuario' AFTER `txtelefono`;
+

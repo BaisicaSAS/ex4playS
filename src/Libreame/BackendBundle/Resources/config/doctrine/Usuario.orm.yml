@@ -37,6 +37,20 @@ Libreame\BackendBundle\Entity\Usuario:
             options:
                 fixed: false
                 comment: 'Correo electronico del usuario'
+        txtelefono:
+            type: string
+            nullable: false
+            length: 45
+            options:
+                fixed: false
+                comment: 'Telefono del usuario'
+        txdireccion:
+            type: string
+            nullable: false
+            length: 250
+            options:
+                fixed: false
+                comment: 'Direccion del usuario'
         txclaveusuario:
             type: string
             nullable: false

@@ -39,6 +39,20 @@ class Usuario
     /**
      * @var string
      *
+     * @ORM\Column(name="txtelefono", type="string", length=45, nullable=false)
+     */
+    private $txtelefono = 'PENDIENTE';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txdireccion", type="string", length=250, nullable=false)
+     */
+    private $txdireccion = 'PENDIENTE';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="txmailusuario", type="string", length=120, nullable=false)
      */
     private $txmailusuario;
@@ -112,6 +126,16 @@ class Usuario
         return $this->txmailusuario;
     }
     
+    public function getTxtelefono()
+    {
+        return $this->txtelefono;
+    }
+    
+    public function getTxdireccion()
+    {
+        return $this->txdireccion;
+    }
+    
     public function getTxclaveusuario()
     {
         return $this->txclaveusuario;
@@ -162,6 +186,20 @@ class Usuario
     public function setTxmailusuario($txmailusuario)
     {
         $this->txmailusuario = $txmailusuario;
+
+        return $this;
+    }
+
+    public function setTxtelefono($txtelefono)
+    {
+        $this->txtelefono = $txtelefono;
+
+        return $this;
+    }
+
+    public function setTxdireccion($txdireccion)
+    {
+        $this->txdireccion = $txdireccion;
 
         return $this;
     }
