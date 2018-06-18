@@ -47,6 +47,8 @@ class Logica {
     public function ejecutaAccion($solicitud, EntityManager $em)
     {
         try{
+            //error_reporting(E_ERROR & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
+            error_reporting(0);
             $respuesta = GamesController::inFallido;
             
             $tmpSolicitud = $solicitud->getAccion();
@@ -63,7 +65,8 @@ class Logica {
                 case GamesController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
                     //ex4plays :: Adicionado $em
-                    $respuesta = Login::loginUsuario($solicitud, $em);
+                    $login = new Login();
+                    $respuesta = $login->loginUsuario($solicitud, $em);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
@@ -81,15 +84,15 @@ class Logica {
 
                 case GamesController::txAccRecOpera: {//Dato:5 : Recuperar Mensajes
                     //echo "<script>alert('Antes de entrar a Recuperar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestUsuarios = $this->get('gest_usuarios_service');
-                    $respuesta = $objGestUsuarios::recuperarMensajes($solicitud);
+                    $objGestUsuarios = new GestionUsuarios();
+                    $respuesta = $objGestUsuarios->recuperarMensajes($solicitud);
                     break;
                 } 
 
                 case GamesController::txAccBusEjemp: {//Dato:7 : Buscar
                     //echo "<script>alert('Antes de entrar a Buscar Ejemplares Usuario-".$solicitud->getEmail()."')</script>";
-                    //$objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = GestionEjemplares::buscarEjemplares($solicitud, $em);
+                    $objGestEjemplares = new GestionEjemplares();
+                    $respuesta = $objGestEjemplares::buscarEjemplares($solicitud, $em);
                     break;
                 } 
 
@@ -231,7 +234,7 @@ class Logica {
         } 
     }   
     
-    public function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
+    public static function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
 
         try {
             //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
@@ -363,7 +366,7 @@ class Logica {
             return $respuestaGen;
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
-        } 
+        }  
     }
 
     
@@ -371,7 +374,7 @@ class Logica {
      * respuestaGenerica: 
      * Funcion que genera el JSON de respuesta cuando por calidad de datos no se ralizó ninguna operacion
      */
-    public function respuestaGenerica(Respuesta $respuesta, Solicitud $pSolicitud){
+    public static function respuestaGenerica(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => $pSolicitud->getSession(), 'ipaddr'=> $pSolicitud->getIPaddr()), 
@@ -386,7 +389,7 @@ class Logica {
      * respuestaRegistro: 
      * Funcion que genera el JSON de respuesta para la accion de registro :: GamesController::txAccRegistro
      */
-    public function respuestaRegistro(Respuesta $respuesta, Solicitud $pSolicitud){
+    public static function respuestaRegistro(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
@@ -400,7 +403,7 @@ class Logica {
      * respuestaLogin: 
      * Funcion que genera el JSON de respuesta para la accion de Login :: GamesController::txAccIngresos:
      */
-    public function respuestaLogin(Respuesta $respuesta, Solicitud $pSolicitud){
+    public static function respuestaLogin(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             //$usuario = new Usuario();
             $usuario = $respuesta->RespUsuarios[0];
@@ -426,7 +429,7 @@ class Logica {
      * respuestaDatosUsuario: 
      * Funcion que genera el JSON de respuesta para la accion de Recuperar Datos de Usuario :: GamesController::txAccRecParam
      */
-    public function respuestaDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
+    public static function respuestaDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
 
         try {
             //Recupera el lugar, de la tabla de Lugares
@@ -481,7 +484,7 @@ class Logica {
      * respuestaBuscarEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de Buscar ejemplares :: GamesController::txAccBusEjem:
      */
-    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
+    public static function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
             $arrTmp = array();
             $ejemplarusuario = new Ejemplarusuario();
@@ -561,7 +564,7 @@ class Logica {
      * respuestaFeedEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar Feed de ejemplares :: GamesController::txAccRecFeeds:
      */
-    public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
+    public static function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, EntityManager $em){
         try{
 
             $arrTmp = array();

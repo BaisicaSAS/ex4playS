@@ -40,7 +40,7 @@ class Login
     
     /* ex4palys :: Adicionado $em
      */
-    public function loginUsuario($pSolicitud, EntityManager $em)
+    public static function loginUsuario($pSolicitud, EntityManager $em)
     {   
         $respuesta = new Respuesta();
         //ex4plays :: Nuevo llamado del servicio, de manera estática
@@ -65,9 +65,9 @@ class Login
                     
                     //Verifica si la clave es correcta
                     if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
-                        //Verifica si el usuario tiene una sesion activa
-                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, NULL, $em)){
-                            
+                        //echo "\n Verifica si el usuario tiene una sesion activa";
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em)){
+                            //echo "\n Entró";
                             //$respuesta->setRespuesta(GamesController::inUSeActi);
                             //Si tiene sesion activa, la recupera para reutilizarla
                             $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);

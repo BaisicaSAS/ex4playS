@@ -20,7 +20,7 @@ use Libreame\BackendBundle\Entity\Actsesion;
  */
 class GestionEjemplares {
     
-    public function buscarEjemplares(Solicitud $psolicitud, $em)
+    public static function buscarEjemplares(Solicitud $psolicitud, $em)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
@@ -64,7 +64,7 @@ class GestionEjemplares {
      * Por ahora solo tendrá Ejemplares, luego se evaluará si tambien se cargan TRATOS Cerrados / Ofertas realizadas
      */
     
-    public function recuperarFeedEjemplares($psolicitud, $em)
+    public static function recuperarFeedEjemplares($psolicitud, $em)
     {   
         $fecha = new \DateTime;
         $respuesta = new Respuesta();
@@ -95,7 +95,7 @@ class GestionEjemplares {
        
     }
     
-    public function publicarEjemplar($psolicitud)
+    public static function publicarEjemplar($psolicitud)
     {   
         $fecha = new \DateTime;
         $respuesta = new Respuesta();

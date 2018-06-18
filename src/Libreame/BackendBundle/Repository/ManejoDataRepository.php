@@ -60,11 +60,12 @@ class ManejoDataRepository extends EntityRepository {
 
     var $inImagenValida;
     //private $em;
-      
+     
+
     ///********************* LO QUE SE USA ********************************///
     
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
-    public function getUsuarioByEmail($txemail, $em)
+    public static function getUsuarioByEmail($txemail, $em)
     {   
         try{
             return $em->getRepository('LibreameBackendBundle:Usuario')->
@@ -74,7 +75,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     //ex4plays :: Obtiene el objeto Lugar según su ID 
-    public function getLugar($inlugar, EntityManager $em)
+    public static function getLugar($inlugar, EntityManager $em)
     {   
         try{
             return $em->getRepository('LibreameBackendBundle:Lugar')->
@@ -85,7 +86,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    public function validaSesionUsuario($psolicitud, $em)
+    public static function validaSesionUsuario($psolicitud, $em)
     {   
         //$respuesta = GamesController::inPlatCai;
         try{
@@ -125,7 +126,7 @@ class ManejoDataRepository extends EntityRepository {
 
                         } else {
                             $respuesta = GamesController::inULogged; //Sesion activa
-                            //echo "<script>alert('La sesion es VALIDA')</script>";
+                            //echo "<script>alert('...La sesion es VALIDA')</script>";
                         }
                     }   
                 }
@@ -145,20 +146,23 @@ class ManejoDataRepository extends EntityRepository {
      * Indica si una sesion para un usuario esta activa
      * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
-    public function usuarioSesionActiva($psolicitud, $idsesion, $em)
+    public static function usuarioSesionActiva($psolicitud, $idsesion, $em)
     {   
         try {
 
             //echo "<script>alert('usuarioSesionActiva - Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
             //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
+            //echo "<script>alert('Sesion ".$$idsesion."')</script>";
             
             if ($idsesion == NULL)
             {
+                //echo "<script>alert('Es null...')</script>";
                 $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                 'sesionusuario' => $usuario,
-                'insesactiva' => GamesController::inSesActi));
+                'insesactiva' => GamesController::inSesInac));
             } else {
+                //echo "<script>alert('No es null...')</script>";
                 $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                 'sesionusuario' => $usuario,
                 'txsesnumero' => $idsesion,
@@ -168,7 +172,13 @@ class ManejoDataRepository extends EntityRepository {
             //Flush al entity manager
             $em->flush(); 
             
-            if ($sesion == NULL) {/*echo "retorna FALSE";*/return FALSE;  } else {/*echo "retorna TRUE";*/return TRUE;}
+            if ($sesion == NULL) {
+                /*echo "retorna FALSE";*/
+                return FALSE;  
+            } else {
+                /*echo "retorna TRUE";*/
+                return TRUE;
+            }
             
         } catch (Exception $ex) {
             //echo $ex->getMessage();
@@ -220,7 +230,7 @@ class ManejoDataRepository extends EntityRepository {
      * GeneraActSesion 
      * ex4play :: Ajustado al modelo
      */
-    public function generaActSesion(Sesion $pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
+    public static function generaActSesion(Sesion $pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
     {
         //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
@@ -254,7 +264,7 @@ class ManejoDataRepository extends EntityRepository {
      * Valida los datos de la sesion verificando que sea veridica
      * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
-    public function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
+    public static function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
     {   
         try{
             //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
@@ -278,7 +288,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene todos los objetos lugar
-    public function getLugares()
+    public static function getLugares()
     {   
         try{
             $em = $this->getDoctrine()->getManager();
@@ -324,7 +334,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene el plan del usuario
-    public function getPlansuscripcion(Planusuario $planusuario, $em)
+    public static function getPlansuscripcion(Planusuario $planusuario, $em)
     {   
         try{            
             $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
@@ -338,7 +348,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene el plan del usuario
-    public function getPlanUsuario(Usuario $usuario, $em)
+    public static function getPlanUsuario(Usuario $usuario, $em)
     {   
         try{            
             $planus = new Planusuario();
@@ -354,7 +364,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene la suma de puntos de usuario
-    public function getPuntosUsuario(Usuario $pUsuario, $em)
+    public static function getPuntosUsuario(Usuario $pUsuario, $em)
     {   
         try{
     
@@ -379,7 +389,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene las calificaciones RECIBIDAS por un usuario
-    public function getCalificaUsuarioRecibidas(Usuario $usuario, $em)
+    public static function getCalificaUsuarioRecibidas(Usuario $usuario, $em)
     {
         try{
             return $em->getRepository('LibreameBackendBundle:Calificatrato')->
@@ -391,7 +401,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene las calificaciones REALIZADAS por un usuario
-    public function getCalificaUsuarioRealizadas(Usuario $usuario, $em)
+    public static function getCalificaUsuarioRealizadas(Usuario $usuario, $em)
     {
         try{
             return $em->getRepository('LibreameBackendBundle:Calificatrato')->
@@ -403,7 +413,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
-    public function getPromedioCalifica($inusuario, $em)
+    public static function getPromedioCalifica($inusuario, $em)
     {   
         try{
             //echo "getPromCalificaciones :: ".":: \n";
@@ -433,7 +443,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene el resumen de ejemplares del usuario
-    public function getResumenUsuario(Usuario $usuario, $em)
+    public static function getResumenUsuario(Usuario $usuario, $em)
     {   
         try{
             //Arreglo para almacenar el resumen
@@ -480,7 +490,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene las preferencias del usuario
-    public function getPreferenciasUsuario(Usuario $usuario, $numpref, $em)
+    public static function getPreferenciasUsuario(Usuario $usuario, $numpref, $em)
     {   
         //echo "Dentro de preferencias  \n";
         try{
@@ -548,6 +558,7 @@ class ManejoDataRepository extends EntityRepository {
             $arrPreferencias[] = array('consolas' => $arrConsolas, 'generos' => $arrGeneros);
             //echo "Fin preferencias  \n";
 
+    
             return $arrPreferencias;
         } catch (Exception $ex) {
                 //ECHO "ERROR PREFERENCIAS ".$ex;
@@ -557,7 +568,7 @@ class ManejoDataRepository extends EntityRepository {
  
     
    //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
-    public function getBuscarEjemplares(Usuario $usuario, $texto, $em)
+    public static function getBuscarEjemplares(Usuario $usuario, $texto, $em)
     {   
         //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
         //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
@@ -638,7 +649,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
         //Obtiene todos los Ejemplares, con ID mayor al parámetro
-    public function getEjemplaresDisponibles($inultejemplar, $em)
+    public static function getEjemplaresDisponibles($inultejemplar, $em)
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
@@ -691,7 +702,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene el máximo ID en ejemplares 
-    public function getMaxEjemplar($em)
+    public static function getMaxEjemplar($em)
     {  
         try{
             $qmx = $em->createQueryBuilder()
@@ -707,7 +718,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
    //Obtiene el objeto Videojuego según su ID 
-    public function getVideojuego($idvideojuego, $em)
+    public static function getVideojuego($idvideojuego, $em)
     {   
         try{
             $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
@@ -723,7 +734,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
    //Obtiene la consola por su Id
-    public function getConsola($idconsola, $em)
+    public static function getConsola($idconsola, $em)
     {   
         try{
             
@@ -738,7 +749,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
    //Obtiene el objeto Fabricante según su ID 
-    public function getFabricante($idfabricante, $em)
+    public static function getFabricante($idfabricante, $em)
     {   
         try{
             $fabricante = $em->getRepository('LibreameBackendBundle:Fabricante')->
@@ -750,7 +761,7 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene la cantidad de reseñas del videojuego
-    public function getCantResenas($idvideojuego, $em)
+    public static function getCantResenas($idvideojuego, $em)
     {   
         try{
             $q = $em->createQueryBuilder()
@@ -766,7 +777,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene la cantidad de puntos por categoria: TODO: hacer una tabla
-    public function getPuntosCategoria($categoria)
+    public static function getPuntosCategoria($categoria)
     {   
         try{
             return $categoria * 30;
@@ -777,7 +788,55 @@ class ManejoDataRepository extends EntityRepository {
     
     
 
+    //Obtiene el objeto Usuario según su ID 
+    public static function getUsuarioById($inusuario, $em)
+    {   
+        try{
+            return $em->getRepository('LibreameBackendBundle:Usuario')->
+                findOneBy(array('idusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
+        } catch (Exception $ex) {
+                return new Usuario();
+        } 
+    }
+    
+    //Obtiene todos los Ids de las membresias del usuario
+    public static function getMembresiasUsuario(LbUsuarios $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbMembresias')->
+                    findBy(array('inmemusuario' => $usuario));
+        } catch (Exception $ex) {
+                return new LbMembresias();
+        } 
+    }
+        
+    public static function getEjemplarById($ejemplar, $em)
+    {   
+        try{
+            return $em->getRepository('LibreameBackendBundle:Ejemplar')->
+                    findOneBy(array('idejemplar' => $ejemplar));
+        } catch (Exception $ex) {
+                return new Ejemplar();
+        } 
+    }
 
+    //Obtiene la fecha en que el usuario publicó el ejemplar
+    public static function getFechaPublicacion($pejemplar, $pusuario, $em)
+    {   
+        try{
+            $sql = "SELECT max(eu.fepublicacion) AS fecha FROM LibreameBackendBundle:ejemplarusuario eu"
+                    ." WHERE eu.ejemplarusuarioejemplar = :ejemplar AND eu.ejemplarusuariousuario = :usuario";
+            $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
+            
+            $fecha = $query->getOneOrNullResult();
+            //echo "\n fecha : ".$fecha['fecha'];
+            return $fecha['fecha'];
+        } catch (Exception $ex) {
+                return $fecha;
+        } 
+    }
+                
     ///********************* LO QUE NO SE USA ********************************///
     
     
@@ -1212,39 +1271,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene el objeto Usuario según su ID 
-    public function getUsuarioById($inusuario, $em)
-    {   
-        try{
-            return $em->getRepository('LibreameBackendBundle:Usuario')->
-                findOneBy(array('idusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
-        } catch (Exception $ex) {
-                return new Usuario();
-        } 
-    }
-    
-    //Obtiene todos los Ids de las membresias del usuario
-    public function getMembresiasUsuario(LbUsuarios $usuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbMembresias')->
-                    findBy(array('inmemusuario' => $usuario));
-        } catch (Exception $ex) {
-                return new LbMembresias();
-        } 
-    }
-        
-    public function getEjemplarById($ejemplar, $em)
-    {   
-        try{
-            return $em->getRepository('LibreameBackendBundle:Ejemplar')->
-                    findOneBy(array('idejemplar' => $ejemplar));
-        } catch (Exception $ex) {
-                return new Ejemplar();
-        } 
-    }
-                
     //Obtiene los datos de un autor por su ID
     public function getAutorById($idautor)
     {   
@@ -1294,22 +1320,6 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
                
-    //Obtiene la fecha en que el usuario publicó el ejemplar
-    public function getFechaPublicacion($pejemplar, $pusuario, $em)
-    {   
-        try{
-            $sql = "SELECT max(eu.fepublicacion) AS fecha FROM LibreameBackendBundle:ejemplarusuario eu"
-                    ." WHERE eu.ejemplarusuarioejemplar = :ejemplar AND eu.ejemplarusuariousuario = :usuario";
-            $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
-            
-            $fecha = $query->getOneOrNullResult();
-            //echo "\n fecha : ".$fecha['fecha'];
-            return $fecha['fecha'];
-        } catch (Exception $ex) {
-                return $fecha;
-        } 
-    }
-                
     //Obtiene todos los Ejemplares, de un usuario
     //1: Todos, 2: En negociación, 3: Publicados, 4: No publicados, 5: Bloqueados
     public function getVisualizarBiblioteca(LbUsuarios $usuario, Array $grupos, $filtro)
@@ -1722,7 +1732,7 @@ class ManejoDataRepository extends EntityRepository {
     
 
     //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
-    public function cantMsgUsr($usuario)
+    public static function cantMsgUsr($usuario)
     {
         try{
             /*$em = $this->getDoctrine()->getManager();

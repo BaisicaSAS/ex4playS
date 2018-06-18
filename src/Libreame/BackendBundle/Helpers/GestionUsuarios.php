@@ -25,7 +25,7 @@ class GestionUsuarios {
      * ex4playS : Cambios al modelo y $em
      */
 
-    public function obtenerParametros($psolicitud, $em)
+    public static function obtenerParametros($psolicitud, $em)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
