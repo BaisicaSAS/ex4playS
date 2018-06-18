@@ -8,7 +8,7 @@ INSERT INTO `ex4play`.`plansuscripcion`
 `fevigencia`,
 `ingratis`,
 `inmesesplan`,
-`dbvalsuscripción`)
+`dbvalsuscripcion`)
 VALUES
 (
 'Plan básico','Plan básico gratuito con la posibilidad de cambiar un videojuego cada dos meses',
@@ -20,7 +20,7 @@ INSERT INTO `ex4play`.`plansuscripcion`
 `fevigencia`,
 `ingratis`,
 `inmesesplan`,
-`dbvalsuscripción`)
+`dbvalsuscripcion`)
 VALUES
 (
 'Plan Chammer','Suscripción anual básica [3 cambios mensuales]',
@@ -33,7 +33,7 @@ INSERT INTO `ex4play`.`plansuscripcion`
 `fevigencia`,
 `ingratis`,
 `inmesesplan`,
-`dbvalsuscripción`)
+`dbvalsuscripcion`)
 VALUES
 (
 'Plan Super Chammer','Suscripción anual completa [10 cambios mensuales]',

@@ -120,7 +120,7 @@ class ManejoDataRepository extends EntityRepository {
                         $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
                     } else {
                         //Valida si la sesion está activa
-                        if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, NULL, $em)){
+                        if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, $psolicitud->getSession(), $em)){
                             //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
                             $respuesta = GamesController::inUsSeIna; //Sesion inactiva
 
@@ -160,7 +160,8 @@ class ManejoDataRepository extends EntityRepository {
                 //echo "<script>alert('Es null...')</script>";
                 $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                 'sesionusuario' => $usuario,
-                'insesactiva' => GamesController::inSesInac));
+                'insesactiva' => GamesController::inSesActi));
+               
             } else {
                 //echo "<script>alert('No es null...')</script>";
                 $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
@@ -173,10 +174,10 @@ class ManejoDataRepository extends EntityRepository {
             $em->flush(); 
             
             if ($sesion == NULL) {
-                /*echo "retorna FALSE";*/
+                //echo "retorna FALSE";
                 return FALSE;  
             } else {
-                /*echo "retorna TRUE";*/
+                //echo "retorna TRUE";
                 return TRUE;
             }
             
@@ -1692,7 +1693,7 @@ class ManejoDataRepository extends EntityRepository {
     
     //Cierra la sesion de un usuario 
     // ex4playS :: $em y modicficaciones al modelo
-    public function cerrarSesionUsuario(Sesion $sesion, $em)
+    public static function cerrarSesionUsuario(Sesion $sesion, $em)
     {   
         try{
             setlocale (LC_TIME, "es_CO");
