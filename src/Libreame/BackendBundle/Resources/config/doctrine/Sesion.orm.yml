@@ -11,7 +11,7 @@ Libreame\BackendBundle\Entity\Sesion:
             nullable: false
             options:
                 unsigned: false
-                comment: ID
+                comment: 'ID'
             id: true
             generator:
                 strategy: IDENTITY

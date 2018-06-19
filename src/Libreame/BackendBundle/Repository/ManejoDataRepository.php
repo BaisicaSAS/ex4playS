@@ -163,10 +163,7 @@ class ManejoDataRepository extends EntityRepository {
                
             } else {
                 echo "\n ...No es null... - [".$idsesion."]";
-                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->
-                    findOneBy(array('sesionusuario' => $usuario,
-                        'txsesnumero' => $idsesion,
-                        'insesactiva' => GamesController::inSesActi));
+                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario, $psolicitud, $em);
                 echo "\n Sesion = ... [".$sesion->getTxsesnumero()."]";
             }
 
@@ -268,22 +265,20 @@ class ManejoDataRepository extends EntityRepository {
     public static function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
     {   
         try{
-            echo "\n 1. recuperaSesionUsuario: ".$psolicitud->getSession();
+            $txsesion = utf8_encode($psolicitud->getSession());
+            echo "\n 1. va a recuperaSesionUsuario: ".$txsesion;
             //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
-            if ($psolicitud->getSession() != NULL) {
-                echo "\n 2.1 Sesion NOT NULL :( ";
-                /*$plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
-                    findOneBy(array('idplansuscripcion' => GamesController::inDatoUno));
-                echo "\n 0.0 Plan : ".$plan->getidplansuscripcion();*/
-                
-                $ejemplo = $em->getRepository('LibreameBackendBundle:Sesion')->
-                        findBy(array('txsesnumero' =>  $psolicitud->getSession()));
-                
-                echo "\n 2.2 El numero de sesion : ".$ejemplo->gettxsesnumero();
-                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findBy(array(
-                                'txsesnumero' =>  $psolicitud->getSession(),
+            if (!($txsesion == NULL)) {
+                echo "\n 2.1 Sesion NOT NULL :( ".$txsesion;
+
+                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                                //'txsesnumero' => $txsesion,
                                 'sesionusuario' => $pusuario,
                                 'insesactiva' => GamesController::inSesActi));
+                if (!($txsesion == $respuesta->gettxsesnumero())){
+                    echo "\n ".$txsesion ." - ".$respuesta->gettxsesnumero();
+                $respuesta = NULL;}
+                
                 echo "\n 2.2.2 El numero de sesion : ".$respuesta->gettxsesnumero();
             } else {
                 echo "\n 3.1 Sesion NULL  ";
@@ -301,34 +296,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    //Obtiene todos los objetos lugar
-    public static function getLugares()
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $sql = "SELECT i FROM LibreameBackendBundle:LbLugares i WHERE i.inlugelegible = 1 ORDER BY i.txlugnombre";
-            $query = $em->createQuery($sql);
-            foreach ($query->getResult() as $reglugar){
-                 $lugares[] = $reglugar->getTxlugnombre();
-                //echo $lugares;
-            }            
-            //echo $query->getResult(); 
-            //echo "Acabo"; 
-            return $query->getResult();
-
-        } catch (Exception $ex) {
-                return new LbIdiomas();
-        } 
-
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbLugares')->
-                findBy(array('inlugelegible' => "1"), array('txlugnombre' => 'ASC'));
-        } catch (Exception $ex) {
-                return new LbLugares();
-        } 
-    }
     
     //Obtiene el plan gratuito básico :: el de ID = 1
     public function getPlanGratuito($em)

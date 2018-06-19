@@ -267,8 +267,9 @@ class GamesController extends Controller
      */
     public function servicioAction(Request $request)
     {
+        error_reporting(E_ALL);
         //error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE );
-        error_reporting(0);
+        //error_reporting(0);
         $em = $this->getDoctrine()->getManager();
         //echo "IngresarSistema ::: servicio";
         //$request = $this->getRequest();

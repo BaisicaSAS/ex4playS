@@ -80,6 +80,7 @@ class Login
                             //Genera sesion activa sin fecha de finalización
                             ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                             $respuesta->setRespuesta(GamesController::inULogged);    
+                            echo "\n GENERA la sesion ".$sesion->gettxsesnumero();
                             $respuesta->setSession($sesion->gettxsesnumero());  
 
                             //Busca la cantidad de mensajes del usuario sin leer 
