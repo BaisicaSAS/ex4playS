@@ -268,20 +268,24 @@ class ManejoDataRepository extends EntityRepository {
     public static function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
     {   
         try{
+            echo "\n recuperaSesionUsuario: ".$psolicitud->getSession();
             //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
             if ($psolicitud->getSession() != NULL) {
+                echo "\n Sesion NOT NULL ";
                 $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                                 'txsesnumero' =>  $psolicitud->getSession(),
                                 'sesionusuario' => $pusuario,
                                 'insesactiva' => GamesController::inSesActi));
+                echo "\n 1.El numero de sesion : ".$respuesta->gettxsesnumero();
             } else {
+                echo "\n Sesion NULL  ";
                 $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                                 'sesionusuario' => $pusuario,
                                 'insesactiva' => GamesController::inSesActi));
             }
             //Flush al entity manager
-            $em->flush();
-
+            //$em->flush();
+            echo "\n El numero de sesion : ".$respuesta->gettxsesnumero();
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
                 return new Sesion();
