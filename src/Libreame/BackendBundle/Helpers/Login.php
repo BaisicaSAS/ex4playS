@@ -64,13 +64,13 @@ class Login
                 if ($estado == GamesController::inUsuActi) {
                     //Verifica si la clave es correcta
                     if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
-                        //echo "\n Verifica si el usuario tiene una sesion activa";
-                        //echo "\n Si la sesion viene en blanco ";
+                        echo "\n Verifica si el usuario tiene una sesion activa";
+                        echo "\n Si la sesion viene en blanco ";
                         if ($pSolicitud->getSession() == NULL){
-                            //echo "\n Verifica si el usuario tiene una sesion activa";
-                            if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em)){
+                            echo "\n Sesion viene NULL";
+                            if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == TRUE){
                                 $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);
-                                //echo "\n Cierra la sesion ".$pSolicitud->getSession();
+                                echo "\n Cierra la sesion ".$pSolicitud->getSession();
                                 $sesion = ManejoDataRepository::cerrarSesionUsuario($sesion, $em);
                                 echo "\n Cierra la sesion ".$sesion->getinsesion();
                             }
@@ -85,6 +85,7 @@ class Login
                             //Busca la cantidad de mensajes del usuario sin leer 
                             $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
                         } else { //La sesion NO es null
+                            echo "\n Sesion no está en blanco";
                             if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == TRUE){
                                 echo "\n La sesion existe y esta activa: ".$pSolicitud->getSession();
 

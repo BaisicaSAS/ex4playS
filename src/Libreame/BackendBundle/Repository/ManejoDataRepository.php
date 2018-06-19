@@ -150,34 +150,34 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try {
 
-            //echo "<script>alert('usuarioSesionActiva - Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
+            echo "\n inicia usuarioSesionActiva ".$idsesion;
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
             //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
-            //echo "<script>alert('Sesion ".$$idsesion."')</script>";
-            
+            echo "\n Usuario : ".$usuario->getTxmailusuario();
+            //$sesion = new Sesion();
             if ($idsesion == NULL)
             {
-                //echo "<script>alert('Es null...')</script>";
-                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
-                'sesionusuario' => $usuario,
-                'insesactiva' => GamesController::inSesActi));
+                echo "\n ...Es null...";
+                $sesion = NULL;
+                echo "\n No encuentra nada, es null...";
                
             } else {
-                //echo "<script>alert('No es null...')</script>";
-                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
-                'sesionusuario' => $usuario,
-                'txsesnumero' => $idsesion,
-                'insesactiva' => GamesController::inSesActi));
+                echo "\n ...No es null... - [".$idsesion."]";
+                $sesion = $em->getRepository('LibreameBackendBundle:Sesion')->
+                    findOneBy(array('sesionusuario' => $usuario,
+                        'txsesnumero' => $idsesion,
+                        'insesactiva' => GamesController::inSesActi));
+                echo "\n Sesion = ... [".$sesion->getTxsesnumero()."]";
             }
 
             //Flush al entity manager
             $em->flush(); 
             
             if ($sesion == NULL) {
-                //echo "retorna FALSE";
+                echo "retorna FALSE";
                 return FALSE;  
             } else {
-                //echo "retorna TRUE";
+                echo "\n retorna TRUE";
                 return TRUE;
             }
             
@@ -268,26 +268,35 @@ class ManejoDataRepository extends EntityRepository {
     public static function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
     {   
         try{
-            echo "\n recuperaSesionUsuario: ".$psolicitud->getSession();
+            echo "\n 1. recuperaSesionUsuario: ".$psolicitud->getSession();
             //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
             if ($psolicitud->getSession() != NULL) {
-                echo "\n Sesion NOT NULL ";
-                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
+                echo "\n 2.1 Sesion NOT NULL :( ";
+                /*$plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
+                    findOneBy(array('idplansuscripcion' => GamesController::inDatoUno));
+                echo "\n 0.0 Plan : ".$plan->getidplansuscripcion();*/
+                
+                $ejemplo = $em->getRepository('LibreameBackendBundle:Sesion')->
+                        findBy(array('txsesnumero' =>  $psolicitud->getSession()));
+                
+                echo "\n 2.2 El numero de sesion : ".$ejemplo->gettxsesnumero();
+                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findBy(array(
                                 'txsesnumero' =>  $psolicitud->getSession(),
                                 'sesionusuario' => $pusuario,
                                 'insesactiva' => GamesController::inSesActi));
-                echo "\n 1.El numero de sesion : ".$respuesta->gettxsesnumero();
+                echo "\n 2.2.2 El numero de sesion : ".$respuesta->gettxsesnumero();
             } else {
-                echo "\n Sesion NULL  ";
+                echo "\n 3.1 Sesion NULL  ";
                 $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                                 'sesionusuario' => $pusuario,
                                 'insesactiva' => GamesController::inSesActi));
             }
             //Flush al entity manager
-            //$em->flush();
-            echo "\n El numero de sesion : ".$respuesta->gettxsesnumero();
+            $em->flush();
+            echo "\n 3.2 El numero de sesion : ".$respuesta->gettxsesnumero();
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
+                echo "\n 4. Error ";
                 return new Sesion();
         } 
     }
