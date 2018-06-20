@@ -64,64 +64,40 @@ class Login
                 if ($estado == GamesController::inUsuActi) {
                     //Verifica si la clave es correcta
                     if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
-                        echo "\n Verifica si el usuario tiene una sesion activa";
-                        echo "\n Si la sesion viene en blanco ";
-                        if ($pSolicitud->getSession() == NULL){
-                            echo "\n Sesion viene NULL";
-                            if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == TRUE){
-                                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);
-                                echo "\n Cierra la sesion ".$pSolicitud->getSession();
-                                $sesion = ManejoDataRepository::cerrarSesionUsuario($sesion, $em);
-                                echo "\n Cierra la sesion ".$sesion->getinsesion();
-                            }
-                            //Crea sesion
-                            //echo "<script>alert('-----Creará sesion"  .GamesController::inSesActi."')</script>";
-                            $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),$em);
-                            //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
-                            $respuesta->setRespuesta(GamesController::inULogged);    
-                            echo "\n GENERA la sesion ".$sesion->gettxsesnumero();
-                            $respuesta->setSession($sesion->gettxsesnumero());  
-
-                            //Busca la cantidad de mensajes del usuario sin leer 
-                            $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
-                        } else { //La sesion NO es null
-                            echo "\n Sesion no está en blanco";
-                            if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == TRUE){
-                                echo "\n La sesion existe y esta activa: ".$pSolicitud->getSession();
-
-                                //echo "\n Entró";
-                                //$respuesta->setRespuesta(GamesController::inUSeActi);
-                                //Si tiene sesion activa, la recupera para reutilizarla
-                                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);
-                                //Genera sesion activa sin fecha de finalización
-                                ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario : Sesion ACTIVA Retomada por el sistema '.$usuario->getTxmailusuario().'[Sesion: '.'$sesion->gettxsesnumero()'.'] -  exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
-                                $respuesta->setRespuesta(GamesController::inULogged);    
-                                $respuesta->setSession($sesion->gettxsesnumero());  
-
-                                //Busca la cantidad de mensajes del usuario sin leer 
-                                $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
-                            } else {
-                                //AQUI SE LOGUEA FINALMENTE
-                                echo "\n La sesion NO existe o NO esta activa: ".$pSolicitud->getSession();
-
-                                //Crea sesion
-                                //echo "<script>alert('-----Creará sesion"  .GamesController::inSesActi."')</script>";
-                                $sesionant = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,$em);
-                                echo "\n Cierra la sesion ".$$sesionant->gettxsesnumero();
-                                $sesionant = ManejoDataRepository::cerrarSesionUsuario($sesion, $em);
+                        //echo "\n 1. Verifica si el usuario tiene una sesion activa";
+                        $estadoSesion = GamesController::inDatoCer;
+                        //Recupera el estado de login (sesion activa, inactiva) del suario
+                        $sesion = ManejoDataRepository::recuperaEstadoSesionUsuario($usuario,$pSolicitud,$em,$estadoSesion);
+                        switch ($estadoSesion) {
+                            case GamesController::inDatoCer: //Error, debe especificar sesion : El usuario tiene una sesion activa
+                                $respuesta->setRespuesta(GamesController::inUSeActi);    
+                                break;
+                            case GamesController::inDatoUno: //Logear
                                 $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),$em);
                                 //Genera sesion activa sin fecha de finalización
-                                echo "\n Crea la sesion ".$sesion->gettxsesnumero();
+                                //echo "\n Crea la sesion ".$sesion->gettxsesnumero();
                                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                                 $respuesta->setRespuesta(GamesController::inULogged);    
                                 $respuesta->setSession($sesion->gettxsesnumero());  
 
                                 //Busca la cantidad de mensajes del usuario sin leer 
                                 $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
+                                break;
+                            case GamesController::inDatoDos: //Logín valido : No cambia sesion, registra intento de relogeo
+                                ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Intento Nuevo Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
+                                $respuesta->setRespuesta(GamesController::inULogged);    
+                                //echo "\n GENERA la sesion ".$sesion->gettxsesnumero();
+                                $respuesta->setSession($sesion->gettxsesnumero());  
+                                //Busca la cantidad de mensajes del usuario sin leer 
+                                $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
+                                break;
+                            case GamesController::inDatoTre: //Error, Sesion inválida :: Se da mensaje de sesion inactiva
+                                $respuesta->setRespuesta(GamesController::inUsSeIna);    
+                                break;
 
-                            }
-                        }
+                            default:
+                                break;
+                        } 
                     } else {
                         //echo "\n Clave incorrecta";
                         $respuesta->setRespuesta(GamesController::inUsClInv);
@@ -148,7 +124,6 @@ class Login
         }     
     }
     
-
     /*
      * ex4plays :: Adicionado $em
      * Cambios en el modelo de datos y de json
@@ -183,7 +158,8 @@ class Login
                         else
                         {
                             //AQUI CIERRA SESION FINALMENTE
-                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud, $em), $em);
+                            $estadosesion = GamesController::inDatoCer;
+                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaEstadoSesionUsuario($usuario, $pSolicitud, $em, $estadosesion), $em);
                             //Genera sesion activa sin fecha de finalización
                             ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, $em);
                             $respuesta->setRespuesta(GamesController::inULogged);    

@@ -97,44 +97,50 @@ class ManejoDataRepository extends EntityRepository {
             $respuesta = GamesController::inUsSeIna; //Inicializa como sesion logueada
 
             $usuario = new Usuario();
+            //echo "\n validaSesionUsuario :: Valida si existe el USUARIO";
             if (!$em->getRepository('LibreameBackendBundle:usuario')->
                         findOneBy(array('txmailusuario' => $psolicitud->getEmail()))){
-                //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
+                //echo "\n validaSesionUsuario :: No existe el USUARIO";
                 $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
             } else {    
+                //echo "\n validaSesionUsuario :: Recupera el usuario en una variable";
                 $usuario = $em->getRepository('LibreameBackendBundle:usuario')->
                         findOneBy(array('txmailusuario' => $psolicitud->getEmail()));
 
                 $estado = $usuario->getInusuestado();
-                //echo "<script>alert('encontro el usuario): estado : ".$estado." ')</script>";
+                //echo "\n validaSesionUsuario :: encontro el usuario: estado : ".$estado;
 
                 //Si el usuario está INACTIVO
                 if ($estado != GamesController::inUsuActi)
                 {
-                    //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
+                    //echo "validaSesionUsuario :: Usuario inactivo";
                     $respuesta = GamesController::inUsuConf; //Usuario Inactiva
                 } else {
                     //Si la clave enviada es inválida
+                    //echo "\n validaSesionUsuario :: revisa si la clave es correcta ";
                     if ($usuario->getTxclaveusuario() != $psolicitud->getClave()){
-                        //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
+                        //echo "\n validaSesionUsuario :: Clave invalida";
                         $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
                     } else {
                         //Valida si la sesion está activa
+                        //echo "\n validaSesionUsuario :: Verifica se la sesion está activa";
                         if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, $psolicitud->getSession(), $em)){
-                            //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
+                            //echo "\n validaSesionUsuario :: Sesion inactiva')</script>";
                             $respuesta = GamesController::inUsSeIna; //Sesion inactiva
 
                         } else {
                             $respuesta = GamesController::inULogged; //Sesion activa
-                            //echo "<script>alert('...La sesion es VALIDA')</script>";
+                            //echo "\n validaSesionUsuario :: La sesion es VALIDA";
                         }
                     }   
                 }
             }
 
             //Flush al entity manager
+            //echo "\n validaSesionUsuario :: va a generar respuesta ";
             $em->flush();
-
+            //echo "\n validaSesionUsuario: RESPUESTA [".$respuesta."]";
+            //echo "\n validaSesionUsuario :: Finaliza \n ";
             return ($respuesta);
         } catch (Exception $ex) {
             return ($respuesta);
@@ -150,32 +156,60 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try {
 
-            echo "\n inicia usuarioSesionActiva ".$idsesion;
+            //echo "\n usuarioSesionActiva :: Inicia ".$idsesion;
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
             //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
-            echo "\n Usuario : ".$usuario->getTxmailusuario();
+            //echo "\n usuarioSesionActiva :: Usuario : ".$usuario->getTxmailusuario();
             //$sesion = new Sesion();
             if ($idsesion == NULL)
             {
-                echo "\n ...Es null...";
+                //echo "\n usuarioSesionActiva :: ...la sesion Es null...";
                 $sesion = NULL;
-                echo "\n No encuentra nada, es null...";
-               
             } else {
-                echo "\n ...No es null... - [".$idsesion."]";
-                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario, $psolicitud, $em);
-                echo "\n Sesion = ... [".$sesion->getTxsesnumero()."]";
+                //echo "\n usuarioSesionActiva :: ...la sesion No es null... - [".$idsesion."]";
+                $estadoSesion = GamesController::inDatoCer;
+                //echo "\n usuarioSesionActiva :: va a recuperar el estado de la sesion - [".$idsesion."]";
+                $sesion = ManejoDataRepository::recuperaEstadoSesionUsuario($usuario, $psolicitud, $em, $estadoSesion);
+                if ($sesion == NULL) {
+                   $txsesion =  "";
+                } else {
+                    $txsesion = utf8_decode($sesion->gettxsesnumero());
+                }
+                //echo "\n usuarioSesionActiva :: Estado para sesion = ".$estadoSesion;
+                
+                switch ($estadoSesion) {
+                    case GamesController::inDatoCer: //Error, debe especificar sesion : El usuario tiene una sesion activa
+                        //echo "\n usuarioSesionActiva :: Error - debe especificar la sesion válida";
+                        break;
+                    case GamesController::inDatoUno: //Logear
+                        //echo "\n usuarioSesionActiva :: Logear";
+                        break;
+                    case GamesController::inDatoDos: //Logín valido : No cambia sesion, registra intento de relogeo
+                        //echo "\n usuarioSesionActiva :: Sesion válida";
+                        break;
+                    case GamesController::inDatoTre: //Error, Sesion inválida :: Se da mensaje de sesion inactiva
+                        //echo "\n usuarioSesionActiva :: Error sesion invalida ";
+                        break;
+
+                    default:
+                        break;
+                } 
+                //echo "\n  usuarioSesionActiva :: Sesion = ... [".$txsesion."]";
             }
 
             //Flush al entity manager
             $em->flush(); 
             
+            //echo "\n usuarioSesionActiva :: Finalizó \n";
             if ($sesion == NULL) {
-                echo "retorna FALSE";
+                //echo " usuarioSesionActiva :: retorna FALSE";
                 return FALSE;  
-            } else {
-                echo "\n retorna TRUE";
+            } else if($estadoSesion == GamesController::inDatoDos) {
+                //echo "\n  usuarioSesionActiva :: retorna TRUE";
                 return TRUE;
+            } else {
+                //echo " usuarioSesionActiva :: retorna FALSE";
+                return FALSE;  
             }
             
         } catch (Exception $ex) {
@@ -255,48 +289,67 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    
-    
+
     /*
-     * recuperaSesionUsuario 
+     * NUEVA ex4plays: recuperaEstadoSesionUsuario
+     * Si la sesion enviada es NULL, se recupera cualquier sesion activa del usuario
+     * Si la sesin enviada no es NULL se busca directamente la sesion 
      * Valida los datos de la sesion verificando que sea veridica
      * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
-    public static function recuperaSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em)
+    public static function recuperaEstadoSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em, &$estadoSesion)
     {   
         try{
+            //echo "\n recuperaEstadoSesionUsuario :: ****************************************** ".$txsesion;
+            //echo "\n recuperaEstadoSesionUsuario :: ENTRA A RECUPERAR SESION ".$txsesion;
             $txsesion = utf8_encode($psolicitud->getSession());
-            echo "\n 1. va a recuperaSesionUsuario: ".$txsesion;
-            //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
-            if (!($txsesion == NULL)) {
-                echo "\n 2.1 Sesion NOT NULL :( ".$txsesion;
-
-                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
-                                //'txsesnumero' => $txsesion,
-                                'sesionusuario' => $pusuario,
-                                'insesactiva' => GamesController::inSesActi));
-                if (!($txsesion == $respuesta->gettxsesnumero())){
-                    echo "\n ".$txsesion ." - ".$respuesta->gettxsesnumero();
-                $respuesta = NULL;}
-                
-                echo "\n 2.2.2 El numero de sesion : ".$respuesta->gettxsesnumero();
+            //echo "\n recuperaEstadoSesionUsuario :: Busca sesion activa del usuario ";
+            $respuesta = $em->getRepository('LibreameBackendBundle:sesion')->findOneBy(array(
+                            //'txsesnumero' => $txsesion,
+                            'sesionusuario' => $pusuario,
+                            'insesactiva' => GamesController::inSesActi));
+            if ($respuesta == NULL) {
+                $txsesion_encontrada = "";
             } else {
-                echo "\n 3.1 Sesion NULL  ";
-                $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
-                                'sesionusuario' => $pusuario,
-                                'insesactiva' => GamesController::inSesActi));
+                $txsesion_encontrada = utf8_encode($respuesta->gettxsesnumero());
+            }
+            //echo "\n recuperaEstadoSesionUsuario :: Termina de Buscar sesion activa del usuario ".$txsesion;
+            //Busca la sesion, si no esta asociado al usuario envia mensaje de sesion no existe
+            if ($txsesion == NULL) {
+                //echo "\n recuperaEstadoSesionUsuario :: 1.1 Sesion NULL ";
+                
+                if ($respuesta == NULL) {
+                    //echo "\n recuperaEstadoSesionUsuario :: 1.1.2 No logueado NO EXISTE SESION";
+                    $estadoSesion = GamesController::inDatoUno;
+                    $respuesta = NULL;
+                } else {
+                    //echo "\n recuperaEstadoSesionUsuario :: 1.1.1 Logueado EXISTE SESION :: Mensaje de error para especificar la sesion";
+                    $estadoSesion = GamesController::inDatoCer;
+                }    
+            } else { //La sesion no es NULL
+                //echo "\n recuperaEstadoSesionUsuario :: 1.2 Sesion NO ES NULL ".utf8_encode($txsesion_encontrada);
+                if ($txsesion == $txsesion_encontrada){
+                    //echo "\n recuperaEstadoSesionUsuario :: 1.2.1 Valido :  La sesión es correcta ".$txsesion ." - ".$txsesion_encontrada;
+                    $estadoSesion = GamesController::inDatoDos;
+                    //$respuesta = NULL;
+                } else {
+                    //echo "\n recuperaEstadoSesionUsuario :: 1.2.2 NO Valido :  La sesión NO ES VALIDA ".$txsesion ." - ".$txsesion_encontrada;
+                    $estadoSesion = GamesController::inDatoTre;
+                    $respuesta = NULL;
+                }
             }
             //Flush al entity manager
             $em->flush();
-            echo "\n 3.2 El numero de sesion : ".$respuesta->gettxsesnumero();
+
+            //echo "\n recuperaEstadoSesionUsuario :: [ El numero de sesion : ".$txsesion_encontrada." ] -- [ El estado devuelto : ".$estadoSesion." ]";
+            //echo "\n recuperaEstadoSesionUsuario :: Finalizó****************************************** \n";
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
-                echo "\n 4. Error ";
+                //echo "\n 4. Error ";
                 return new Sesion();
         } 
     }
 
-    
     //Obtiene el plan gratuito básico :: el de ID = 1
     public function getPlanGratuito($em)
     {   

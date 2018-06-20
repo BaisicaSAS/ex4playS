@@ -36,15 +36,16 @@ class GestionUsuarios {
         //$califica = new LbCalificausuarios();
         try {
             //Valida que la sesión corresponda y se encuentre activa
+            //echo "\n obtenerParametros :: Inicia Obtener parámetros";
             $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
-            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "\n obtenerParametros :: Validez de sesion ".$respSesionVali;
             if ($respSesionVali==GamesController::inULogged) 
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 if ($usuario != NULL) 
                 {
-                    //echo "Usuario no es NULL :: ".$usuario->getTxnickname().":: \n";
+                    //echo "obtenerParametros :: Usuario no es NULL :: ".$usuario->getTxnickname().":: \n";
                     //echo "<script>alert('RESP cali ".count($usuario)." ')</script>";
 
                     $respuesta->setRespuesta(GamesController::inExitoso);
@@ -95,7 +96,7 @@ class GestionUsuarios {
                     
 //                    $plansuscrip = new Plansuscripcion();
                     $plansuscrip = ManejoDataRepository::getPlanSuscripcion($planusuario, $em);
-                    //echo "Plan :: ".utf8_encode($plansuscrip->gettxnomplan());
+                    //echo "\n obtenerParametros :: Plan :: ".utf8_encode($plansuscrip->gettxnomplan());
                     //$arrPlanUsuario = array();
                     //foreach ($planusuario as $plan) {
                     $arrPlanUsuario = array("inplan"=>$plansuscrip->getidplansuscripcion(),
@@ -114,15 +115,18 @@ class GestionUsuarios {
                     $respuesta->setArrPreferenciasU($ar); //Solo 5 registros de preferencias máximo
                     $respuesta->setArrResumenU(ManejoDataRepository::getResumenUsuario($usuario, $em)); 
                 } else {
+                    //echo "\n obtenerParametros :: El usuario es NULL";
                     $usuario = new Usuario();
                     $respuesta->setRespuesta(GamesController::inMenNoEx);
-                    $respuesta->setArrUsuarios($usuario);
+                    $respuesta->setArrUsuarios(NULL);
                 }
             } else {
+                //echo "\n obtenerParametros :: OJO El usuario no está LOGGEADO";
                 $usuario = new Usuario();
                 $respuesta->setRespuesta($respSesionVali);
                 $respuesta->setArrUsuarios($usuario);
             }
+            //echo "\n obtenerParametros :: Finaliza \n";
         } catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
         } finally {

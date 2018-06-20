@@ -436,10 +436,10 @@ class Logica {
             //$em = Logica::getDoctrine()->getManager();
             //echo "Va a generar respusta DatosUsuari0 \n";
             $usuario = new Usuario();
-            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             $lugar = new Lugar();
             if ($respuesta->getRespuesta()== GamesController::inULogged){
                 //echo "LUGAR ".$usuario->getUsuarioInlugar()->getinlugar();
+                $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
                 $lugar = ManejoDataRepository::getLugar($usuario->getUsuarioInlugar(), $em);
             }
             if (!is_null($usuario)){
