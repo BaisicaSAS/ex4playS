@@ -1224,23 +1224,25 @@ class Logica {
                 
                 ManejoDataRepository::persistEntidad($planusuario, $em);
                 
-                //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
+                echo "\n registroUsuario :: Guardó usuario...va a generar sesion";
                 setlocale (LC_TIME, "es_CO");
                 $fecha = new \DateTime('c');
                 //echo "<script>alert('fecha ')</script>";
 
                 $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),$em);
-                //echo "<script>alert('Generó sesion ')</script>";
+                echo "\n registroUsuario :: Generó sesion";
                 //Guarda la actividad de la sesion:: Como finalizada
                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,GamesController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha,$em);
-                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                echo "\n registroUsuario :: Generó actividad de sesion";
 
                 //Envia email
                 //$Logica = new Logica();
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
-                //EnviaMailController::enviaMailRegistroAction($usuario);
-                //echo "<script>alert('Envió mail ')</script>";
+                echo "\n registroUsuario :: Va a enviar mail";
+                $mailer = new \Symfony\Bundle\MonologBundle\SwiftMailer();
+                EnviaMailController::enviaMailRegistroAction($usuario, $mailer);
+                echo "\n registroUsuario :: Envió mail";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 

@@ -22,11 +22,11 @@ class EnviaMailController extends Controller{
      * enviaMailRegistro 
      * Se encarga de enviar el email con el que el usuario confirmara su registro
      */
-    public function enviaMailRegistroAction(Usuario $usuario)
+    public function enviaMailRegistroAction(Usuario $usuario, $mailer)
     {   
         try{
             $cadena = Logica::generaCadenaURL($usuario);
-            #echo "cadena enviada = "."http://baisica.co/ex4play/services/web/registro/".$cadena;
+            echo "\n enviaMailRegistroAction :: cadena a enviar = "."http://baisica.co/ex4play/services/web/registro/".$cadena;
             $message = \Swift_Message::newInstance()
                 ->setContentType('text/html')
                 ->setSubject('Bienvenido a ex4play '.$usuario->getTxnomusuario())
@@ -35,18 +35,22 @@ class EnviaMailController extends Controller{
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxmailusuario())
-                ->setBody('Prueba '.$cadena);
-                /*->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
+                //->setBody('Prueba '.$cadena)
+                ->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxmailusuario(), 
                         'crurl' => "http://baisica.co/ex4play/services/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
                 ),'text/html');
-*/
-            $objmail = $this->container->get('EnviaMail_service');
-            $objmail->sendEmail($message);    
+
+            echo "\n enviaMailRegistroAction :: se armó Mensaje, viene sendMail";
+            //$objmail = $this->container->get('EnviaMail_service');
+            $mailer->send($message);
+            echo "\n enviaMailRegistroAction :: envió el Mensaje!!!";
+            //$objmail = $this->get('mailer');
+            //$objmail->sendEmail($message);    
         
-            return 0;
+            return GamesController::inExitoso;
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 

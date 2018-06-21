@@ -1,0 +1,4 @@
+[2018-06-21 12:42:09] event.DEBUG: Notified event "console.command" to listener "Symfony\Bridge\Monolog\Handler\ConsoleHandler::onCommand". [] []
+[2018-06-21 12:42:10] security.NOTICE: It is recommended that you enable the "openssl" extension for random number generation. [] []
+[2018-06-21 12:42:14] event.DEBUG: Notified event "console.terminate" to listener "Symfony\Bundle\SwiftmailerBundle\EventListener\EmailSenderListener::onTerminate". [] []
+[2018-06-21 12:42:14] event.DEBUG: Notified event "console.terminate" to listener "Symfony\Bridge\Monolog\Handler\ConsoleHandler::onTerminate". [] []
