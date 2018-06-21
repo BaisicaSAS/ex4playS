@@ -84,6 +84,12 @@ Libreame\BackendBundle\Entity\Usuario:
             options:
                 fixed: false
                 comment: 'Guarda la url de la imagen.'
+        txclave:
+            type: blob
+            nullable: false
+            options:
+                fixed: false
+                comment: 'Clave del usuario'
     manyToOne:
         usuarioInlugar:
             targetEntity: Lugar

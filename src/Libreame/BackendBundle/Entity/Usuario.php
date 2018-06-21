@@ -5,6 +5,7 @@ namespace Libreame\BackendBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Controller\GamesController;
+use Libreame\BackendBundle\Repository\ManejoDataRepository;
 /**
  * Usuario
  *
@@ -102,6 +103,13 @@ class Usuario
      */
     private $txusuimagen;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txclave", type="blob")
+     */
+    private $txclave;
+
     /* 
      * getters ex4playS
      */
@@ -162,6 +170,11 @@ class Usuario
     }
     
     public function getTxusuimagen()
+    {
+        return $this->txusuimagen;
+    }
+    
+    public function getTxclave()
     {
         return $this->txusuimagen;
     }
@@ -246,6 +259,13 @@ class Usuario
         return $this;
     }
     
+    public function setTxclave($txclave)
+    {
+        $this->txclave = $txclave;
+
+        return $this;
+    }
+
     function __construct(){ 
         $strBlanco = "";
         $this->txmailusuario = $strBlanco;
@@ -255,6 +275,7 @@ class Usuario
         $this->usuarioInlugar = $strBlanco;
         $this->txusuvalidacion = $strBlanco;
         $this->txusuimagen = $strBlanco;
+        $this->txclave = $strBlanco;
     } 
     
     //Función que crea un usuario para su registro en el sistema
@@ -273,7 +294,10 @@ class Usuario
             $usuario->setTxclaveusuario($pSolicitud->getClave());  
             $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
             $usuario->setUsuarioInlugar($Lugar);  
-            $usuario->settxusuvalidacion(Logica::generaRand(GamesController::inTamVali));  
+            $txusuvalidacion = Logica::generaRand(GamesController::inTamVali);
+            $usuario->settxusuvalidacion($txusuvalidacion);  
+            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), $txusuvalidacion));  
+
 
             return $usuario;
         } catch (Exception $ex)  {    

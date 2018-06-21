@@ -871,7 +871,28 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    ///********************* LO QUE NO SE USA ********************************///
+ 
+/*I found an example for en/decoding strings in PHP. At first it looks very good but it wont work :-(
+
+Does anyone know what the problem is?
+
+$Pass = "Passwort";
+$Clear = "Klartext";
+
+$crypted = fnEncrypt($Clear, $Pass);
+echo "Encrypted: ".$crypted."</br>";
+
+$newClear = fnDecrypt($crypted, $Pass);
+echo "Decrypted: ".$newClear."</br>";
+*/
+    public static function fnEncrypt($sValue, $sSecretKey) {
+        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sDecrypted, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+    }
+
+    public static function fnDecrypt($sValue, $sSecretKey) {
+        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, base64_decode($sEncrypted), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+    }   
+///********************* LO QUE NO SE USA ********************************///
     
     
     //Obtiene varios objetos Editorial según el ID del libro 

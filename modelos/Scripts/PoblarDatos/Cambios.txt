@@ -40,3 +40,5 @@ ALTER TABLE `ex4play`.`usuario`
 ADD COLUMN `txtelefono` VARCHAR(45) NOT NULL DEFAULT 'PENDIENTE' COMMENT 'Telefono del usuario' AFTER `txmailusuario`,
 ADD COLUMN `txdireccion` VARCHAR(250) NOT NULL DEFAULT 'PENDIENTE' COMMENT 'Direccion del usuario' AFTER `txtelefono`;
 
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `txclave` BLOB NULL COMMENT 'Almacena la clave encriptada' AFTER `txUsuImagen`;
