@@ -30,8 +30,8 @@ services:
     #    class: Libreame\BackendBundle\Helpers\GestionEjemplares
 #        arguments: [@service_id, "plain_value", %parameter%]
 
-    EnviaMail_service:
-        class: Libreame\BackendBundle\Controller\EnviaMailController
-        arguments: [@mailer]
+#    EnviaMail_service:
+#        class: Libreame\BackendBundle\Controller\EnviaMailController
+#        arguments: [@mailer]
         
         

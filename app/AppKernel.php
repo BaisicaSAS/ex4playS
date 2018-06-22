@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Libreame\BackendBundle\LibreameBackendBundle(),
         );
+        //echo "ambiente ".$this->getEnvironment();
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();

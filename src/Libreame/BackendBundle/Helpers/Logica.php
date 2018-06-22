@@ -1069,7 +1069,7 @@ class Logica {
      * generaCadenaURL 
      * Combina datos para entregar URL de Registro
      */
-    public function generaCadenaURL(Usuario $usuario)
+    public static function generaCadenaURL(Usuario $usuario)
     {   
         //Cantidad de caracteres del mail
         $caracEmail = strlen($usuario->getTxmailusuario());
@@ -1240,8 +1240,13 @@ class Logica {
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
                 echo "\n registroUsuario :: Va a enviar mail";
-                //$mailer = new \Symfony\Bundle\MonologBundle\SwiftMailer();
-                EnviaMailController::enviaMailRegistroAction($usuario/*, $mailer*/);
+                
+                error_reporting(E_ALL);
+                $transport = (new \Swift_SmtpTransport('p3plcpnl0478.prod.phx3.secureserver.net', 25))
+                    ->setUsername('registro@ex4read.co')
+                    ->setPassword('R3g15tr0');
+                $mailer = new \Swift_Mailer($transport);
+                EnviaMailController::enviaMailRegistroAction($usuario, $mailer);
                 echo "\n registroUsuario :: Envió mail";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
