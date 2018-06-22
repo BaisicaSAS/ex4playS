@@ -22,7 +22,7 @@ class EnviaMailController extends Controller{
      * enviaMailRegistro 
      * Se encarga de enviar el email con el que el usuario confirmara su registro
      */
-    public function enviaMailRegistroAction(Usuario $usuario, $mailer)
+    public function enviaMailRegistroAction(Usuario $usuario)
     {   
         try{
             $cadena = Logica::generaCadenaURL($usuario);
@@ -35,17 +35,18 @@ class EnviaMailController extends Controller{
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxmailusuario())
-                //->setBody('Prueba '.$cadena)
-                ->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
+                ->setBody('Prueba '.$cadena);
+                /*->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxmailusuario(), 
                         'crurl' => "http://baisica.co/ex4play/services/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
-                ),'text/html');
+                ),'text/html');*/
 
-            echo "\n enviaMailRegistroAction :: se armó Mensaje, viene sendMail";
+            echo "\n enviaMailRegistroAction :: se armó Mensaje, viene sendMail :: ".$message->getSubject();
             //$objmail = $this->container->get('EnviaMail_service');
-            $mailer->send($message);
+            //$mailer->send($message);
+            $this->getContainer->get('swiftmailer')->sendEmail($message);
             echo "\n enviaMailRegistroAction :: envió el Mensaje!!!";
             //$objmail = $this->get('mailer');
             //$objmail->sendEmail($message);    

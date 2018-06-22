@@ -261,7 +261,7 @@ class appProdProjectContainer extends Container
     }
     protected function getDoctrine_Dbal_DefaultConnectionService()
     {
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => '3306', 'dbname' => 'ex4play', 'user' => 'adminex4play', 'password' => 'adminex4play', 'driverOptions' => array()), new \Doctrine\DBAL\Configuration(), new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => 3306, 'dbname' => 'ex4play', 'user' => 'adminex4play', 'password' => 'adminex4play', 'driverOptions' => array()), new \Doctrine\DBAL\Configuration(), new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
     }
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
@@ -305,7 +305,7 @@ class appProdProjectContainer extends Container
     }
     protected function getEnviamailServiceService()
     {
-        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Helpers\EmailServiceClass($this->get('swiftmailer.mailer.default'));
+        return $this->services['enviamail_service'] = new \Libreame\BackendBundle\Controller\EnviaMailController($this->get('swiftmailer.mailer.default'));
     }
     protected function getEventDispatcherService()
     {
@@ -793,7 +793,7 @@ class appProdProjectContainer extends Container
         $a->setPassword('R3g15tr0');
         $a->setAuthMode(NULL);
         $this->services['swiftmailer.mailer.default.transport.real'] = $instance = new \Swift_Transport_EsmtpTransport(new \Swift_Transport_StreamBuffer(new \Swift_StreamFilters_StringReplacementFilterFactory()), array(0 => $a), $this->get('swiftmailer.mailer.default.transport.eventdispatcher'));
-        $instance->setHost('localhost');
+        $instance->setHost('p3plcpnl0478.prod.phx3.secureserver.net');
         $instance->setPort(25);
         $instance->setEncryption(NULL);
         $instance->setTimeout(30);
@@ -1182,16 +1182,17 @@ class appProdProjectContainer extends Container
             'kernel.container_class' => 'appProdProjectContainer',
             'database_driver' => 'pdo_mysql',
             'database_host' => '127.0.0.1',
-            'database_port' => '3306',
+            'database_port' => 3306,
             'database_name' => 'ex4play',
             'database_user' => 'adminex4play',
             'database_password' => 'adminex4play',
+            'locale' => 'en',
+            'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'mailer_transport' => 'smtp',
             'mailer_host' => 'p3plcpnl0478.prod.phx3.secureserver.net',
             'mailer_user' => 'registro@ex4read.co',
+            'mailer_port' => false,
             'mailer_password' => 'R3g15tr0',
-            'locale' => 'en',
-            'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
@@ -1534,7 +1535,7 @@ class appProdProjectContainer extends Container
             'swiftmailer.mailer.default.delivery.enabled' => true,
             'swiftmailer.mailer.default.transport.smtp.encryption' => NULL,
             'swiftmailer.mailer.default.transport.smtp.port' => 25,
-            'swiftmailer.mailer.default.transport.smtp.host' => 'localhost',
+            'swiftmailer.mailer.default.transport.smtp.host' => 'p3plcpnl0478.prod.phx3.secureserver.net',
             'swiftmailer.mailer.default.transport.smtp.username' => 'registro@ex4read.co',
             'swiftmailer.mailer.default.transport.smtp.password' => 'R3g15tr0',
             'swiftmailer.mailer.default.transport.smtp.auth_mode' => NULL,

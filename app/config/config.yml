@@ -64,9 +64,9 @@ doctrine:
 swiftmailer:
     disable_delivery:  false
     transport: %mailer_transport%
-    #host:      %mailer_host%
+    host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    #port:      %mailer_port%
+    port:      %mailer_port%
     #encryption: %mailer_encryption%
     spool:     { type: memory }

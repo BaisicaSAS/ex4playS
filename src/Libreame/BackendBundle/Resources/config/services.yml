@@ -32,6 +32,6 @@ services:
 
     EnviaMail_service:
         class: Libreame\BackendBundle\Controller\EnviaMailController
-        #arguments: ['@mailer']
+        arguments: [@mailer]
         
         

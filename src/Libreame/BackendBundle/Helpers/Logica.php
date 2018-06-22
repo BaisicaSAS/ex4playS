@@ -1240,8 +1240,8 @@ class Logica {
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
                 echo "\n registroUsuario :: Va a enviar mail";
-                $mailer = new \Symfony\Bundle\MonologBundle\SwiftMailer();
-                EnviaMailController::enviaMailRegistroAction($usuario, $mailer);
+                //$mailer = new \Symfony\Bundle\MonologBundle\SwiftMailer();
+                EnviaMailController::enviaMailRegistroAction($usuario/*, $mailer*/);
                 echo "\n registroUsuario :: Envió mail";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
