@@ -39,8 +39,6 @@ class EnviaMailController extends Controller{
                 ->setBody("<p><strong>Bienvenido ".$usuario->getTxnomusuario().",</strong></p>" 
                         . "<p><tr>Estas a un paso de finalizar tu registro.</tr><br/></p>"
                         . "<p><tr>Haz click en el enlace para confirmar tu cuenta. </tr></p>"
-                        //. "<br/><tr><strong> ".$cadena." </tr><br/><br/><br/>"
-                        //. "<p><br/><tr><strong> http://localhost/ex4playS/web/registro/".$cadena." </tr><br/><br/><br/></p>"
                         . "<p><br/><tr><strong><align='center'> <a href='http://baisica.co/ex4play/services/web/registro/".$cadena."'>...Click aquí para confirmar...</a> </tr><br/><br/></p>"
                         //. "<p><br/><tr><strong><align='center'> <a href='http://localhost/ex4playS/web/registro/".$cadena."'>...Click aquí para confirmar...</a> </tr><br/><br/></p>"
                         . "<p><tr><strong>El equipo de ex4play</strong></tr></p>"

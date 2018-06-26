@@ -134,6 +134,52 @@ class GestionUsuarios {
         }
     }
     
+    
+    /* actualizarClaveUsuario 
+     * Cambia las clave del usuario
+     */
+    
+    public function actualizarClaveUsuario(Solicitud $psolicitud, $em)
+    {   
+        //echo "actualizarClaveUsuario : INGRESA ACTUALIZAR CLAVE \n";
+         /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        try {
+            //Si la clave actual del usuario es válida
+            //if $psolicitud->getClave() ==  {   
+                //Valida que la sesión corresponda y se encuentre activa
+                $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+                //echo "actualizarClaveUsuario : Validez de sesion ".$respSesionVali." \n";
+                if ($respSesionVali== GamesController::inULogged) 
+                {    
+                    //echo "actualizarClaveUsuario : Esta logueado \n";
+                    $actualiza = ManejoDataRepository::setCambiarClave($psolicitud, $em);
+                    //echo "actualizarClaveUsuario Cambió la clave ".$actualiza." \n";
+                    if ($actualiza == GamesController::inFallido){
+                        //echo "actualizarClaveUsuario : Responde fallido \n";
+                        $respuesta->setRespuesta(GamesController::inFallido);
+                    } else {
+                        //echo "actualizarClaveUsuario : Responde sesion valida \n";
+                        $respuesta->setRespuesta($respSesionVali);
+                    }
+
+                    return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+                } else {
+                    //echo "actualizarClaveUsuario : NO LOGUEADO \n";
+                    $respuesta->setRespuesta($respSesionVali);
+                    return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+                }
+            //} else {
+            //    $respuesta->setRespuesta(GamesController::inUsClAcI);
+            //}
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            return Logica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }    
+    
     /* recuperarMensajes 
      * Retorna la información de los mensajes del usuario
      */

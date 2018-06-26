@@ -872,6 +872,37 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
  
+    //Actualiza clave de usuario
+    public static function setCambiarClave(Solicitud $psolicitud, $em)
+    {   
+        try{
+            $resp = GamesController::inFallido;
+            //echo "setCambiarClave : Inicia : usuario FALLIDO ".$resp." \n";
+            
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+            //echo "setCambiarClave : Recuperó el usuario ".$usuario->getTxnickname()." \n";
+            //echo 'usuario FALLIDO '.$resp;
+            //if ($psolicitud->getUsuFecNac() != ""){
+            //    $d = new DateTime($psolicitud->getUsuFecNac());
+            //}
+            
+            $usuario->setTxclaveusuario($psolicitud->getClaveNueva());
+            //echo "setCambiarClave : cambia clave \n";
+            //echo "setCambiarClave : clave : [".$psolicitud->getClaveNueva()."] \n";
+            //echo "setCambiarClave : Validacion : [".$usuario->getTxusuvalidacion()."] \n";
+            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), $usuario->getTxusuvalidacion()));  
+            //echo "setCambiarClave : encripta clave \n";
+            $em->persist($usuario);
+            $em->flush();
+            $resp = GamesController::inExitoso;
+            //echo "setCambiarClave : Respuesta = ".$resp." \n";
+            
+            return $resp;
+        } catch (Exception $ex) {
+                return  GamesController::inFallido;
+        } 
+    }
+                
 /*I found an example for en/decoding strings in PHP. At first it looks very good but it wont work :-(
 
 Does anyone know what the problem is?
@@ -1604,32 +1635,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
-    //Actualiza clave de usuario
-    public function setCambiarClave(Solicitud $psolicitud)
-    {   
-        try{
-            $resp = GamesController::inFallido;
-            //echo 'usuario FALLIDO '.$resp;
-            $em = $this->getDoctrine()->getManager();
-            
-            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            //echo 'usuario FALLIDO '.$resp;
-            //if ($psolicitud->getUsuFecNac() != ""){
-            //    $d = new DateTime($psolicitud->getUsuFecNac());
-            //}
-            
-            $usuario->setTxusuclave($psolicitud->getClaveNueva());
-           
-            $em->persist($usuario);
-            $em->flush();
-            $resp = GamesController::inExitoso;
-            
-            return $resp;
-        } catch (Exception $ex) {
-                return  GamesController::inFallido;
-        } 
-    }
-                
     //Guarda CUALQUIER ENTIDAD del parametro
     //ex4plays::Adicionado $em
     public function persistEntidad($entidad, EntityManager $em)

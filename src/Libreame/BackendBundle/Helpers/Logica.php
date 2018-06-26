@@ -119,6 +119,13 @@ class Logica {
                     break;
                 } 
 
+                case GamesController::txAccRecClave: {//Dato:29 : Cambio de clave
+                    //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
+                    //$objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = GestionUsuarios::actualizarClaveUsuario($solicitud, $em);
+                    break;
+                } 
+                
                 case GamesController::txAccActParam: {//Dato:12 : Actualizar datos parametros usuario
                     //echo "<script>alert('Antes de entrar a Actualizar datos parametros usuario-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -154,13 +161,6 @@ class Logica {
                     break;
                 } 
 
-                case GamesController::txAccRecClave: {//Dato:29 : Cambio de clave
-                    //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
-                    $objGestUsuarios = $this->get('gest_usuarios_service');
-                    $respuesta = $objGestUsuarios::actualizarClaveUsuario($solicitud);
-                    break;
-                } 
-                
                 case GamesController::txAccMarcMens: {//Dato:36 : Marcar Mensaje
                     //echo "<script>alert('Antes de entrar a Marcar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
