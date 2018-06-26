@@ -36,13 +36,17 @@ class EnviaMailController extends Controller{
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxmailusuario())
-                //->setBody('Prueba '.$cadena);
-                ->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
+                ->setBody("Bienvenido ".$usuario->getTxnomusuario().", "
+                        . "/\n Estas a un paso de finalizar tu registro. /\n"
+                        . "/\n Haz click en el enlace. /\n  http://baisica.co/ex4play/services/web/registro/".$cadena);
+                /*->setBody($this->container->get('templating')->renderView(
+                    'LibreameBackendBndle:Registro:registro.html.twig', array('content' => $content)));
+                /*->setBody($this->renderView('LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxmailusuario(), 
                         'crurl' => "http://baisica.co/ex4play/services/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
-                ),'text/html');
+                ),'text/html');*/
 
             echo "\n enviaMailRegistroAction :: se armó Mensaje, viene sendMail :: ".$message->getSubject();
             //$objmail = $this->container->get('mailer');
