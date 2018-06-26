@@ -2153,16 +2153,14 @@ echo "Decrypted: ".$newClear."</br>";
     }
     
     //Valida datos de registro de    un usuario
-    public function datosUsuarioValidos($usuario, $clave)
+    public function datosUsuarioValidos($usuario, $clave, $em)
     {
         try{
-            $em = $this->getDoctrine()->getManager();
-            
            //echo "manejodarepo:usr ".$usuario;
             //echo "manejodarepo:clave ".$clave;
-            $vUsuario = new LbUsuarios();
-            $vUsuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $usuario, 
+            $vUsuario = new Usuario();
+            $vUsuario = $em->getRepository('LibreameBackendBundle:usuario')->
+                    findOneBy(array('txmailusuario' => $usuario, 
                         'txusuvalidacion' => $clave, 
                         'inusuestado' => GamesController::inDatoCer));
             
@@ -2178,7 +2176,7 @@ echo "Decrypted: ".$newClear."</br>";
     
     //Activa un usuario en accion de Validacion de Registro
     // * ex4plays :: eliminada la variable DEVICE 
-    public function activarUsuarioRegistro(LbUsuarios $usuario)
+    public function activarUsuarioRegistro(Usuario $usuario, $em)
     {
         try{
             /*  3. Marcar el usuario como activo
@@ -2189,7 +2187,7 @@ echo "Decrypted: ".$newClear."</br>";
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
             
-            $em = $this->getDoctrine()->getManager();
+            //$em = $this->getDoctrine()->getManager();
             $em->getConnection()->beginTransaction();
 
 
@@ -2199,7 +2197,7 @@ echo "Decrypted: ".$newClear."</br>";
             //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
             $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesInac, $fecha, $fecha, GamesController::txMeNoIdS, $em);
             //Guarda la actividad de la sesion:: 
-            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), GamesController::txAccConfRegi, $fecha, $fecha, $em);
+            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxmailusuario(), GamesController::txAccConfRegi, $fecha, $fecha, $em);
             
             $em->persist($usuario);
             

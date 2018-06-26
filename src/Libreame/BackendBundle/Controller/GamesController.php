@@ -775,7 +775,7 @@ class GamesController extends Controller
            case E_WARNING:
                     //echo "Hay un WARNING.<br />\n";
                     //echo "El warning es: ". $errstr ."-linea [".$errline."] <br />\n";
-                    //ech echoo "El fichero donde se ha producido el warning es: ". $errfile ."<br />\n";
+                    //echo "El fichero donde se ha producido el warning es: ". $errfile ."<br />\n";
                     //echo "La línea donde se ha producido el warning es: ". $errline ."<br />\n";
                     /* No ejecutar el gestor de errores interno de PHP, hacemos que lo pueda procesar un try catch */
                     return true;

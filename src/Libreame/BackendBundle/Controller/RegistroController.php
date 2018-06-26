@@ -37,14 +37,15 @@ class RegistroController extends Controller
             //$objLogica = new Logica();
             $this->descomponerDatosEntrada($id);
 
-            //echo "regcontroller:usr ".$this->usuario;
-            //echo "regcontroller:clave ".$this->clave;
-            $respuesta = Logica::validarRegistroGeneradoUsuario($this->usuario, $this->clave);
+            $em = $this->getDoctrine()->getManager();
+            //echo "\n regcontroller:usr   :".$this->usuario." \n";
+            //echo "\n regcontroller:clave :".$this->clave." \n";
+            $respuesta = Logica::validarRegistroGeneradoUsuario($this->usuario, $this->clave, $em);
             
             if ($respuesta == GamesController::inExitoso) {
-                return $this->render('AppBundle:Registro:confirmarRegistro.html.twig', array('id' => $this->clave, 'usr' => $this->usuario));
+                return $this->render('LibreameBackendBundle:Registro:confirmarRegistro.html.twig', array('id' => $this->clave, 'usr' => $this->usuario));
             } else {
-                return $this->render('AppBundle:Registro:failConfirmarRegistro.html.twig', array('usr' => $this->usuario));
+                return $this->render('LibreameBackendBundle:Registro:failConfirmarRegistro.html.twig', array('usr' => $this->usuario));
             }
         }            
         catch (Exception $ex) {
@@ -96,7 +97,7 @@ class RegistroController extends Controller
             if (!in_array($i,$posClave) and (($i<2) or ($i>7)) ) {
                 //echo substr($datos,$i,1);
                 $this->clave.=substr($datos,$i,1);
-            } //else { echo "\nNo hace parte: ".$i.' - '. substr($datos,$i,1).' ||| ';}
+            } //else {echo "\nNo hace parte: ".$i.' - '. substr($datos,$i,1).' ||| ';}
         }
         //echo "  \nCLAVE: [ ".$this->clave.' ]';
     }

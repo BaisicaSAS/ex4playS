@@ -1155,18 +1155,18 @@ class Logica {
         return $key;         
     }
     
-    public function validarRegistroGeneradoUsuario($usuario, $clave)
+    public function validarRegistroGeneradoUsuario($usuario, $clave, $em)
     {
         try {
             //echo "logica:usr ".$usuario;
             //echo "logica:clave ".$clave;
-            $vUsuario = new LbUsuarios();
-            $vUsuario = ManejoDataRepository::datosUsuarioValidos($usuario, $clave);
+            $vUsuario = new Usuario();
+            $vUsuario = ManejoDataRepository::datosUsuarioValidos($usuario, $clave, $em);
             $respuesta = GamesController::inExitoso;
             if ($vUsuario == NULL) { $respuesta = GamesController::inFallido; }
             
             if ($respuesta==GamesController::inExitoso) {
-                $respuesta = ManejoDataRepository::activarUsuarioRegistro($vUsuario);
+                $respuesta = ManejoDataRepository::activarUsuarioRegistro($vUsuario, $em);
             }
             return $respuesta;
         } catch (Exception $ex) {
@@ -1224,22 +1224,22 @@ class Logica {
                 
                 ManejoDataRepository::persistEntidad($planusuario, $em);
                 
-                echo "\n registroUsuario :: Guardó usuario...va a generar sesion";
+                //echo "\n registroUsuario :: Guardó usuario...va a generar sesion";
                 setlocale (LC_TIME, "es_CO");
                 $fecha = new \DateTime('c');
                 //echo "<script>alert('fecha ')</script>";
 
                 $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inDatoCer,$fecha,$fecha,$pSolicitud->getIPaddr(),$em);
-                echo "\n registroUsuario :: Generó sesion";
+                //echo "\n registroUsuario :: Generó sesion";
                 //Guarda la actividad de la sesion:: Como finalizada
                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,GamesController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha,$em);
-                echo "\n registroUsuario :: Generó actividad de sesion";
+                //echo "\n registroUsuario :: Generó actividad de sesion";
 
                 //Envia email
                 //$Logica = new Logica();
                 
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
-                echo "\n registroUsuario :: Va a enviar mail";
+                //echo "\n registroUsuario :: Va a enviar mail";
                 
                 error_reporting(E_ALL);
                 $transport = (new \Swift_SmtpTransport('p3plcpnl0478.prod.phx3.secureserver.net', 25))
@@ -1247,7 +1247,7 @@ class Logica {
                     ->setPassword('R3g15tr0');
                 $mailer = new \Swift_Mailer($transport);
                 EnviaMailController::enviaMailRegistroAction($usuario, $mailer);
-                echo "\n registroUsuario :: Envió mail";
+                //echo "\n registroUsuario :: Envió mail";
 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 
