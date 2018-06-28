@@ -49,6 +49,28 @@ class appProdUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
         }
         not_ex4read_confirmarRegistro:
 
+        // ex4play_ingresarSistema
+        if ($pathinfo === '/ingreso') {
+            if ($this->context->getMethod() != 'POST') {
+                $allow[] = 'POST';
+                goto not_ex4play_ingresarSistema;
+            }
+
+            return array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\GamesController::servicioAction',  '_format' => 'json',  '_route' => 'ex4play_ingresarSistema',);
+        }
+        not_ex4play_ingresarSistema:
+
+        // ex4play_confirmarRegistro
+        if (0 === strpos($pathinfo, '/registro') && preg_match('#^/registro/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_ex4play_confirmarRegistro;
+            }
+
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4play_confirmarRegistro')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\RegistroController::confirmarRegistroAction',));
+        }
+        not_ex4play_confirmarRegistro:
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

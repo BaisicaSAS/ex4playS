@@ -67,8 +67,10 @@ class ManejoDataRepository extends EntityRepository {
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
     public static function getUsuarioByEmail($txemail, $em)
     {   
+        //echo "\n getUsuarioByEmail : Ingresa ";
         try{
-            return $em->getRepository('LibreameBackendBundle:Usuario')->
+            //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
+            return $em->getRepository('LibreameBackendBundle:usuario')->
                 findOneBy(array('txmailusuario' => $txemail));
         } catch (Exception $ex) {
                 return new Usuario();
@@ -86,14 +88,16 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    public static function validaSesionUsuario($psolicitud, $em)
+    public function validaSesionUsuario(Solicitud $psolicitud, $em)
     {   
-        //$respuesta = GamesController::inPlatCai;
+        //echo "\n validaSesionUsuario : Ingresa validar sesion";
+        //echo "\n validaSesionUsuario : Ingresa validar sesion :: ".$psolicitud->getEmail();
+        $respuesta = GamesController::inPlatCai;
         try{
             //Verifica que el usuario exista, que esté activo, que la clave coincida
             //que corresponda al dispositivo, y que la sesion esté activa
 
-            //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
+            //echo "\n validaSesionUsuario : Ingresa validar sesion :: ".$psolicitud->getEmail();
             $respuesta = GamesController::inUsSeIna; //Inicializa como sesion logueada
 
             $usuario = new Usuario();
@@ -298,9 +302,9 @@ class ManejoDataRepository extends EntityRepository {
      * ex4plays :: Adiciona $em y ajusta con entidades del modelo 
      */
     public static function recuperaEstadoSesionUsuario(Usuario $pusuario, Solicitud $psolicitud, $em, &$estadoSesion)
-    {   
+    {   //echo "\n recuperaEstadoSesionUsuario :: ****************************************** ";
         try{
-            //echo "\n recuperaEstadoSesionUsuario :: ****************************************** ".$txsesion;
+            //echo "\n recuperaEstadoSesionUsuario :: ****************************************** ";
             //echo "\n recuperaEstadoSesionUsuario :: ENTRA A RECUPERAR SESION ".$txsesion;
             $txsesion = utf8_encode($psolicitud->getSession());
             //echo "\n recuperaEstadoSesionUsuario :: Busca sesion activa del usuario ";
@@ -903,6 +907,63 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+
+    //Actualiza datos de usuario
+    public function setActualizaUsuario(Solicitud $psolicitud, $em)
+    {   
+        try{
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+            $lugar = ManejoDataRepository::getLugar($psolicitud->getUsuLugar(), $em);
+            
+            if ($psolicitud->getUsuFecNac() != ""){
+                $d = new DateTime($psolicitud->getUsuFecNac());
+            }
+            
+            if ($psolicitud->getTelefono() == "")
+                $usuario->setTxtelefono($psolicitud->getEmail());
+            else
+                $usuario->setTxtelefono($psolicitud->getTelefono());
+            
+            $usuario->setUsuarioInlugar($lugar);
+            $usuario->setinusugenero($psolicitud->getUsuGenero());
+            //Cargar imágen usuario
+            $usuario->setTxusuimagen(GamesController::txMeNoIdS);
+            //$usuario->setTxusuimagen($psolicitud->getUsuImagen());
+            $usuario->setTxnomusuario($psolicitud->getNomUsuario());
+            $usuario->setTxnickname($psolicitud->getNomMostUsuario());
+            if ($psolicitud->getUsuFecNac() != ""){
+                $usuario->setfeusunacimiento($d);
+            }
+           
+            $em->persist($usuario);
+            $em->flush();
+            //Cargar imágen usuario
+            if ($psolicitud->getUsuImagen() != "") {
+                //echo "setActualizaUsuario: Calcula imágen  \n" ;
+                $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getIdusuario(), GamesController::txIndCarpImgUsua));
+                $this->inImagenValida = GamesController::inDatoUno;
+            } else {
+                //echo "setActualizaUsuario: La imágen viene vacia \n" ;
+                $this->inImagenValida = GamesController::inDatoUno;
+            }
+            
+            if ($this->inImagenValida == GamesController::inDatoUno){
+                $em->persist($usuario);
+                $em->flush();
+                $resp = GamesController::inExitoso;
+                //echo "setActualizaUsuario: La imágen es válida [".$resp."]\n" ;
+            } else {
+                $resp = GamesController::inErrImag;
+                //echo "setActualizaUsuario: La imágen NO es válida [".$resp."] \n" ;
+            }
+            
+            return $resp;
+        } catch (Exception $ex) {
+                return new LbUsuarios();
+        } 
+    }
+    
+    
 /*I found an example for en/decoding strings in PHP. At first it looks very good but it wont work :-(
 
 Does anyone know what the problem is?
@@ -1578,63 +1639,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
-    //Actualiza datos de usuario
-    public function setActualizaUsuario(Solicitud $psolicitud)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            $lugar = ManejoDataRepository::getLugar($psolicitud->getUsuLugar());
-            
-            if ($psolicitud->getUsuFecNac() != ""){
-                $d = new DateTime($psolicitud->getUsuFecNac());
-            }
-            
-            if ($psolicitud->getTelefono() == "")
-                $usuario->setTxusutelefono($psolicitud->getEmail());
-            else
-                $usuario->setTxusutelefono($psolicitud->getTelefono());
-            
-            $usuario->setInusulugar($lugar);
-            $usuario->setInusugenero($psolicitud->getUsuGenero());
-            //Cargar imágen usuario
-            $usuario->setTxusuimagen(GamesController::txMeNoIdS);
-            //$usuario->setTxusuimagen($psolicitud->getUsuImagen());
-            $usuario->setTxusunombre($psolicitud->getNomUsuario());
-            $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
-            if ($psolicitud->getUsuFecNac() != ""){
-                $usuario->setFeusunacimiento($d);
-            }
-           
-            $em->persist($usuario);
-            $em->flush();
-            //Cargar imágen usuario
-            if ($psolicitud->getUsuImagen() != "") {
-                //echo "setActualizaUsuario: Calcula imágen  \n" ;
-                $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), GamesController::txIndCarpImgUsua));
-                $this->inImagenValida = GamesController::inDatoUno;
-            } else {
-                //echo "setActualizaUsuario: La imágen viene vacia \n" ;
-                $this->inImagenValida = GamesController::inDatoUno;
-            }
-            
-            if ($this->inImagenValida == GamesController::inDatoUno){
-                $em->persist($usuario);
-                $em->flush();
-                $resp = GamesController::inExitoso;
-                //echo "setActualizaUsuario: La imágen es válida [".$resp."]\n" ;
-            } else {
-                $resp = GamesController::inErrImag;
-                //echo "setActualizaUsuario: La imágen NO es válida [".$resp."] \n" ;
-            }
-            
-            return $resp;
-        } catch (Exception $ex) {
-                return new LbUsuarios();
-        } 
-    }
-    
     //Guarda CUALQUIER ENTIDAD del parametro
     //ex4plays::Adicionado $em
     public function persistEntidad($entidad, EntityManager $em)
@@ -1648,7 +1652,6 @@ echo "Decrypted: ".$newClear."</br>";
                 return null;
         } 
     }
-    
    
     /*
      * Recupera un comentario, con su Id numerico

@@ -784,13 +784,13 @@ class appProdProjectContainer extends Container
     protected function getSwiftmailer_Mailer_Default_Transport_RealService()
     {
         $a = new \Swift_Transport_Esmtp_AuthHandler(array(0 => new \Swift_Transport_Esmtp_Auth_CramMd5Authenticator(), 1 => new \Swift_Transport_Esmtp_Auth_LoginAuthenticator(), 2 => new \Swift_Transport_Esmtp_Auth_PlainAuthenticator()));
-        $a->setUsername('registro@ex4read.co');
+        $a->setUsername('ex4play@baisica.co');
         $a->setPassword('R3g15tr0');
         $a->setAuthMode(NULL);
         $this->services['swiftmailer.mailer.default.transport.real'] = $instance = new \Swift_Transport_EsmtpTransport(new \Swift_Transport_StreamBuffer(new \Swift_StreamFilters_StringReplacementFilterFactory()), array(0 => $a), $this->get('swiftmailer.mailer.default.transport.eventdispatcher'));
         $instance->setHost('p3plcpnl0478.prod.phx3.secureserver.net');
-        $instance->setPort(25);
-        $instance->setEncryption(NULL);
+        $instance->setPort(465);
+        $instance->setEncryption('ssl');
         $instance->setTimeout(30);
         $instance->setSourceIp(NULL);
         return $instance;
@@ -1185,8 +1185,9 @@ class appProdProjectContainer extends Container
             'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'mailer_transport' => 'smtp',
             'mailer_host' => 'p3plcpnl0478.prod.phx3.secureserver.net',
-            'mailer_user' => 'registro@ex4read.co',
+            'mailer_user' => 'ex4play@baisica.co',
             'mailer_port' => false,
+            'mailer_encryption' => 'ssl',
             'mailer_password' => 'R3g15tr0',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
@@ -1528,10 +1529,10 @@ class appProdProjectContainer extends Container
             'swiftmailer.data_collector.class' => 'Symfony\\Bundle\\SwiftmailerBundle\\DataCollector\\MessageDataCollector',
             'swiftmailer.mailer.default.transport.name' => 'smtp',
             'swiftmailer.mailer.default.delivery.enabled' => true,
-            'swiftmailer.mailer.default.transport.smtp.encryption' => NULL,
-            'swiftmailer.mailer.default.transport.smtp.port' => 25,
+            'swiftmailer.mailer.default.transport.smtp.encryption' => 'ssl',
+            'swiftmailer.mailer.default.transport.smtp.port' => 465,
             'swiftmailer.mailer.default.transport.smtp.host' => 'p3plcpnl0478.prod.phx3.secureserver.net',
-            'swiftmailer.mailer.default.transport.smtp.username' => 'registro@ex4read.co',
+            'swiftmailer.mailer.default.transport.smtp.username' => 'ex4play@baisica.co',
             'swiftmailer.mailer.default.transport.smtp.password' => 'R3g15tr0',
             'swiftmailer.mailer.default.transport.smtp.auth_mode' => NULL,
             'swiftmailer.mailer.default.transport.smtp.timeout' => 30,

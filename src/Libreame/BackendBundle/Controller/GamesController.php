@@ -271,7 +271,7 @@ class GamesController extends Controller
         //error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE );
         //error_reporting(0);
         $em = $this->getDoctrine()->getManager();
-        //echo "IngresarSistema ::: servicio";
+        //echo "servicioAction : IngresarSistema \n";
         //$request = $this->getRequest();
         $content = $request->getContent();
         $datos = json_decode($content, true);
@@ -285,11 +285,12 @@ class GamesController extends Controller
         //Se evalúa si se logró obtener la información de sesion desde el JSON
         $jsonValido = $this->descomponerJson($datos);
         try {
-            //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
+            //echo "servicioAction : json válido : ".$jsonValido." \n"; 
             if ($jsonValido != self::inJsonInv) {
-
+                //echo "servicioAction : Json es válido...Inicia \n"; 
                 $objLogica = $this->container->get('logica_service');
                 $respuesta = $objLogica->ejecutaAccion($this->objSolicitud, $em);
+                //echo "servicioAction : Json es válido ".$respuesta."\n"; 
                 
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
                 
@@ -297,6 +298,7 @@ class GamesController extends Controller
                 $jrespuesta->setRespuesta($jsonValido);    
                 $objLogica = $this->container->get('logica_service');
                 $respuesta = json_encode($objLogica->respuestaGenerica($jrespuesta, $this->objSolicitud));
+                //echo "servicioAction : Json es inválido \n"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             
@@ -411,7 +413,7 @@ class GamesController extends Controller
                     }
                     
                     case self::txAccActParam: { //Dato:12 : Actualizar datos parametros usuario
-                        //echo "<script>alert('ENTRA POR ACTUALIZAR DATOS USUARIO')</script>";
+                        //echo "descomponerJson : ENTRA POR ACTUALIZAR DATOS USUARIO \n";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
@@ -645,7 +647,7 @@ class GamesController extends Controller
                         break;
                     }
                     case self::txAccActParam: { //Dato:12 : Actualizar datos parametros usuario
-                        //echo "<script>alert('ENTRA POR ACTUALIZAR DATOS USUARIO')</script>";
+                        //echo "estructuraCorrecta : ENTRA POR ACTUALIZAR DATOS USUARIO \n";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
                                 isset($datos['idsolicitud']['telefono']) and 
                                 isset($datos['idsolicitud']['nomusuario']) and  isset($datos['idsolicitud']['nommostusuario']) and 

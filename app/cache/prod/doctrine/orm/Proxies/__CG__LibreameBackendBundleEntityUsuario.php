@@ -64,10 +64,10 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txtelefono', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txdireccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclave');
+            return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txtelefono', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txdireccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclave', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusugenero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'feusunacimiento');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txtelefono', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txdireccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclave');
+        return array('__isInitialized__', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'idusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnomusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txnickname', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txtelefono', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txdireccion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txmailusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclaveusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'fecreacionusuario', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusuestado', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuvalidacion', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'usuarioInlugar', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txusuimagen', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'txclave', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'inusugenero', '' . "\0" . 'Libreame\\BackendBundle\\Entity\\Usuario' . "\0" . 'feusunacimiento');
     }
 
     /**
@@ -323,6 +323,28 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
     /**
      * {@inheritDoc}
      */
+    public function getinusugenero()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getinusugenero', array());
+
+        return parent::getinusugenero();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getfeusunacimiento()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getfeusunacimiento', array());
+
+        return parent::getfeusunacimiento();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setTxnomusuario($txnomusuario)
     {
 
@@ -450,6 +472,28 @@ class Usuario extends \Libreame\BackendBundle\Entity\Usuario implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxclave', array($txclave));
 
         return parent::setTxclave($txclave);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setinusugenero($inusugenero)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setinusugenero', array($inusugenero));
+
+        return parent::setinusugenero($inusugenero);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setfeusunacimiento($feusunacimiento)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setfeusunacimiento', array($feusunacimiento));
+
+        return parent::setfeusunacimiento($feusunacimiento);
     }
 
     /**

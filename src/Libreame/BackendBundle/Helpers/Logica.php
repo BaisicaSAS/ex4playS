@@ -52,7 +52,7 @@ class Logica {
             $respuesta = GamesController::inFallido;
             
             $tmpSolicitud = $solicitud->getAccion();
-            //echo "<script>alert('".$tmpSolicitud."-".GamesController::txAccRegistro."')</script>";
+            //echo "ejecutaAccion : ".$tmpSolicitud."-".GamesController::txAccRegistro." \n";
             switch ($tmpSolicitud){
                 //accion de registro en el sistema
                 case GamesController::txAccRegistro: {//Dato:1 : Registro en el sistema
@@ -63,10 +63,10 @@ class Logica {
                 }    
                 //accion de login en el sistema
                 case GamesController::txAccIngresos: {//Dato:2 : Login
-                    //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
+                    //echo "ejecutaAccion : Antes de entrar a Login-".$solicitud->getEmail()." \n";
                     //ex4plays :: Adicionado $em
-                    $login = new Login();
-                    $respuesta = $login->loginUsuario($solicitud, $em);
+                    //$login = new Login();
+                    $respuesta = Login::loginUsuario($solicitud, $em);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
@@ -127,9 +127,9 @@ class Logica {
                 } 
                 
                 case GamesController::txAccActParam: {//Dato:12 : Actualizar datos parametros usuario
-                    //echo "<script>alert('Antes de entrar a Actualizar datos parametros usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestUsuarios = $this->get('gest_usuarios_service');
-                    $respuesta = $objGestUsuarios::actualizarDatosUsuario($solicitud);
+                    //echo "ejecutaAccion : Antes de entrar a Actualizar datos parametros usuario-".$solicitud->getEmail()." \n";
+                    //$objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = GestionUsuarios::actualizarDatosUsuario($solicitud, $em);
                     break;
                 } 
 
@@ -757,6 +757,7 @@ class Logica {
      */
     public function respuestaActualizarDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
+            //echo "respuestaActualizarDatosUsuario : entra a la respuesta \n";
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));

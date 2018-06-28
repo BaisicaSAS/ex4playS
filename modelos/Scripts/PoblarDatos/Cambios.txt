@@ -42,3 +42,9 @@ ADD COLUMN `txdireccion` VARCHAR(250) NOT NULL DEFAULT 'PENDIENTE' COMMENT 'Dire
 
 ALTER TABLE `ex4play`.`usuario` 
 ADD COLUMN `txclave` BLOB NULL COMMENT 'Almacena la clave encriptada' AFTER `txUsuImagen`;
+
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `inusugenero` INT NOT NULL DEFAULT 0 COMMENT '0 : Sin especificar, 1: Masculino, 2 : Femenino' AFTER `txclave`;
+
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `feusunacimiento` DATETIME NULL COMMENT 'Fecha de nacimiento del usuario' AFTER `inusugenero`;

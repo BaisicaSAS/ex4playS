@@ -110,6 +110,20 @@ class Usuario
      */
     private $txclave;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inusugenero", type="integer" nullable=false)
+     */
+    private $inusugenero = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="feusunacimiento", type="datetime", nullable=true)
+     */
+    private $feusunacimiento;
+
     /* 
      * getters ex4playS
      */
@@ -177,6 +191,16 @@ class Usuario
     public function getTxclave()
     {
         return $this->txusuimagen;
+    }
+    
+    public function getinusugenero()
+    {
+        return $this->inusugenero;
+    }
+    
+    public function getfeusunacimiento()
+    {
+        return $this->feusunacimiento;
     }
     
     /* 
@@ -262,6 +286,20 @@ class Usuario
     public function setTxclave($txclave)
     {
         $this->txclave = $txclave;
+
+        return $this;
+    }
+
+    public function setinusugenero($inusugenero)
+    {
+        $this->inusugenero = $inusugenero;
+
+        return $this;
+    }
+
+    public function setfeusunacimiento($feusunacimiento)
+    {
+        $this->feusunacimiento = $feusunacimiento;
 
         return $this;
     }

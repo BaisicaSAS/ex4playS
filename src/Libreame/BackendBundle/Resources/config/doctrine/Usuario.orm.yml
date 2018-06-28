@@ -86,10 +86,22 @@ Libreame\BackendBundle\Entity\Usuario:
                 comment: 'Guarda la url de la imagen.'
         txclave:
             type: blob
-            nullable: false
+            nullable: true
             options:
                 fixed: false
                 comment: 'Clave del usuario'
+        inusugenero:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0 : Sin especificar, 1: Masculino, 2 : Femenino'
+                default: '0'
+        feusunacimiento:
+            type: datetime
+            nullable: true
+            options:
+                comment: 'Fecha de nacimiento del usuario'
     manyToOne:
         usuarioInlugar:
             targetEntity: Lugar

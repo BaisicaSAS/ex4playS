@@ -360,34 +360,35 @@ class GestionUsuarios {
        
     }
 
-    
-    public function actualizarDatosUsuario(Solicitud $psolicitud)
+    public function actualizarDatosUsuario(Solicitud $psolicitud, $em)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
+         //echo "actualizarDatosUsuario : Ingresó \n";
         $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
+        //$objLogica = $this->get('logica_service');
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==AccesoController::inULogged) 
+            //echo "actualizarDatosUsuario : va a validar la sesion \n";
+            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "actualizarDatosUsuario :: Validez de sesion ".$respSesionVali." ' \n";
+            if ($respSesionVali== GamesController::inULogged) 
             {    
                 //Genera la oferta para el ejemplar
-                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
-                if ($actualiza == AccesoController::inFallido)
-                    $respuesta->setRespuesta(AccesoController::inFallido);
+                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud, $em);
+                if ($actualiza == GamesController::inFallido)
+                    $respuesta->setRespuesta(GamesController::inFallido);
                 else
                     $respuesta->setRespuesta($respSesionVali);
                 
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
             }
         } catch (Exception $ex) {
-            $respuesta->setRespuesta(AccesoController::inPlatCai);
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
         }
        
     }    
