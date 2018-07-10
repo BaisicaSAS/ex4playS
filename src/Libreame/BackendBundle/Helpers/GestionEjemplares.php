@@ -95,86 +95,102 @@ class GestionEjemplares {
        
     }
     
-    public static function publicarEjemplar($psolicitud)
+    public function publicarEjemplar(Solicitud $psolicitud, $em)
     {   
-        $fecha = new \DateTime;
+        //error_reporting(E_ALL);
+        //echo "GestionEjemplares : publicarEjemplar : entra a Publicar Ejemplar Usuario-".$psolicitud->getEmail()." \n";
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        //echo "GestionEjemplares : publicarEjemplar : Objeto Respuesta creado \n";
+        //$objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali= ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "GestionEjemplares :: publicarEjemplar :: Validez de sesion ".$respSesionVali." \n";
+            if ($respSesionVali==GamesController::inULogged) 
+            {    
+                //Genera la oferta para el ejemplar si la accion es 1}
+                //echo "GestionEjemplares :: publicarEjemplar :: Decide accion para ejemplar : ".$psolicitud->getAccionComm()." \n";
+                if ($psolicitud->getAccionComm() == GamesController::inAccPublica) {
+                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es publicar \n ";
+                    $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud, $em);
+                    $respuesta->setRespuesta($respPub);
+                } elseif ($psolicitud->getAccionComm() == GamesController::inAccDespubl) {
+                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es des - publicar \n ";
+                } elseif ($psolicitud->getAccionComm() == GamesController::inAccModific) {
+                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es modificar la publicacion  \n ";
+                } elseif ($psolicitud->getAccionComm() == GamesController::inAccElimina) {}
+                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es eliminar la publicacion  \n ";
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+        }
+       
+    }
+
+    
+    public function visualizarBiblioteca(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
         $ejemplares = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objAcceso::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==$objAcceso::inULogged) 
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
             {    
-                //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
-                $em = $this->getDoctrine()->getEntityManager();
+                //echo "<script>alert(' buscaEjemplares :: FindAll ')</script>";
                 //Busca el usuario 
-                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
-                $membresia= $em->getRepository('LibreameBackendBundle:LbMembresias')->
-                    findBy(array('inmemusuario' => $usuario));
+                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
                 
-                $arrMem = array();
-                foreach ($membresia as $memb){
-                    $arrMem[] = $memb->getInmemgrupo();
-                }
-
-                $sql = "SELECT e FROM LibreameBackendBundle:LbGrupos e "
-                        ." WHERE e.ingrupo in (:grupos) ";
-                $query = $em->createQuery($sql)->setParameter('grupos', $arrMem);
-                
-                $grupo = $query->getResult();
+                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
 
                 $arrGru = array();
                 foreach ($grupo as $gru){
                     $arrGru[] = $gru->getIngrupo();
                 }
 
-                
-                //Recupera cada uno de los ejemplares con ID > al del parametro
-                $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
-                        . "LibreameBackendBundle:LbMembresias m,"
-                        . "LibreameBackendBundle:LbUsuarios u WHERE e.inejemplar > ".$psolicitud->getUltEjemplar()
-                        ." and e.inejeusudueno = m.inmemusuario"
-                        ." and m.inmemgrupo in (:grupos) ";
-                
-                $query = $em->createQuery($sql)->setParameter('grupos', $arrGru);
-                /*foreach ($arrGru as $dato){
-                    echo "<script>alert('SQL ".$dato." ')</script>";
-                }*/
-
-
-                //$query = $em->createQuery('SELECT e FROM LibreameBackendBundle:LbEjemplares e WHERE e.inejemplar > 1');
-                $ejemplares = $query->getResult();
+                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $arrGru, $psolicitud->getFiltro());
+                //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
                 $respuesta->setRespuesta(AccesoController::inExitoso);
-                //echo "<script>alert('SQL ".$sql." ')</script>";
+
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
             $ejemplares = array();
-            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
         }
        
     }
+
     
 }
 /*http://localhost/Ex4ReadBE/web/app_dev.php/ingreso

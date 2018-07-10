@@ -34,8 +34,8 @@ class Solicitud {
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
     private $pTipopublica; //Tipo de publicacion 0 / 1 / 2
     private $pIdOferta;
-    private $pTitulo; //Titulo del libro ofrecido
-    private $pIdlibro; //Id del libro ofrecido
+    private $pTitulo; //Titulo del videojuego ofrecido
+    private $pIdvidjuego; //Id del videojuego ofrecido
     private $pIdioma; //Idioma
     private $pAvaluo; //Avalúa
     private $pValVenta; //Valor venta
@@ -68,8 +68,8 @@ class Solicitud {
     private $pinCalificacion; //Calificacion dada por el usuario
     private $pinRegHisPublicacion; //Id del registro de publicacion del ejemplar
     
-    private $pAutor; // Autor
-    private $pEditorial; // Editorial
+    private $pConsola; // Consola
+    private $pFabricante; // Fabricante
     private $pEdicion; // Edicion
     private $pEstado; // Estado del ejemplar
     private $pModopublica; // Modo publicacion
@@ -164,8 +164,8 @@ class Solicitud {
         return $this->pTitulo;
     }
     
-    public function getIdLibro() {
-        return $this->pIdlibro;
+    public function getIdvidjuego() {
+        return $this->pIdvidjuego;
     }
         
     public function getIdioma() {
@@ -268,12 +268,12 @@ class Solicitud {
         return $this->pinRegHisPublicacion;
     }
     
-    public function getAutor() {
-        return $this->pAutor;
+    public function getConsola() {
+        return $this->pConsola;
     }
     
-    public function getEditorial() {
-        return $this->pEditorial;
+    public function getFabricante() {
+        return $this->pFabricante;
     }
     
     public function getEdicion() {
@@ -416,8 +416,8 @@ class Solicitud {
         return $this;
     }
     
-    public function setIdLibro($pIdlibro) {
-        $this->pIdlibro = $pIdlibro;
+    public function setIdvidjuego($pIdvidjuego) {
+        $this->pIdvidjuego = $pIdvidjuego;
         return $this;
     }
         
@@ -546,13 +546,13 @@ class Solicitud {
         return $this;
     }
     
-    public function setAutor($pautor) {
-        $this->pAutor = $pautor;
+    public function setConsola($pconsola) {
+        $this->pConsola = $pconsola;
         return $this;
     }
     
-    public function setEditorial($peditorial) {
-        $this->pEditorial = $peditorial;
+    public function setFabricante($pfabricante) {
+        $this->pFabricante = $pfabricante;
         return $this;
     }
     

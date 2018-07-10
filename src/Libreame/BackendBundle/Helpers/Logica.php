@@ -120,7 +120,7 @@ class Logica {
                 } 
 
                 case GamesController::txAccRecClave: {//Dato:29 : Cambio de clave
-                    //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
+                    //echo "ejecutaAccion : Antes de entrar a Cambio de clave -".$solicitud->getEmail()." \n";
                     //$objGestUsuarios = $this->get('gest_usuarios_service');
                     $respuesta = GestionUsuarios::actualizarClaveUsuario($solicitud, $em);
                     break;
@@ -134,9 +134,9 @@ class Logica {
                 } 
 
                 case GamesController::txAccPubliEje: {//Dato:13 : Publicar ejemplar
-                    //echo "<script>alert('Antes de entrar a Publicar Ejemplar Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::publicarEjemplar($solicitud);
+                    //echo "ejecutaAccion : Antes de entrar a Publicar Ejemplar Usuario - [".$solicitud->getEmail()."] \n";
+                    //$objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = GestionEjemplares::publicarEjemplar($solicitud, $em);
                     break;
                 } 
 
@@ -295,7 +295,7 @@ class Logica {
                 
                 //accion de publicar un ejemplar
                 case GamesController::txAccPubliEje:  //Dato: 13
-                    $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
+                    $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud, $em);
                     break;
 
                 //accion de Visualizar biblioteca
@@ -771,14 +771,16 @@ class Logica {
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: GamesController::txAccPubliEje:
      */
     
-    public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
-        return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+    public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $em){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),
-                        'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro()
-                            )
-                    ));
+                    'titulo'=>$respuesta->getTitulo(), 'idvidjuego' => $respuesta->getIdvidjuego())));
+        } catch (Exception $ex) {
+                return GamesController::inPlatCai;
+        } 
     }    
     
     /*

@@ -26,7 +26,7 @@ class Respuesta {
     private $RespPreferenciasU; //Arreglo preferencias del usuario
     //Respuestas para PublicarEjemplar
     private $pTitulo; //Titulo del libro ofrecido
-    private $pIdlibro; //Id del libro ofrecido
+    private $pIdvidjuego; //Id del videojuego ofrecido
     private $pIdEjemplar; //Id del Ejemplar
     private $pIdioma; //Idioma
     private $pAvaluo; //Avalúa
@@ -110,9 +110,9 @@ class Respuesta {
         return $this->pTitulo;
     }   
 
-    public function getIdlibro()
+    public function getIdvidjuego()
     {
-        return $this->pIdlibro;
+        return $this->pIdvidjuego;
     }   
 
     public function getIdEjemplar()

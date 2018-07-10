@@ -48,3 +48,11 @@ ADD COLUMN `inusugenero` INT NOT NULL DEFAULT 0 COMMENT '0 : Sin especificar, 1:
 
 ALTER TABLE `ex4play`.`usuario` 
 ADD COLUMN `feusunacimiento` DATETIME NULL COMMENT 'Fecha de nacimiento del usuario' AFTER `inusugenero`;
+
+
+delete FROM ex4play.ejemplarusuario where idejemplarusuario >= 0;
+
+alter table ex4play.ejemplarusuario auto_increment=1;
+
+ALTER TABLE `ex4play`.`ejemplarusuario` 
+CHANGE COLUMN `idejemplarusuario` `idejemplarusuario` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Id del registro de relacion\n' ;

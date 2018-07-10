@@ -81,7 +81,95 @@ class Puntosusuario
      * })
      */
     private $puntosusuariousuario;
-
-
+    
+//*********************************
+//  Getter y seter ex4play
+//*********************************    
+    public function getidpuntosusuario()
+    {
+        return $this->idpuntosusuario;
+    }
+    
+    public function getinpuntaje()
+    {
+        return $this->inpuntaje;
+    }
+    
+    public function getfefechapuntos()
+    {
+        return $this->fefechapuntos;
+    }
+    
+    public function getinsumaresta()
+    {
+        return $this->insumaresta;
+    }
+    
+    public function getpunusuarioactiusuario()
+    {
+        return $this->punusuarioactiusuario;
+    }
+    
+    public function getpunusuarioejemplar()
+    {
+        return $this->punusuarioejemplar;
+    }
+    
+    public function getpunusuarioResenavideojuego()
+    {
+        return $this->punusuarioResenavideojuego;
+    }
+    
+    public function getpuntosusuariousuario()
+    {
+        return $this->puntosusuariousuario;
+    }
+    
+    /* 
+     * setters ex4playS
+     */
+   
+    public function setinpuntaje($inpuntaje)
+    {
+        $this->inpuntaje = $inpuntaje;
+        return $this;
+    }
+    
+    public function setfefechapuntos($fefechapuntos)
+    {
+        $this->fefechapuntos = $fefechapuntos;
+        return $this;
+    }
+    
+    public function setinsumaresta($insumaresta)
+    {
+        $this->insumaresta = $insumaresta;
+        return $this;
+    }
+    
+    public function setpunusuarioactiusuario($punusuarioactiusuario)
+    {
+        $this->punusuarioactiusuario = $punusuarioactiusuario;
+        return $this;
+    }
+    
+    public function setpunusuarioejemplar($punusuarioejemplar)
+    {
+        $this->punusuarioejemplar = $punusuarioejemplar;
+        return $this;
+    }
+    
+    public function setpunusuarioResenavideojuego($punusuarioResenavideojuego)
+    {
+        $this->punusuarioResenavideojuego = $punusuarioResenavideojuego;
+        return $this;
+    }
+    
+    public function setpuntosusuariousuario($puntosusuariousuario)
+    {
+        $this->puntosusuariousuario = $puntosusuariousuario;
+        return $this;
+    }
+    
 }
 

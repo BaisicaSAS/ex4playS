@@ -15,7 +15,7 @@ use Libreame\BackendBundle\Entity\Usuario;
 class GamesController extends Controller
 {
     //// ************************* LO QUE SE USA **************************////
-    //// ************************* LO QUE NO SE USA **************************////
+    //// ************************* LO QUE NO //SE USA **************************////
     //Tipo publicacion
     const inTPLibro =  0; //Tipo publicación : Libro
     const inTPRevista = 1; //Tipo publicación : Revista
@@ -23,12 +23,16 @@ class GamesController extends Controller
     //Valor de cada punto en ex4read
     const inValPunto = 200; //Vlor de cada punto en el sistema en pesos = $ 200
     
+    //BARTs * Caegoría
+    const PuntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
     //Constantes globales
+    const inSuma_ =  1; //Proceso fallido
+    const inResta = 2; //Proceso fallido por conexión de plataforma
     const inFallido =  0; //Proceso fallido
     const inDescone = -1; //Proceso fallido por conexión de plataforma
     const inExitoso =  1; //Proceso existoso
     const inDatoCer =  0; //Valor cero: Sirve para los datos Inactivo, Cerrado etc del modelo
-    const inDatoUno =  1; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    const inDatoUno =  1; //Valor Uno: Sirve para    los datos Activo, Abierto, etc del modelo
     const inDatoDos =  2; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
     const inDatoTre =  3; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
     const inDatoCua =  4; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
@@ -427,21 +431,17 @@ class GamesController extends Controller
                     }
                     
                     case self::txAccPubliEje: { //Dato:13 : Publicar un ejemplar
-                        //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
+                        //echo "descomponerJson :  ENTRA POR PUBLICAR \n";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                        $this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
+                        //$this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
                         $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accion']);
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
-                        $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
+                        $this->objSolicitud->setIdvidjuego($json_datos['idsolicitud']['idvidjuego']);
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
-                        $this->objSolicitud->setAutor($json_datos['idsolicitud']['autor']);
-                        $this->objSolicitud->setEditorial($json_datos['idsolicitud']['editorial']);
-                        $this->objSolicitud->setEdicion($json_datos['idsolicitud']['edicion']);
-                        $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
-                        $this->objSolicitud->setEstado($json_datos['idsolicitud']['estado']);
+                        $this->objSolicitud->setConsola($json_datos['idsolicitud']['consola']);
+                        $this->objSolicitud->setFabricante($json_datos['idsolicitud']['fabricante']);
                         $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
-                        $this->objSolicitud->setAvaluo($json_datos['idsolicitud']['avaluo']);
                         break;
                     }
 
@@ -657,15 +657,13 @@ class GamesController extends Controller
                     }
                     
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
-                        //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
+                        //echo "estructuraCorrecta :: VAL ENTRA POR PUBLICAR \n";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
-                                 isset($datos['idsolicitud']['imagen']) and  isset($datos['idsolicitud']['accion']) and 
+                                 /*isset($datos['idsolicitud']['imagen']) and  */isset($datos['idsolicitud']['accion']) and 
                                  isset($datos['idsolicitud']['idejemplar']) and
-                                 isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['titulo']) and 
-                                 isset($datos['idsolicitud']['autor']) and  isset($datos['idsolicitud']['editorial']) and 
-                                 isset($datos['idsolicitud']['edicion']) and  isset($datos['idsolicitud']['idioma']) and 
-                                 isset($datos['idsolicitud']['estado']) and  isset($datos['idsolicitud']['modopublica']) and 
-                                 isset($datos['idsolicitud']['avaluo']));
+                                 isset($datos['idsolicitud']['idvidjuego']) and  isset($datos['idsolicitud']['titulo']) and 
+                                 isset($datos['idsolicitud']['consola']) and isset($datos['idsolicitud']['fabricante']) and 
+                                 isset($datos['idsolicitud']['modopublica']));
                         break;
                     }
                     
