@@ -73,6 +73,8 @@ class Solicitud {
     private $pEdicion; // Edicion
     private $pEstado; // Estado del ejemplar
     private $pModopublica; // Modo publicacion
+    private $pRepetir; // Repetir Ejemplar en la publicacion
+    
     
     /*  La variable tratoacep es realmente el indicador del significado del mensaje 
         -1	S, D	Mensaje de texto normal (El que existe actualente para enviar un mensaje en el chat)
@@ -298,6 +300,10 @@ class Solicitud {
     
     public function getUnidad() {
         return $this->pUnidad;
+    }
+    
+    public function getRepetir() {
+        return $this->pRepetir;
     }
     
     
@@ -583,6 +589,11 @@ class Solicitud {
     
     public function setUnidad($punidad) {
         $this->pUnidad = $punidad;
+        return $this;
+    }
+    
+    public function setRepetir($prepetir) {
+        $this->pRepetir = $prepetir;
         return $this;
     }
     

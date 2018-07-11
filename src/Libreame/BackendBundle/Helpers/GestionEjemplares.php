@@ -114,19 +114,19 @@ class GestionEjemplares {
                 //echo "GestionEjemplares :: publicarEjemplar :: Decide accion para ejemplar : ".$psolicitud->getAccionComm()." \n";
                 if ($psolicitud->getAccionComm() == GamesController::inAccPublica) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es publicar \n ";
-                    $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud, $em);
+                    $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud, $em, $respuesta);
                     $respuesta->setRespuesta($respPub);
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccDespubl) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es des - publicar \n ";
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccModific) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es modificar la publicacion  \n ";
-                } elseif ($psolicitud->getAccionComm() == GamesController::inAccElimina) {}
+                } elseif ($psolicitud->getAccionComm() == GamesController::inAccElimina) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es eliminar la publicacion  \n ";
-                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+                }
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
             }
+            return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
         } catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
             return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);

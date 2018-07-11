@@ -31,12 +31,6 @@ class Respuesta {
     private $pIdioma; //Idioma
     private $pAvaluo; //Avalúa
     private $pValVenta; //Valor venta
-    private $pTituloSol1; //Primer Titulo Solicitado
-    private $pIdlibroSol1; //Primer id del libro Solicitado
-    private $pValAdicSol1; //Valor adicional para el primer libro
-    private $pTituloSol2; //Segundo Titulo Solicitado
-    private $pIdlibroSol2; //Segundo id del libro Solicitado
-    private $pValAdicSol2; //Valor adicional para el segundo libro
     private $pObservaSol; //Observaciones de la oferta
     private $pIdMensaje; //Id Mensaje recibido (La plataforma publica el ejemplar)
     private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
@@ -133,36 +127,6 @@ class Respuesta {
     public function getValVenta()
     {
         return $this->pValVenta;
-    }   
-
-    public function getTituloSol1()
-    {
-        return $this->pTituloSol1;
-    }   
-
-    public function getIdLibroSol1()
-    {
-        return $this->pIdlibroSol1;
-    }   
-
-    public function getValAdicSol1()
-    {
-        return $this->pValAdicSol1;
-    }   
-
-    public function getTituloSol2()
-    {
-        return $this->pTituloSol2;
-    }   
-
-    public function getIdLibroSol2()
-    {
-        return $this->pIdlibroSol2;
-    }   
-
-    public function getValAdicSol2()
-    {
-        return $this->pValAdicSol2;
     }   
 
     public function getObservaSol()
@@ -293,9 +257,9 @@ class Respuesta {
         return $this;
     }   
 
-    public function setIdlibro($pIdlibro)
+    public function setIdvidjuego($pIdvidjuego)
     {
-        $this->pIdlibro = $pIdlibro;
+        $this->pIdvidjuego = $pIdvidjuego;
         return $this;
     }   
 
@@ -320,42 +284,6 @@ class Respuesta {
     public function setValVenta($pValVenta)
     {
         $this->pValVenta = $pValVenta;
-        return $this;
-    }   
-
-    public function setTituloSol1($pTituloSol1)
-    {
-        $this->pTituloSol1 = $pTituloSol1;
-        return $this;
-    }   
-
-    public function setIdLibroSol1($pIdlibroSol1)
-    {
-        $this->pIdlibroSol1 = $pIdlibroSol1;
-        return $this;
-    }   
-
-    public function setValAdicSol1($pValAdicSol1)
-    {
-        $this->pValAdicSol1 = $pValAdicSol1;
-        return $this;
-    }   
-
-    public function setTituloSol2($pTituloSol2)
-    {
-        $this->pTituloSol2 = $pTituloSol2;
-        return $this;
-    }   
-
-    public function setIdLibroSol2($pIdlibroSol2)
-    {
-        $this->pIdlibroSol2 = $pIdlibroSol2;
-        return $this;
-    }   
-
-    public function setValAdicSol2($pValAdicSol2)
-    {
-        $this->pValAdicSol2 = $pValAdicSol2;
         return $this;
     }   
 

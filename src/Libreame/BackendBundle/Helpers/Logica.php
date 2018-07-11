@@ -740,7 +740,7 @@ class Logica {
      * respuestaCerrarSesion: 
      * Funcion que genera el JSON de respuesta para la accion de Cerrar Sesion :: GamesController::txAccCerraSes
      */
-    public function respuestaCerrarSesion($respuesta, $pSolicitud){
+    public static function respuestaCerrarSesion($respuesta, $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
@@ -755,7 +755,7 @@ class Logica {
         * respuestaActualizarDatosUsuario: 
      * Funcion que genera el JSON de respuesta para la accion de Actualizar datos de usuario:: GamesController::txAccActParam
      */
-    public function respuestaActualizarDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud){
+    public static function respuestaActualizarDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             //echo "respuestaActualizarDatosUsuario : entra a la respuesta \n";
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
@@ -771,7 +771,7 @@ class Logica {
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: GamesController::txAccPubliEje:
      */
     
-    public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $em){
+    public static function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $em){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 

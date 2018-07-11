@@ -55,6 +55,7 @@ class GamesController extends Controller
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
     const txAnyData =  'ANY'; //String para indicar cualquier usuario
+    const inIdGenerico =  500000; //Entero largo para Id Generico de tablas Consola / Fabricante
    
 
     
@@ -442,6 +443,7 @@ class GamesController extends Controller
                         $this->objSolicitud->setConsola($json_datos['idsolicitud']['consola']);
                         $this->objSolicitud->setFabricante($json_datos['idsolicitud']['fabricante']);
                         $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
+                        $this->objSolicitud->setRepetir($json_datos['idsolicitud']['repetir']);
                         break;
                     }
 
@@ -663,7 +665,7 @@ class GamesController extends Controller
                                  isset($datos['idsolicitud']['idejemplar']) and
                                  isset($datos['idsolicitud']['idvidjuego']) and  isset($datos['idsolicitud']['titulo']) and 
                                  isset($datos['idsolicitud']['consola']) and isset($datos['idsolicitud']['fabricante']) and 
-                                 isset($datos['idsolicitud']['modopublica']));
+                                 isset($datos['idsolicitud']['modopublica']) and isset($datos['idsolicitud']['repetir']) );
                         break;
                     }
                     
