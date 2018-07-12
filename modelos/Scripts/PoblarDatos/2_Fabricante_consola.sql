@@ -4,6 +4,11 @@ alter table ex4play.consola auto_increment=1;
 alter table ex4play.fabricante auto_increment=1;
 
 /*Fabricante*/
+INSERT INTO `ex4play`.`fabricante`
+(`txnomfabricante`,
+`txpaisfabricante`)
+VALUES
+('No identificado','Ninguno');
 
 INSERT INTO `ex4play`.`fabricante`
 (`txnomfabricante`,
@@ -17,14 +22,7 @@ INSERT INTO `ex4play`.`fabricante`
 VALUES
 ('MICROSOFT','USA');
 
-INSERT INTO `ex4play`.`fabricante`
-(`idfabricante`,
-`txnomfabricante`,
-`txpaisfabricante`)
-VALUES
-(500000,'No identificado','Ninguno');
-
-alter table ex4play.fabricante auto_increment=3;
+/*alter table ex4play.fabricante auto_increment=3;*/
 /*Consola*/
 
 INSERT INTO `ex4play`.`consola`
@@ -32,36 +30,35 @@ INSERT INTO `ex4play`.`consola`
 `felanzamiento`,
 `consola_fabricante`)
 VALUES
-('PS3','2018-01-01 00:00:00','1');
+('No identificada','2018-01-01 00:00:00',1);
 
 INSERT INTO `ex4play`.`consola`
 (`txnombreconsola`,
 `felanzamiento`,
 `consola_fabricante`)
 VALUES
-('PS4','2018-01-01 00:00:00','1');
+('PS3','2018-01-01 00:00:00','2');
 
 INSERT INTO `ex4play`.`consola`
 (`txnombreconsola`,
 `felanzamiento`,
 `consola_fabricante`)
 VALUES
-('Xbox 360','2018-01-01 00:00:00','2');
+('PS4','2018-01-01 00:00:00','2');
 
 INSERT INTO `ex4play`.`consola`
 (`txnombreconsola`,
 `felanzamiento`,
 `consola_fabricante`)
 VALUES
-('Xbox One','2018-01-01 00:00:00','2');
-
+('Xbox 360','2018-01-01 00:00:00','3');
 
 INSERT INTO `ex4play`.`consola`
-(`idconsola`,
-`txnombreconsola`,
+(`txnombreconsola`,
 `felanzamiento`,
 `consola_fabricante`)
 VALUES
-(500000,'No identificada','2018-01-01 00:00:00',500000);
+('Xbox One','2018-01-01 00:00:00','3');
 
-alter table ex4play.consola auto_increment=5;
+
+/*alter table ex4play.consola auto_increment=5;*/

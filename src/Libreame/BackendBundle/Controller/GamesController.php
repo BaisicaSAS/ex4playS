@@ -55,7 +55,6 @@ class GamesController extends Controller
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
     const txAnyData =  'ANY'; //String para indicar cualquier usuario
-    const inIdGenerico =  500000; //Entero largo para Id Generico de tablas Consola / Fabricante
    
 
     
