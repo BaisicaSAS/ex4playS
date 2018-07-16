@@ -48,7 +48,7 @@ class Logica {
     {
         try{
             //error_reporting(E_ERROR & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
-            error_reporting(0);
+            error_reporting(E_ALL);
             $respuesta = GamesController::inFallido;
             
             $tmpSolicitud = $solicitud->getAccion();

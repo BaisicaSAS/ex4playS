@@ -95,7 +95,7 @@ class GestionEjemplares {
        
     }
     
-    public function publicarEjemplar(Solicitud $psolicitud, $em)
+    public static function publicarEjemplar(Solicitud $psolicitud, $em)
     {   
         //error_reporting(E_ALL);
         //echo "GestionEjemplares : publicarEjemplar : entra a Publicar Ejemplar Usuario-".$psolicitud->getEmail()." \n";

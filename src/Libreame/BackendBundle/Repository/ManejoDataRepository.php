@@ -25,32 +25,6 @@ use Libreame\BackendBundle\Entity\Videojuego;
 use Libreame\BackendBundle\Entity\Consola;
 use Libreame\BackendBundle\Entity\Fabricante;
 
-/*use AppBundle\Entity\LbEjemplares;
-use AppBundle\Entity\LbGeneros;
-use AppBundle\Entity\LbLibros;
-use AppBundle\Entity\LbUsuarios;
-use AppBundle\Entity\LbDispusuarios;
-use AppBundle\Entity\LbGrupos;
-use AppBundle\Entity\LbSesiones;
-use AppBundle\Entity\LbActsesion;
-use AppBundle\Entity\LbEditoriales;
-use AppBundle\Entity\LbAutores;
-use AppBundle\Entity\LbGeneroslibros;
-use AppBundle\Entity\LbMembresias;
-use AppBundle\Entity\LbCalificausuarios;
-use AppBundle\Entity\LbIndicepalabra;
-use AppBundle\Entity\LbMensajes;
-use AppBundle\Entity\LbIdiomas;
-use AppBundle\Entity\LbBusquedasusuarios;
-use AppBundle\Entity\LbMegusta;
-use AppBundle\Entity\LbComentarios;
-use AppBundle\Entity\LbNegociacion;
-use AppBundle\Entity\LbHistejemplar;
-use AppBundle\Entity\LbPlanes;
-use AppBundle\Entity\LbPlanesusuarios;
-use AppBundle\Entity\LbEditorialeslibros;
-use AppBundle\Entity\LbAutoreslibros;
-use AppBundle\Entity\LbTareas;*/
 
 /**
  * Description of ManejoDataRepository
@@ -60,6 +34,8 @@ use AppBundle\Entity\LbTareas;*/
 class ManejoDataRepository extends EntityRepository {
 
     var $inImagenValida;
+    //BARTs * Caegoría
+    //var $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
     //private $em;
      
 
@@ -70,9 +46,11 @@ class ManejoDataRepository extends EntityRepository {
     public static function getPuntajeBarts($incategoria)
     {   
         //echo "\n getPuntajeBarts : Ingresa ";
+        //BARTs * Caegoría
+        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
         try{
-            //$barts = GamesController::PuntajeBARTs[$incategoria];
-            $barts = GamesController::PuntajeBARTs[$incategoria];
+            //$barts = ManejoDataRepository::$puntajeBARTs[$incategoria];
+            $barts = $puntajeBARTs[$incategoria];
             
             return $barts;
         } catch (Exception $ex) {
@@ -82,15 +60,30 @@ class ManejoDataRepository extends EntityRepository {
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
     public static function getUsuarioByEmail($txemail, $em)
     {   
+        error_reporting(E_ALL);
         //echo "\n getUsuarioByEmail : Ingresa ";
         try{
             //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
-            return $em->getRepository('LibreameBackendBundle:usuario')->
+            return $em->getRepository('LibreameBackendBundle:Usuario')->
                 findOneBy(array('txmailusuario' => $txemail));
         } catch (Exception $ex) {
                 return new Usuario();
         } 
     }
+    //ex4plays :: Obtiene el objeto Usuario según su EMAIL
+    public static function getUsuarioByMail($txemail, $em)
+    {   
+        error_reporting(E_ALL);
+        //echo "\n getUsuarioByEmail : Ingresa ";
+        try{
+            //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
+            return $em->getRepository('LibreameBackendBundle:Usuario')->
+                findOneBy(array('txmailusuario' => $txemail));
+        } catch (Exception $ex) {
+                return new Usuario();
+        } 
+    }
+    
     //ex4plays :: Obtiene el objeto Lugar según su ID 
     public static function getLugar($inlugar, EntityManager $em)
     {   
@@ -321,7 +314,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "\n recuperaEstadoSesionUsuario :: ENTRA A RECUPERAR SESION ".$txsesion;
             $txsesion = utf8_encode($psolicitud->getSession());
             //echo "\n recuperaEstadoSesionUsuario :: Busca sesion activa del usuario ";
-            $respuesta = $em->getRepository('LibreameBackendBundle:sesion')->findOneBy(array(
+            $respuesta = $em->getRepository('LibreameBackendBundle:Sesion')->findOneBy(array(
                             //'txsesnumero' => $txsesion,
                             'sesionusuario' => $pusuario,
                             'insesactiva' => GamesController::inSesActi));

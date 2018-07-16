@@ -40,9 +40,9 @@ class Login
     
     /* ex4palys :: Adicionado $em
      */
-    public static function loginUsuario($pSolicitud, EntityManager $em)
+    public static function loginUsuario($pSolicitud, $em)
     {   
-        //error_reporting(E_ALL);
+        error_reporting(E_ALL);
         $respuesta = new Respuesta();
         //ex4plays :: Nuevo llamado del servicio, de manera estática
         //$objLogica = $this->get('logica_service');
@@ -53,11 +53,12 @@ class Login
 
             $sesion = new Sesion();
             $actsesion = new Actsesion();
-            $txemail = $pSolicitud->getEmail();
+            $txemail = utf8_decode($pSolicitud->getEmail());
             //echo "loginUsuario : Mail usuario ".$pSolicitud->getEmail()."-".$txemail." \n";
-            $usuario = NULL;
-            //echo "loginUsuario : USUARIO = NULL \n";
-            $usuario = ManejoDataRepository::getUsuarioByEmail($txemail, $em);
+            /*$usuario = NULL;
+            //echo "loginUsuario : USUARIO = NULL \n";*/
+            //echo "loginUsuario : VA A RECUPERAR EL USUARIO \n";
+            $usuario = ManejoDataRepository::getUsuarioByMail($txemail, $em);
             //Verifica si el usuario existe
             //echo "loginUsuario : va a verificar si el usuario quedó o no NULL \n";
             if ($usuario != NULL){

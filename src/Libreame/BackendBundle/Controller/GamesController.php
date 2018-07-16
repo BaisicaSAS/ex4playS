@@ -23,8 +23,6 @@ class GamesController extends Controller
     //Valor de cada punto en ex4read
     const inValPunto = 200; //Vlor de cada punto en el sistema en pesos = $ 200
     
-    //BARTs * Caegoría
-    const PuntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
     //Constantes globales
     const inSuma_ =  1; //Proceso fallido
     const inResta = 2; //Proceso fallido por conexión de plataforma
@@ -294,6 +292,7 @@ class GamesController extends Controller
                 //echo "servicioAction : Json es válido...Inicia \n"; 
                 $objLogica = $this->container->get('logica_service');
                 $respuesta = $objLogica->ejecutaAccion($this->objSolicitud, $em);
+                //$respuesta = Logica::ejecutaAccion($this->objSolicitud, $em);
                 //echo "servicioAction : Json es válido ".$respuesta."\n"; 
                 
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
@@ -302,6 +301,7 @@ class GamesController extends Controller
                 $jrespuesta->setRespuesta($jsonValido);    
                 $objLogica = $this->container->get('logica_service');
                 $respuesta = json_encode($objLogica->respuestaGenerica($jrespuesta, $this->objSolicitud));
+                //$respuesta = json_encode(Logica::respuestaGenerica($jrespuesta, $this->objSolicitud));
                 //echo "servicioAction : Json es inválido \n"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
