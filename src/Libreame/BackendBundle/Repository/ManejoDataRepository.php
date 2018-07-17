@@ -35,7 +35,7 @@ class ManejoDataRepository extends EntityRepository {
 
     var $inImagenValida;
     //BARTs * Caegoría
-    //var $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
+    //var $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10];
     //private $em;
      
 
@@ -47,7 +47,7 @@ class ManejoDataRepository extends EntityRepository {
     {   
         //echo "\n getPuntajeBarts : Ingresa ";
         //BARTs * Caegoría
-        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 20];
+        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10];
         try{
             //$barts = ManejoDataRepository::$puntajeBARTs[$incategoria];
             $barts = $puntajeBARTs[$incategoria];
