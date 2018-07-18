@@ -50,6 +50,13 @@ class Ejemplarusuario
     private $inbloqueado = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="innegociacion", type="integer", nullable=false)
+     */
+    private $innegociacion = '0';
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fepublicacion", type="datetime", nullable=true)
@@ -80,7 +87,7 @@ class Ejemplarusuario
     
     public function getidejemplarusuario()
     {
-        return $this->inlugpadre;
+        return $this->idejemplarusuario;
     }
  
     public function getinvigente()
@@ -101,6 +108,11 @@ class Ejemplarusuario
     public function getinbloqueado()
     {
         return $this->inbloqueado;
+    }
+
+    public function getinnegociacion()
+    {
+        return $this->innegociacion;
     }
 
     public function getfepublicacion()
@@ -143,6 +155,13 @@ class Ejemplarusuario
     public function setinbloqueado($inbloqueado)
     {
         $this->inbloqueado = $inbloqueado;
+
+        return $this;
+    }
+
+    public function setinnegociacion($innegociacion)
+    {   
+        $this->innegociacion = $innegociacion;
 
         return $this;
     }

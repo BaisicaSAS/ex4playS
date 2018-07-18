@@ -155,10 +155,12 @@ class GestionEjemplares {
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 
-                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $psolicitud->getFiltro(), $em);
+                //TODO: Por ahora filtro será solo 1: TODOS, filtro no vendrá en el json
+                //$ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $psolicitud->getFiltro(), $em);
+                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, GamesController::inDatoUno, $em);
                 //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
                 $respuesta->setRespuesta(GamesController::inExitoso);
-
+                
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
                 //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
@@ -166,8 +168,10 @@ class GestionEjemplares {
                 //Guarda la actividad de la sesion:: 
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
+
                 
                 return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+                
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();

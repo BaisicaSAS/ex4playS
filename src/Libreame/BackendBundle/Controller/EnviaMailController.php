@@ -25,14 +25,14 @@ class EnviaMailController extends Controller{
     public static function enviaMailRegistroAction(Usuario $usuario, \Swift_Mailer $mailer)
     {   
         try{
-            error_reporting(E_ALL);
+            //error_reporting(E_ALL);
             $cadena = Logica::generaCadenaURL($usuario);
             //echo "\n enviaMailRegistroAction :: cadena a enviar = "."http://baisica.co/ex4play/services/web/registro/".$cadena;
             $message = \Swift_Message::newInstance()
                 ->setContentType('text/html')
                 ->setSubject('Bienvenido a ex4play '.$usuario->getTxnomusuario())
-                ->setFrom(['ex4play@baisica.co' => 'Registro de ex4play'])
-                ->setBcc('ex4play@baisica.co')
+                ->setFrom(['registro@ex4play.com' => 'Registro de ex4play'])
+                ->setBcc('registro@ex4play.com')
                 //->setFrom('baisicasas@gmail.com')
                 //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxmailusuario())

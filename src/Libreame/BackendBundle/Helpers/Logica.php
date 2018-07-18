@@ -48,7 +48,7 @@ class Logica {
     {
         try{
             //error_reporting(E_ERROR & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
-            error_reporting(E_ALL);
+            //error_reporting(E_ALL);
             $respuesta = GamesController::inFallido;
             
             $tmpSolicitud = $solicitud->getAccion();
@@ -301,6 +301,7 @@ class Logica {
                 //accion de Visualizar biblioteca
                 case GamesController::txAccVisuaBib:  //Dato: 16
                     $JSONResp = Logica::respuestaVisualizarBiblioteca($respuesta, $pSolicitud, $parreglo, $em);
+                    //echo "generaRespuesta :: Terminó el JSON de respuestaVisualizarBiblioteca ".print_r($JSONResp)." \n";
                     break;
 
                 //accion de Chatear
@@ -932,8 +933,9 @@ class Logica {
             $arrTmp = array();
             $ejemplarUsuario = new Ejemplarusuario();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
-            //echo "Va a generar la respuestaVisualizarBiblioteca :: Logica.php [365] \n";
+            //echo "Va a generar la respuestaVisualizarBiblioteca \n";
             foreach ($parreglo as $ejemplarUsuario){
+                //echo "respuestaVisualizarBiblioteca :: Para el ejemplarUsuario : ".$ejemplarUsuario->getidejemplarusuario(). " : \n"; 
                 $ejemplar = $ejemplarUsuario->getejemplarusuarioejemplar();
                 $consola = new Consola();
                 $fabricante = new Fabricante();
@@ -943,7 +945,7 @@ class Logica {
                     $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego()->getidvideojuego(), $em);
                     //echo "videojuego: [".utf8_encode($videojuego->gettxnomvideojuego())."]\n";
                     //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] \n";
-                    $genero = $ejemplar->getejemplarVideojuego()->gettxgenerovideojuego();
+                    $genero = utf8_encode($ejemplar->getejemplarVideojuego()->gettxgenerovideojuego());
                     //echo "...generos \n";
                     $consola = ManejoDataRepository::getConsola($ejemplar->getejemplarVideojuego()->getvideojuegoconsola(), $em);
                     //echo "...consola \n";
@@ -960,69 +962,61 @@ class Logica {
                     //$cantcomment = ManejoDataRepository::getCantComment($ejemplar->getidejemplar());
                     //echo "...cantcomment \n";
                     $usuario = ManejoDataRepository::getUsuarioById($ejemplarUsuario->getejemplarusuariousuario()->getIdusuario(), $em);
-                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
+                    //echo "...usuario [".utf8_encode($usuario->getTxnickname())."] \n";
                     $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getIdusuario(), $em);
                     //echo "...promcalifica \n";
                     $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplarUsuario, $usuario, $em);
                     //echo "...$fecpublica \n";
-                    //echo "RECUPERO DATOS\n";*/
-                }
+                    //echo "RECUPERO DATOS\n";
                 
-                $arrConsola = array();
-                //foreach ($consola as $conso) {
-                    //echo "...consola [".utf8_encode($autor->getTxautnombre())."] \n";
+                    $arrConsola = array();
+                    //echo "...consola [".utf8_encode($consola->gettxnombreconsola())."] \n";
                     $arrConsola[] = array('idonsola' => $consola->getidconsola(),
                         'txconnombre' => utf8_encode($consola->gettxnombreconsola()));
-                //}
-                $arrFabricante = array();
-                //foreach ($fabricante as $fabric) {
-                    //echo "...fabricante [".utf8_encode($fabric->gettxnomfabricante())."] \n";
+                    
+                    $arrFabricante = array();
+                    //echo "...fabricante [".utf8_encode($fabricante->gettxnomfabricante())."] \n";
                     $arrFabricante[] = array('idfabricante' => $fabricante->getidfabricante(),
                         'txfabnombre' => utf8_encode($fabricante->gettxnomfabricante()));
-                //}
 
-                $titulo = utf8_encode($videojuego->gettxnomvideojuego());
-                //$precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $barts = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego()); //Cantidad de puntos
-                //$imagen = utf8_encode($ejemplar->getTxejeimagen());
-                //$lugar = $usuario->getInusulugar();
-                //$condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //$desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                /*
-                 if ($condactual == 0) {///Si el ejemplar NO está en negociacion se puede editar
-                    //Si está bloqueado no se puede editar
-                    if ($ejemplar->getInejebloqueado() == GamesController::inDatoUno){
-                        $puedeeditar = GamesController::inDatoCer;
-                    } else  {
+                    $titulo = utf8_encode($videojuego->gettxnomvideojuego());
+                    //echo "...titulo [".utf8_encode($videojuego->gettxnomvideojuego())."] \n";
+                    $barts = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego()); //Cantidad de puntos
+                    $publicado = $ejemplarUsuario->getinpublicado();
+                    $ennegociacion = $ejemplarUsuario->getinnegociacion();
+                    $bloqueado = $ejemplarUsuario->getinbloqueado();
+                     
+                    if (($ennegociacion == GamesController::inDatoCer)and($bloqueado == GamesController::inDatoCer)) {
                         $puedeeditar = GamesController::inDatoUno;
+                    } else {
+                        $puedeeditar = GamesController::inDatoCer;
                     }
-                } else { //En negociacion NO se puede editar
-                    $puedeeditar = GamesController::inDatoCer;
+                    
+                    //echo "...barts [".$barts."] \n";
+                    //$imagen = utf8_encode($ejemplar->getTxejeimagen());
                 }
-                */    
+                //echo "...arma el arreglo [] \n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getIdejemplar(), 
                     'titulo' => $titulo, 
                     'barts' => $barts, 
                     //'imagen' => $imagen, 
-                    'publicado' => $ejemplarUsuario->getinpublicado(),
-                    //'megusta' => $megusta,
+                    'publicado' => $publicado,
+                    'bloqueado' => $bloqueado,
+                    'ennegociacion' => $ennegociacion,
+                    'puedeeditar' => $puedeeditar,
                     'fechapublica' => $fecpublica,
+                    //'megusta' => $megusta,
                     //'cantmegusta' => $cantmegusta,
-                    //'cantcomment' => $cantcomment,
-                    //'condactual' => $condactual,
-                    //'desccondactual' => $desccondactual,
-                    //'puedeeditar' => $puedeeditar,
-                    //'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
-                    'consola' => $arrConsola,
-                    'fabricante' => $arrFabricante,
                     'generos' => $genero,
+                    'consola' => $arrConsola,
+                    'fabricante' => $arrFabricante
                     //'histejemplar' => $arrHistEjemplar,
                     //'chats' => $arrNegociacion
                 );
+                //echo "...armado [] \n";
                 
             }
-            
+           
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
@@ -1226,10 +1220,10 @@ class Logica {
                 //OJO ex4playS 15 Mayo 2018 : Se debe activar esta linea para que envíe correo de confirmación
                 //echo "\n registroUsuario :: Va a enviar mail";
                 
-                error_reporting(E_ALL);
-                $transport = (new \Swift_SmtpTransport('p3plcpnl0478.prod.phx3.secureserver.net', 25))
-                    ->setUsername('registro@ex4read.co')
-                    ->setPassword('R3g15tr0');
+                error_reporting(E_ERROR);
+                $transport = (new \Swift_SmtpTransport('smtpout.secureserver.net', 25))
+                    ->setUsername('registro@ex4play.com')
+                    ->setPassword('eX.fouR.pl4y$');
                 $mailer = new \Swift_Mailer($transport);
                 EnviaMailController::enviaMailRegistroAction($usuario, $mailer);
                 //echo "\n registroUsuario :: Envió mail";

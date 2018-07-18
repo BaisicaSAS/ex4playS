@@ -60,7 +60,7 @@ class ManejoDataRepository extends EntityRepository {
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
     public static function getUsuarioByEmail($txemail, $em)
     {   
-        error_reporting(E_ALL);
+        //error_reporting(E_ALL);
         //echo "\n getUsuarioByEmail : Ingresa ";
         try{
             //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
@@ -72,8 +72,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     //ex4plays :: Obtiene el objeto Usuario según su EMAIL
     public static function getUsuarioByMail($txemail, $em)
-    {   
-        error_reporting(E_ALL);
+    {   //error_reporting(E_ALL);
         //echo "\n getUsuarioByEmail : Ingresa ";
         try{
             //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
@@ -936,12 +935,12 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     //Obtiene la fecha en que el usuario publicó el ejemplar
-    public static function getFechaPublicacion($pejemplar, $pusuario, $em)
+    public static function getFechaPublicacion($pejemplarusuario, $pusuario, $em)
     {   
         try{
             $sql = "SELECT max(eu.fepublicacion) AS fecha FROM LibreameBackendBundle:ejemplarusuario eu"
-                    ." WHERE eu.ejemplarusuarioejemplar = :ejemplar AND eu.ejemplarusuariousuario = :usuario";
-            $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
+                    ." WHERE eu.idejemplarusuario = :ejemplar AND eu.ejemplarusuariousuario = :usuario";
+            $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplarusuario, 'usuario'=> $pusuario));
             
             $fecha = $query->getOneOrNullResult();
             //echo "\n fecha : ".$fecha['fecha'];
@@ -1054,11 +1053,12 @@ $newClear = fnDecrypt($crypted, $Pass);
 echo "Decrypted: ".$newClear."</br>";
 */
     public static function fnEncrypt($sValue, $sSecretKey) {
-        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sDecrypted, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+        //return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sDecrypted, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND))));
     }
 
     public static function fnDecrypt($sValue, $sSecretKey) {
-        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, base64_decode($sEncrypted), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, base64_decode($sValue), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND)));
     }   
 ///********************* LO QUE NO SE USA ********************************///
     
@@ -1568,23 +1568,21 @@ echo "Decrypted: ".$newClear."</br>";
 
                     $resejemplares = $q->getQuery()->getResult();
                     break;
-                /*case GamesController::inDatoDos :  //En negociación
+                case GamesController::inDatoDos :  //En negociación
                     $q = $em->createQueryBuilder()
-                        ->select('e')
-                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
-                        ->setParameter('pvigente', GamesController::inDatoUno)//Debe cambiar a solo los ejemplares publicados = 1                    
-                        ->where(' u.inusuario = :pusuario')
-                        ->setParameter('pusuario', $usuario)
-                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                        ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inejeestadonegocio IN (1, 2, 3, 4) ')//En negociación (Si está entregado o recibido, ya no es del usuario)
-                        //->setMaxResults(10000)
-                        ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;*/
+                        ->select('eu')
+                        ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                        ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                        ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                        ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                        ->andWhere(' eu.innegociacion = :pnegociacion')//Publicacion en negociacion
+                        ->setParameter('pnegociacion', GamesController::inDatoUno)//
+                        ->andWhere(' u.idusuario = :idusuario')//Para el usuario logeado
+                        ->setParameter('idusuario', $usuario)//Para el usuario logeado
+                        ->orderBy(' e.idejemplar ', 'ASC');
+
+                    $resejemplares = $q->getQuery()->getResult();
+                    break;
                 case GamesController::inDatoTre :  //Publicados
                     $q = $em->createQueryBuilder()
                         ->select('eu')
@@ -2236,7 +2234,7 @@ echo "Decrypted: ".$newClear."</br>";
             //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
             //echo utf8_decode($psolicitud->getTitulo())."\n";*/
             
-            error_reporting(E_ALL);
+            //error_reporting(E_ALL);
             $respuestaProc =  GamesController::inFallido; 
             $fecha = new \DateTime;
             

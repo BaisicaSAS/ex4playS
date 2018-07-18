@@ -59,3 +59,6 @@ CHANGE COLUMN `idejemplarusuario` `idejemplarusuario` BIGINT(20) NOT NULL AUTO_I
 
 ALTER TABLE `ex4play`.`ejemplarusuario` 
 ADD COLUMN `inbloqueado` INT NOT NULL DEFAULT 0 COMMENT 'Bloqueo del ejemplar por adquisicion de videojuego sin pustos disponibles - Bloqueado 1, No bloqueado 0' AFTER `inpublicado`;
+
+ALTER TABLE `ex4play`.`ejemplarusuario` 
+ADD COLUMN `innegociacion` INT NOT NULL DEFAULT 0 COMMENT 'Indica si el ejemplar esta = 1 o no esta = 0 en negociacion' AFTER `inpublicado`;

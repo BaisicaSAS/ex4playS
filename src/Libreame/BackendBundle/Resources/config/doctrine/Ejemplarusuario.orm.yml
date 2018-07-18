@@ -45,6 +45,13 @@ Libreame\BackendBundle\Entity\Ejemplarusuario:
                 unsigned: false
                 comment: 'Bloqueo del ejemplar por adquisicion de videojuego sin pustos disponibles - Bloqueado 1, No bloqueado 0'
                 default: '0'
+        innegociacion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Indica si el ejemplar esta = 1 o no esta = 0 en negociacion'
+                default: '0'
         fepublicacion:
             type: datetime
             nullable: true

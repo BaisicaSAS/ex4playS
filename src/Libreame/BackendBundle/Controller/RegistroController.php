@@ -32,7 +32,7 @@ class RegistroController extends Controller
     public function confirmarRegistroAction($id)
     {   
         try {
-            error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT & ~E_DEPRECATED);
+            //error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT & ~E_DEPRECATED);
             //$objMDR = $this->get('manejodatos_repo_service');
             //$objLogica = new Logica();
             $this->descomponerDatosEntrada($id);

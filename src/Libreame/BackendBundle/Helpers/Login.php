@@ -42,7 +42,7 @@ class Login
      */
     public static function loginUsuario($pSolicitud, $em)
     {   
-        error_reporting(E_ALL);
+        //error_reporting(E_ALL);
         $respuesta = new Respuesta();
         //ex4plays :: Nuevo llamado del servicio, de manera estática
         //$objLogica = $this->get('logica_service');
