@@ -96,7 +96,7 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    public function validaSesionUsuario(Solicitud $psolicitud, $em)
+    public static function validaSesionUsuario(Solicitud $psolicitud, $em)
     {   
         $respuesta = GamesController::inPlatCai;
         try{
@@ -1542,10 +1542,9 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
                 
-               
     //Obtiene todos los Ejemplares, de un usuario
     //1: Todos, 2: En negociación, 3: Publicados, 4: No publicados, 5: Bloqueados
-    public function getVisualizarBiblioteca(LbUsuarios $usuario, Array $grupos, $filtro)
+    public static function getVisualizarBiblioteca(Usuario $usuario, $filtro, $em)
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
@@ -1553,29 +1552,31 @@ echo "Decrypted: ".$newClear."</br>";
             //El usuario debe estar activo
             //Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 
             //3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega 5 - Entregado, 6 - Recibido
-            $em = $this->getDoctrine()->getManager();
             switch($filtro){
                 case GamesController::inDatoUno : //Todos
                     $q = $em->createQueryBuilder()
-                        ->select('e')
-                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                        ->where(' u.inusuario = :pusuario')
-                        ->setParameter('pusuario', $usuario)
-                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                        ->setParameter('grupos', $grupos)
-                        //->setMaxResults(10000)
-                        ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;
-                case GamesController::inDatoDos :  //En negociación
+                        ->select('eu')
+                        ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                        ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                        ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                        ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
+                        ->setParameter('pvigente', GamesController::inDatoUno)//Debe cambiar a solo los ejemplares publicados = 1                    
+                        ->andWhere(' u.idusuario = :idusuario')//Para el usuario logeado
+                        ->setParameter('idusuario', $usuario)//Para el usuario logeado
+                        ->orderBy(' e.idejemplar ', 'ASC');
+
+                    $resejemplares = $q->getQuery()->getResult();
+                    break;
+                /*case GamesController::inDatoDos :  //En negociación
                     $q = $em->createQueryBuilder()
                         ->select('e')
                         ->from('LibreameBackendBundle:LbEjemplares', 'e')
                         ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
                         ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
                         ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
+                        ->setParameter('pvigente', GamesController::inDatoUno)//Debe cambiar a solo los ejemplares publicados = 1                    
                         ->where(' u.inusuario = :pusuario')
                         ->setParameter('pusuario', $usuario)
                         ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
@@ -1583,60 +1584,67 @@ echo "Decrypted: ".$newClear."</br>";
                         ->andWhere(' e.inejeestadonegocio IN (1, 2, 3, 4) ')//En negociación (Si está entregado o recibido, ya no es del usuario)
                         //->setMaxResults(10000)
                         ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;
+                        break;*/
                 case GamesController::inDatoTre :  //Publicados
                     $q = $em->createQueryBuilder()
-                        ->select('e')
-                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                        ->where(' u.inusuario = :pusuario')
-                        ->setParameter('pusuario', $usuario)
-                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                        ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inejepublicado = 1 ')//Publicados
-                        //->setMaxResults(10000)
-                        ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;
+                        ->select('eu')
+                        ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                        ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                        ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                        ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
+                        ->setParameter('pvigente', GamesController::inDatoUno)//vigentes                    
+                        ->andWhere(' u.idusuario = :idusuario')//Para el usuario logeado
+                        ->setParameter('idusuario', $usuario)//Para el usuario logeado
+                        ->andWhere(' eu.inpublicado = :ppublicado')//Publicado
+                        ->setParameter('ppublicado', GamesController::inDatoUno)//Debe cambiar a solo los ejemplares publicados = 1                    
+                        ->orderBy(' e.idejemplar ', 'ASC');
+
+                    $resejemplares = $q->getQuery()->getResult();
+                    break;
                 case GamesController::inDatoCua :  //No Publicados
                     $q = $em->createQueryBuilder()
-                        ->select('e')
-                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                        ->where(' u.inusuario = :pusuario')
-                        ->setParameter('pusuario', $usuario)
-                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                        ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inejepublicado = 0 ')//No publicados
-                        //->setMaxResults(10000)
-                        ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;
+                        ->select('eu')
+                        ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                        ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                        ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                        ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
+                        ->setParameter('pvigente', GamesController::inDatoUno)//vigentes                    
+                        ->andWhere(' u.idusuario = :idusuario')//Para el usuario logeado
+                        ->setParameter('idusuario', $usuario)//Para el usuario logeado
+                        ->andWhere(' eu.inpublicado = :ppublicado')//No Publicado
+                        ->setParameter('ppublicado', GamesController::inDatoCer)//Ejemplares no publicados                    
+                        ->orderBy(' e.idejemplar ', 'ASC');
+
+                    $resejemplares = $q->getQuery()->getResult();
+                    break;
                 case GamesController::inDatoCin:  //Bloqueados
                     $q = $em->createQueryBuilder()
-                        ->select('e')
-                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                        ->where(' u.inusuario = :pusuario')
-                        ->setParameter('pusuario', $usuario)
-                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                        ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inejebloqueado = 1 ')//Bloqueados
-                        //->setMaxResults(10000)
-                        ->orderBy(' h.fehisejeregistro ', 'DESC');
-                        break;
-                    
+                        ->select('eu')
+                        ->from('LibreameBackendBundle:Ejemplarusuario', 'eu')
+                        ->leftJoin('LibreameBackendBundle:Ejemplar', 'e', \Doctrine\ORM\Query\Expr\Join::WITH, 'eu.ejemplarusuarioejemplar = e.idejemplar')
+                        ->leftJoin('LibreameBackendBundle:Usuario', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.idusuario = eu.ejemplarusuariousuario')
+                        ->leftJoin('LibreameBackendBundle:Trato', 't', \Doctrine\ORM\Query\Expr\Join::WITH, 't.tratoejemplar = e.idejemplar and t.tratousrdueno = u.idusuario')
+                        ->andWhere(' eu.invigente = :pvigente')//Publicacion vigente
+                        ->setParameter('pvigente', GamesController::inDatoUno)//vigentes                    
+                        ->andWhere(' u.idusuario = :idusuario')//Para el usuario logeado
+                        ->setParameter('idusuario', $usuario)//Para el usuario logeado
+                        ->andWhere(' eu.inpublicado = :ppublicado')//No Publicado
+                        ->setParameter('ppublicado', GamesController::inDatoCer)//Ejemplares no publicados                    
+                        ->andWhere(' eu.inbloqueado = :pbloqueado')//Bloqueado
+                        ->setParameter('pbloqueado', GamesController::inDatoUno)//Ejemplares bloqueados                    
+                        ->orderBy(' e.idejemplar ', 'ASC');
+
+                    $resejemplares = $q->getQuery()->getResult();
+                    break;
             }    
 
             return $q->getQuery()->getResult();
             //return $q->getArrayResult();
         } catch (Exception $ex) {
                 //echo "retorna error";
-                return new LbEjemplares();
+                return new Ejemplar();
         } 
     }
                 
@@ -1742,69 +1750,7 @@ echo "Decrypted: ".$newClear."</br>";
                 return new LbComentarios();
         } 
     }
-    
-    /*
-     * Crea registro en generolibro, para el genero por defecto y lo rtorna
-     */
-    public function asociarGeneroBasicoLibro(LbLibros $libro, $em){
-        $generolibro = new LbGeneroslibros();
-        try{
-            //$em = $this->getDoctrine()->getManager();
-            $genero = $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                    findOneBy(array('ingenero'=>GamesController::inIdGeneral));
-            
-            $generolibro->setIngligenero($genero);
-            $generolibro->setInglilibro($libro);
-            
-            //$em->persist($generolibro);
-            //$em->flush();    
-            return $generolibro;
-        } catch (Exception $ex) {
-            return $generolibro;
-        } 
-    }
 
-    /*
-     * Metodo para crear un libro desde una solicitud, en $cual: la P indica que es el 
-     * PUBLICADO, la S, que es SOLICITADO
-     */
-    public function crearLibro(Solicitud $psolicitud, $cual)
-    {
-        $libro = new LbLibros(); 
-        try {
-            //$em = $this->getDoctrine()->getManager();
-            //$libro->setTxlibtipopublica($psolicitud->getTipopublica());  
-            if ($cual == GamesController::txEjemplarPub) {
-                $libro->setTxlibtitulo($psolicitud->getTitulo());  
-                $libro->setTxlibidioma($psolicitud->getIdioma());  
-            } elseif ($cual == GamesController::txEjemplarSol1) {
-                $libro->setTxlibtitulo($psolicitud->getTituloSol1());  
-                $libro->setTxlibidioma($psolicitud->getIdioma());  
-            } elseif ($cual == GamesController::txEjemplarSol2) {
-                $libro->setTxlibtitulo($psolicitud->getTituloSol2());  
-                $libro->setTxlibidioma($psolicitud->getIdioma());  
-            }
-            $libro->setTxlibautores(GamesController::txMenNoId);  
-            $libro->setTxlibeditorial(GamesController::txMenNoId);  
-            $libro->setTxlibedicionanio(GamesController::txMeNoIdS);  
-            $libro->setTxlibedicionnum(GamesController::txMeNoIdS);  
-            $libro->setTxlibedicionpais(GamesController::txMenNoId); 
-            $libro->setTxediciondescripcion(GamesController::txMenNoId);  
-            $libro->setTxlibcodigoofic(GamesController::txMenNoId);  
-            $libro->setTxlibcodigoofic13(GamesController::txMenNoId);  
-            $libro->setTxlibresumen(GamesController::txMenNoId);  
-            $libro->setTxlibtomo(GamesController::txMenNoId);  
-            $libro->setTxlibvolumen(GamesController::txMenNoId);  
-            $libro->setTxpaginas(GamesController::txMenNoId);  
-            //$em->persist($libro);
-            //$em->flush();   
-
-            return $libro;
-        } catch (Exception $ex)  {    
-            return $libro;
-        }
-    }
-    
     /*
      * Crea un ejemplar a partir de una solicitud y el libro que representa
      */
@@ -1849,26 +1795,6 @@ echo "Decrypted: ".$newClear."</br>";
              return new Sesion();
         } 
     }
-
-    //Busca un Libro por su titulo
-    public function buscarLibroByTitulo($titulo, $em)
-    {
-        try{
-            $libro = new LbLibros();
-            $sql = "SELECT l FROM LibreameBackendBundle:LbLibros l"
-                    ." WHERE lower(l.txlibtitulo) LIKE lower(:titulo)";
-            $query = $em->createQuery($sql)->setParameter('titulo', '%'.$titulo.'%');
-            $libro = $query->getOneOrNullResult();
-            return $libro;
-
-            /*return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy(array('lower(txlibtitulo)' => '%'.$titulo.'%'));*/
-
-        } catch (Exception $ex) {
-            return new LbLibros();
-        } 
-    }
-    
 
     //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
     public static function cantMsgUsr($usuario)
@@ -2296,8 +2222,8 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }    
     
-     //Genera la carga y publicación de un ejemplar a la plataforma
-    public function generarPublicacionEjemplar(Solicitud $psolicitud, $em, &$respuesta){
+    //Genera la carga y publicación de un ejemplar a la plataforma
+    public static function generarPublicacionEjemplar(Solicitud $psolicitud, $em, &$respuesta){
         
         //Para publicar un ejemplar
         //1. Validar en front end el Libro y autocompletar si es necesario,  

@@ -43,6 +43,13 @@ class Ejemplarusuario
     private $inpublicado = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="inbloqueado", type="integer", nullable=false)
+     */
+    private $inbloqueado = '0';
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fepublicacion", type="datetime", nullable=true)
@@ -91,6 +98,11 @@ class Ejemplarusuario
         return $this->inpublicado;
     }
 
+    public function getinbloqueado()
+    {
+        return $this->inbloqueado;
+    }
+
     public function getfepublicacion()
     {
         return $this->fepublicacion;
@@ -124,6 +136,13 @@ class Ejemplarusuario
     public function setinpublicado($inpublicado)
     {
         $this->inpublicado = $inpublicado;
+
+        return $this;
+    }
+
+    public function setinbloqueado($inbloqueado)
+    {
+        $this->inbloqueado = $inbloqueado;
 
         return $this;
     }

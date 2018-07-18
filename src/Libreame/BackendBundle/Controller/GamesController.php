@@ -72,7 +72,7 @@ class GamesController extends Controller
     const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
     const txAccPubliEje =  '13'; //Publicar un ejemplar
     //DEPRECADO: const txAccModifEje =  '14'; //Modificar un ejemplar
-    const txAccElimiPub =  '15'; //Eliminar una publicacion
+    const txAccElimiPub =  '15'; //Eliminar una publicacion :: Despublicar
     const txAccVisuaBib =  '16'; //Visualizar Biblioteca
     const txAccModifOfe =  '17'; //Modificar una oferta
     const txAccElimiOfe =  '18'; //Eliminar una oferta
@@ -445,9 +445,25 @@ class GamesController extends Controller
                         $this->objSolicitud->setRepetir($json_datos['idsolicitud']['repetir']);
                         break;
                     }
+                    
+                    case self::txAccElimiPub: {
+                        //echo "descomponerJson :  ENTRA POR ELIMINAR PUBLICACION \n";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        //$this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
+                        $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accion']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
+                        $this->objSolicitud->setIdvidjuego($json_datos['idsolicitud']['idvidjuego']);
+                        $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
+                        $this->objSolicitud->setConsola($json_datos['idsolicitud']['consola']);
+                        $this->objSolicitud->setFabricante($json_datos['idsolicitud']['fabricante']);
+                        $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
+                        $this->objSolicitud->setRepetir($json_datos['idsolicitud']['repetir']);
+                        break;
+                    }
 
                     case self::txAccVisuaBib: { //Dato:16 : Visualizar biblioteca
-                        //echo "<script>alert('ENTRA POR CERRAR SESION')</script>";
+                        //descomponerJson : VISUALIZAR BIBLIOTECA \n";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setFiltro($json_datos['idsolicitud']['filtro']);
@@ -669,7 +685,7 @@ class GamesController extends Controller
                     }
                     
                     case self::txAccVisuaBib: { //Dato:16 : Visualizar biblioteca
-                        //echo "<script>alert('VAL ENTRA VISUALIZAR BIBLIOTECA')</script>";
+                        //echo "estructuraCorrecta :: VAL ENTRA VISUALIZAR BIBLIOTECA \n";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
                                 and isset($datos['idsolicitud']['filtro']));
                         break;

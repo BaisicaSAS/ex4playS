@@ -38,6 +38,13 @@ Libreame\BackendBundle\Entity\Ejemplarusuario:
                 unsigned: false
                 comment: 'Indica si el ejemplar aparece en las búsquedas, como publicado. 0 : No publicado, 1: Publicado'
                 default: '0'
+        inbloqueado:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Bloqueo del ejemplar por adquisicion de videojuego sin pustos disponibles - Bloqueado 1, No bloqueado 0'
+                default: '0'
         fepublicacion:
             type: datetime
             nullable: true

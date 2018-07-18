@@ -135,39 +135,29 @@ class GestionEjemplares {
     }
 
     
-    public function visualizarBiblioteca(Solicitud $psolicitud)
+    public static function visualizarBiblioteca(Solicitud $psolicitud, $em)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
-        $usuario = new LbUsuarios();
-        $sesion = new LbSesiones();
-        $ejemplares = new LbEjemplares();
+        //$objLogica = $this->get('logica_service');
+        $usuario = new Usuario();
+        $sesion = new Sesion();
+        $ejemplares = new Ejemplar();
+
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==AccesoController::inULogged) 
+            $respSesionVali= ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "visualizarBiblioteca :: Validez de sesion ".$respSesionVali." \n";
+            if ($respSesionVali== GamesController::inULogged) 
             {    
                 //echo "<script>alert(' buscaEjemplares :: FindAll ')</script>";
                 //Busca el usuario 
-                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 
-                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
-                
-                //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
-                
-                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
-
-                $arrGru = array();
-                foreach ($grupo as $gru){
-                    $arrGru[] = $gru->getIngrupo();
-                }
-
-                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $arrGru, $psolicitud->getFiltro());
+                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $psolicitud->getFiltro(), $em);
                 //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                $respuesta->setRespuesta(GamesController::inExitoso);
 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
@@ -177,16 +167,16 @@ class GestionEjemplares {
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
             }
         } catch (Exception $ex) {
-            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $respuesta->setRespuesta(GamesController::inPlatCai);
             $ejemplares = array();
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
         }
        
     }
