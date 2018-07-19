@@ -47,7 +47,13 @@ class ManejoDataRepository extends EntityRepository {
     {   
         //echo "\n getPuntajeBarts : Ingresa ";
         //BARTs * Caegoría
-        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10];
+        //Las categorías serian:
+        //1. Juegos con menos de 6 meses de publicado = 50 Barts
+        //2. Juegos entre 6 meses y 1 año de liberados  = 30 Barts
+        //3. Juegos de 1 año o mas   = 10 Barts
+        //4. Juegos de popularidad / demanda alta (Sin importar la antiguedad) = 50 Barts
+        //5. Juegos de popularidad / demanda baja (Sin importar la antiguedad) = 10 Barts
+        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10, '4' => 50, '5' => 10];
         try{
             //$barts = ManejoDataRepository::$puntajeBARTs[$incategoria];
             $barts = $puntajeBARTs[$incategoria];
@@ -969,7 +975,8 @@ class ManejoDataRepository extends EntityRepository {
             //echo "setCambiarClave : cambia clave \n";
             //echo "setCambiarClave : clave : [".$psolicitud->getClaveNueva()."] \n";
             //echo "setCambiarClave : Validacion : [".$usuario->getTxusuvalidacion()."] \n";
-            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), $usuario->getTxusuvalidacion()));  
+            //$usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), $usuario->getTxusuvalidacion()));  
+            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), GamesController::txSecret));  
             //echo "setCambiarClave : encripta clave \n";
             $em->persist($usuario);
             $em->flush();
@@ -1053,12 +1060,14 @@ $newClear = fnDecrypt($crypted, $Pass);
 echo "Decrypted: ".$newClear."</br>";
 */
     public static function fnEncrypt($sValue, $sSecretKey) {
+        //echo "Valor [".$sValue."] - Secret [".$sSecretKey."]";
         //return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sDecrypted, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
-        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
     }
 
     public static function fnDecrypt($sValue, $sSecretKey) {
-        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, base64_decode($sValue), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+        //echo "Valor [".$sValue."* - Secret [".$sSecretKey."]";
+        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, base64_decode($sValue), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
     }   
 ///********************* LO QUE NO SE USA ********************************///
     

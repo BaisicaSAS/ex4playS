@@ -334,8 +334,10 @@ class Usuario
             $usuario->setUsuarioInlugar($Lugar);  
             $txusuvalidacion = Logica::generaRand(GamesController::inTamVali);
             $usuario->settxusuvalidacion($txusuvalidacion);  
-            echo "va al cifrado \n"; 
-            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), $txusuvalidacion));  
+            //echo "va al cifrado \n"; 
+            //$usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), $txusuvalidacion));
+            //@TODO : Clave de cifrado establecida : [fyxwwk-+ieekrz2ve1pkv0ayxkimxce
+            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), GamesController::txSecret));  
 
 
             return $usuario;

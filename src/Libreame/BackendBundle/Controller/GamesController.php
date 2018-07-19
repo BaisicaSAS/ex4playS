@@ -53,6 +53,7 @@ class GamesController extends Controller
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
     const txAnyData =  'ANY'; //String para indicar cualquier usuario
+    const txSecret = '[fyxwwk-+ieekrz2ve1pkv0ayxkimxce';
    
 
     
@@ -183,8 +184,8 @@ class GamesController extends Controller
     
     const inAccPublica = 1;//1 Accion de pubblicar ejemplar
     const inAccDespubl = 2;//2 Accion de DES-pubblicar ejemplar
-    const inAccModific = 3;//3 Accion de modificar ejemplar
-    const inAccElimina = 4;//4 ACCION DE ELIMINAR EJEMPLAR ??????
+    // NO EXISTIRA LA EDICION const inAccModific = 3;//3 Accion de modificar ejemplar
+    const inAccElimina = 3;//3 ACCION DE ELIMINAR EJEMPLAR : Lo que hace es esconderlo del todo
     
     //Tipo de tarea
     const inTipTarCali = 0;//0 - Calificar un usuario
@@ -440,7 +441,6 @@ class GamesController extends Controller
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
                         $this->objSolicitud->setConsola($json_datos['idsolicitud']['consola']);
                         $this->objSolicitud->setFabricante($json_datos['idsolicitud']['fabricante']);
-                        $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
                         $this->objSolicitud->setRepetir($json_datos['idsolicitud']['repetir']);
                         break;
                     }
@@ -456,7 +456,6 @@ class GamesController extends Controller
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
                         $this->objSolicitud->setConsola($json_datos['idsolicitud']['consola']);
                         $this->objSolicitud->setFabricante($json_datos['idsolicitud']['fabricante']);
-                        $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
                         $this->objSolicitud->setRepetir($json_datos['idsolicitud']['repetir']);
                         break;
                     }
@@ -679,7 +678,7 @@ class GamesController extends Controller
                                  isset($datos['idsolicitud']['idejemplar']) and
                                  isset($datos['idsolicitud']['idvidjuego']) and  isset($datos['idsolicitud']['titulo']) and 
                                  isset($datos['idsolicitud']['consola']) and isset($datos['idsolicitud']['fabricante']) and 
-                                 isset($datos['idsolicitud']['modopublica']) and isset($datos['idsolicitud']['repetir']) );
+                                 isset($datos['idsolicitud']['repetir']) );
                         break;
                     }
                     

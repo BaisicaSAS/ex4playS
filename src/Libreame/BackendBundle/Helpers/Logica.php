@@ -523,8 +523,10 @@ class Logica {
                     $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario, $em);
                     //echo "\n fecha publicación... $fecpublica \n";
                     //echo "\n RECUPERO DATOS\n";
-                
+                    
+                    //@Cambio ejemplarusuario
                     $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
+                        'idejemusuario' => $ejemplarusuario->getidejemplarusuario(),
                         'videojuego' => $videojuego->getidvideojuego(), 
                         'titulo' => $titulo, 
                         'categoria' => $categoria, 
@@ -605,7 +607,9 @@ class Logica {
                     //echo "\n fecha publicación... $fecpublica \n";
                     //echo "\n RECUPERO DATOS\n";
                 
+                    //@Cambio ejemplarusuario
                     $arrTmp[] = array('idejemplar' => $ejemplar->getidejemplar(), 
+                        'idejemusuario' => $ejemplarusuario->getidejemplarusuario(),
                         'videojuego' => $videojuego->getidvideojuego(), 
                         'titulo' => $titulo, 
                         'categoria' => $categoria, 
@@ -996,7 +1000,9 @@ class Logica {
                     //$imagen = utf8_encode($ejemplar->getTxejeimagen());
                 }
                 //echo "...arma el arreglo [] \n";
+                //@Cambio ejemplarusuario
                 $arrTmp[] = array('idejemplar' => $ejemplar->getIdejemplar(), 
+                    'idejemusuario' => $ejemplarUsuario->getidejemplarusuario(), 
                     'titulo' => $titulo, 
                     'barts' => $barts, 
                     //'imagen' => $imagen, 
@@ -1221,8 +1227,8 @@ class Logica {
                 //echo "\n registroUsuario :: Va a enviar mail";
                 
                 error_reporting(E_ERROR);
-                $transport = (new \Swift_SmtpTransport('smtpout.secureserver.net', 25))
-                    ->setUsername('registro@ex4play.com')
+                $transport = (new \Swift_SmtpTransport('p3plcpnl0478.prod.phx3.secureserver.net', 25))
+                    ->setUsername('ex4play@baisica.co')
                     ->setPassword('eX.fouR.pl4y$');
                 $mailer = new \Swift_Mailer($transport);
                 EnviaMailController::enviaMailRegistroAction($usuario, $mailer);

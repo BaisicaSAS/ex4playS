@@ -118,10 +118,12 @@ class GestionEjemplares {
                     $respuesta->setRespuesta($respPub);
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccDespubl) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es des - publicar \n ";
-                } elseif ($psolicitud->getAccionComm() == GamesController::inAccModific) {
-                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es modificar la publicacion  \n ";
+                    $respPub = ManejoDataRepository::generarDESPublicacionEjemplar($psolicitud, $em, $respuesta);
+                    $respuesta->setRespuesta($respPub);
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccElimina) {
-                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es eliminar la publicacion  \n ";
+                    //echo "GestionEjemplares :: publicarEjemplar :: La acion es eliminar el ejemplar \n ";
+                    $respPub = ManejoDataRepository::generarEliminacionEjemplar($psolicitud, $em, $respuesta);
+                    $respuesta->setRespuesta($respPub);
                 }
             } else {
                 $respuesta->setRespuesta($respSesionVali);
