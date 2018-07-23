@@ -118,6 +118,7 @@ class GestionEjemplares {
                     $respuesta->setRespuesta($respPub);
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccDespubl) {
                     //echo "GestionEjemplares :: publicarEjemplar :: La acion es des - publicar \n ";
+                    //echo "GestionEjemplares :: publicarEjemplar :: Debe traer Idejemplar = idejemusuario e idvideojuego = OBLIGATORIO \n ";
                     $respPub = ManejoDataRepository::generarDESPublicacionEjemplar($psolicitud, $em, $respuesta);
                     $respuesta->setRespuesta($respPub);
                 } elseif ($psolicitud->getAccionComm() == GamesController::inAccElimina) {

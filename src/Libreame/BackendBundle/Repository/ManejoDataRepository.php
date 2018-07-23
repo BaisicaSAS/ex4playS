@@ -766,6 +766,21 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+   //Obtiene el objeto Ejemplarusuario según su ID 
+    public static function getEjemplarusuario($idejemplarusuario, $em)
+    {   
+        try{
+            $ejemplarusuario = $em->getRepository('LibreameBackendBundle:Ejemplarusuario')->
+                findOneBy(array("idejemplarusuario"=>$idejemplarusuario));
+            
+            //echo "\n ManejoDataRepository::getEjemplarusuario: idejemplarusuario: ".$ejemplarusuario->getidejemplarusuario();
+            //echo "\n ManejoDataRepository::getEjemplarusuario: cuenta: ".count($ejemplarusuario);
+            return $ejemplarusuario;
+        } catch (Exception $ex) {
+                return new Ejemplarusuario();
+        } 
+    }
+    
    //Obtiene el objeto Videojuego según su ID 
     public static function getVideojuego($idvideojuego, $em)
     {   
@@ -2373,7 +2388,8 @@ echo "Decrypted: ".$newClear."</br>";
             //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Registra los puntos para el usuario \n";
             $punUsuario = new Puntosusuario();
             $punUsuario->setfefechapuntos($fecha);
-            $inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
+            //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
+            $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
             //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
             $punUsuario->setinpuntaje($inpuntaje);
             $punUsuario->setinsumaresta(GamesController::inSuma_);
@@ -2443,6 +2459,62 @@ echo "Decrypted: ".$newClear."</br>";
         //8. Se crea un registro de historialejemplar, hay que revisar con que 
         //   tipo de Movimiento, porque debe adicionarse
         
+    }
+
+    //Genera la carga y publicación de un ejemplar a la plataforma
+    public static function generarDESPublicacionEjemplar(Solicitud $psolicitud, $em, &$respuesta){
+        
+        //Para des-publicar un ejemplar
+        //1. Validar en front end el Libro y autocompletar si es necesario,  
+        //   @TODO:  está funcion debe realizarse como servicio
+        //Cuando llega a este punto ya ha validado todas las condiciones del usuario, 
+        //planes, restricciones, penalizaciones, etc...DEFINIR BIEN
+        try{
+            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Inicia a generar la des-publicacion !!! \n";
+            //echo utf8_encode($psolicitud->getTitulo())."\n";
+            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
+            //echo utf8_decode($psolicitud->getTitulo())."\n";*/
+            
+            //error_reporting(E_ALL);
+            $respuestaProc =  GamesController::inFallido; 
+            $fecha = new \DateTime;
+            
+            $em->getConnection()->beginTransaction();
+            
+            //Recupera todas las variables de la solicitud
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+            $ejemplarusuario = new Ejemplarusuario();
+            $videojuego = new Videojuego();
+            //$imgbase64 = $psolicitud->getImageneje();
+            $vjuegoExiste = GamesController::inFallido;
+            //Si existe el videojuego, en la base de datos, se recupera por el ID
+            if (($psolicitud->getIdEjemplar() != "")){
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
+                $vjuegoExiste = GamesController::inExitoso;
+                //En el json de entrada, el ejemplar = ejemplarusuario
+                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemplar(), $em);
+                if ($ejemplarusuario == NULL) {
+                    //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario inválido \n";
+                    $em->flush();
+                    $em->getConnection()->rollback();
+                    $respuestaProc = GamesController::inEjemInv; 
+                    return $respuestaProc;
+                } else {
+                    $videojuego = ManejoDataRepository::getVideojuego($psolicitud->getIdvidjuego(), $em);
+                }
+            } else {
+                //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario = NULL \n";
+                $em->flush();
+                $em->getConnection()->rollback();
+                $respuestaProc = GamesController::inDatosOb; 
+                return $respuestaProc;
+            }
+                    
+
+        } catch (Exception $ex) {
+                $em->getConnection()->rollback();
+                return  GamesController::inFallido;
+        } 
     }
 
     public function getCantidadUsuarios() {

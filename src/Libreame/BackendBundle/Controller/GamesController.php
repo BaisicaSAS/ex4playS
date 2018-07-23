@@ -21,7 +21,7 @@ class GamesController extends Controller
     const inTPRevista = 1; //Tipo publicación : Revista
     
     //Valor de cada punto en ex4read
-    const inValPunto = 200; //Vlor de cada punto en el sistema en pesos = $ 200
+    const inValPunto = 200; //Valor de cada punto en el sistema en pesos = $ 200
     
     //Constantes globales
     const inSuma_ =  1; //Proceso fallido
@@ -41,6 +41,8 @@ class GamesController extends Controller
     const inTamVali =  128; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const inJsonInv = -10; //Datos inconsistentes
+    const inDatosOb = -11; //Datos obligatorios no relacionados (Cuando no relaciona idejemplar, por ahora)
+    const inEjemInv = -12; //Ejemplar relacionado es inválido
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
     const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
     const txMeNoIdS =  'Pendiente'; //Mensaje estandar para pendiente/Sin identificar, con campo Longitud menor a 10
