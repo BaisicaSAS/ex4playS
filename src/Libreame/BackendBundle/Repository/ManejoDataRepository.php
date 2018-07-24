@@ -417,21 +417,39 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
     
-            $qpu = $em->createQueryBuilder()
+            $qpuS = $em->createQueryBuilder()
                 ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
                 ->from('LibreameBackendBundle:Puntosusuario', 'a')
                 ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :insuma')    
                 ->setParameter('pusuario', $pUsuario)
+                ->setParameter('insuma', GamesController::inSuma_)
                 ->setMaxResults(1);
             
-            $puntos = GamesController::inDatoCer;
-            if($qpu->getQuery()->getOneOrNullResult() == NULL){
-                $puntos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            $qpuR = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :inresta')    
+                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('inresta', GamesController::inResta)
+                ->setMaxResults(1);
+            
+            $puntosPos = GamesController::inDatoCer;
+            if($qpuS->getQuery()->getOneOrNullResult() == NULL){
+                $puntosPos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
             } else {
-                $puntos = (int)$qpu->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+                $puntosPos = (int)$qpuS->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
             
-            return $puntos;
+            $puntosNeg = GamesController::inDatoCer;
+            if($qpuR->getQuery()->getOneOrNullResult() == NULL){
+                $puntosNeg = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $puntosNeg = (int)$qpuR->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            return $puntosPos - $puntosNeg;
         } catch (Exception $ex) {
                 return GamesController::inDatoCer;
         } 
@@ -2470,9 +2488,9 @@ echo "Decrypted: ".$newClear."</br>";
         //Cuando llega a este punto ya ha validado todas las condiciones del usuario, 
         //planes, restricciones, penalizaciones, etc...DEFINIR BIEN
         try{
-            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Inicia a generar la des-publicacion !!! \n";
+            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Inicia a generar la des-publicacion !!! \n";
             //echo utf8_encode($psolicitud->getTitulo())."\n";
-            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
+            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
             //echo utf8_decode($psolicitud->getTitulo())."\n";*/
             
             //error_reporting(E_ALL);
@@ -2489,21 +2507,68 @@ echo "Decrypted: ".$newClear."</br>";
             $vjuegoExiste = GamesController::inFallido;
             //Si existe el videojuego, en la base de datos, se recupera por el ID
             if (($psolicitud->getIdEjemplar() != "")){
-                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
+                echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
                 $vjuegoExiste = GamesController::inExitoso;
                 //En el json de entrada, el ejemplar = ejemplarusuario
                 $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemplar(), $em);
                 if ($ejemplarusuario == NULL) {
-                    //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario inválido \n";
+                    echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario inválido \n";
                     $em->flush();
                     $em->getConnection()->rollback();
                     $respuestaProc = GamesController::inEjemInv; 
                     return $respuestaProc;
                 } else {
-                    $videojuego = ManejoDataRepository::getVideojuego($psolicitud->getIdvidjuego(), $em);
+                    echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: valida si el ejemplar está bloqueado o en negociacion no se puede desbloquear \n";
+                    $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
+                    if ($ejemplar == NULL) {
+                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplar inválido : No existe \n";
+                        $em->flush();
+                        $em->getConnection()->rollback();
+                        $respuestaProc = GamesController::inEjemInv; 
+                        return $respuestaProc;
+                    } else {
+                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario valido : aquí debe despublicarlo \n";
+                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: si no esta bloquaedo o en negociacion lo des-publica \n";
+                        if (($ejemplarusuario->getinbloqueado()==GamesController::inDatoUno)or($ejemplarusuario->getinnegociacion()==GamesController::inDatoUno)or($ejemplarusuario->getinvigente()==GamesController::inDatoCer)or($ejemplarusuario->getinpublicado()==GamesController::inDatoCer)) {
+                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Ejemplar bloqueado o en negociacion o no está vigente \n";
+                            $em->flush();
+                            $em->getConnection()->rollback();
+                            $respuestaProc = GamesController::inEjemInv; 
+                            return $respuestaProc;
+                        } else {
+                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Marca ejemplar y ejemplar usuario como no publicado \n";
+                            $ejemplarusuario->setinpublicado(GamesController::inDatoCer); //Despublica el ejemplar
+                            $em->persist($ejemplarusuario);
+                            $ejemplar->setinejemplarpublicado(GamesController::inDatoCer); //Despublica el ejemplar
+                            $em->persist($ejemplar);
+                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Registra los puntos para el usuario \n";
+                            $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                            $punUsuario = new Puntosusuario();
+                            $punUsuario->setfefechapuntos($fecha);
+                            //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
+                            $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
+                            echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
+                            $punUsuario->setinpuntaje($inpuntaje);
+                            $punUsuario->setinsumaresta(GamesController::inResta);
+                            $punUsuario->setpuntosusuariousuario($usuario);
+                            //$punUsuario->setpunusuarioResenavideojuego($punusuarioResenavideojuego);
+                            //$punUsuario->setpunusuarioactiusuario();
+                            $punUsuario->setpunusuarioejemplar($ejemplar);
+                            $em->persist($punUsuario);
+                            $respuestaProc = GamesController::inExitoso; 
+                            $em->flush();
+                            //El objeto respuesta 
+                            $respuesta->setIdEjemplar($ejemplarusuario->getidejemplarusuario());
+                            $respuesta->setTitulo($videojuego->gettxnomvideojuego());
+                            $respuesta->setIdvidjuego($videojuego->getidvideojuego());
+
+                            $em->getConnection()->commit();
+                            return $respuestaProc;
+                        }
+                    }
                 }
             } else {
-                //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario = NULL \n";
+                echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario = NULL \n";
                 $em->flush();
                 $em->getConnection()->rollback();
                 $respuestaProc = GamesController::inDatosOb; 

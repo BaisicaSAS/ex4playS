@@ -102,6 +102,16 @@ Libreame\BackendBundle\Entity\Usuario:
             nullable: true
             options:
                 comment: 'Fecha de nacimiento del usuario'
+        dblatitud:
+            type: float
+            nullable: false
+            options:
+                default: '0'
+        dblongitud:
+            type: float
+            nullable: false
+            options:
+                default: '0'
     manyToOne:
         usuarioInlugar:
             targetEntity: Lugar

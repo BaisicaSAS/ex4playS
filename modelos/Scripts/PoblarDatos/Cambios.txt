@@ -62,3 +62,7 @@ ADD COLUMN `inbloqueado` INT NOT NULL DEFAULT 0 COMMENT 'Bloqueo del ejemplar po
 
 ALTER TABLE `ex4play`.`ejemplarusuario` 
 ADD COLUMN `innegociacion` INT NOT NULL DEFAULT 0 COMMENT 'Indica si el ejemplar esta = 1 o no esta = 0 en negociacion' AFTER `inpublicado`;
+
+ALTER TABLE `ex4play`.`usuario` 
+ADD COLUMN `dblatitud` DOUBLE NOT NULL DEFAULT 0 AFTER `feusunacimiento`,
+ADD COLUMN `dblongitud` DOUBLE NOT NULL DEFAULT 0 AFTER `dblatitud`;

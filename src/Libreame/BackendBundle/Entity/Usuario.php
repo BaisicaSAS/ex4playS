@@ -123,6 +123,18 @@ class Usuario
      * @ORM\Column(name="feusunacimiento", type="datetime", nullable=true)
      */
     private $feusunacimiento;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="dblatitud", type="float", nullable=true)
+     */
+    private $dblatitud = 0;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="dblongitud", type="float", nullable=true)
+     */
+    private $dblongitud = 0;
 
     /* 
      * getters ex4playS
@@ -201,6 +213,16 @@ class Usuario
     public function getfeusunacimiento()
     {
         return $this->feusunacimiento;
+    }
+    
+    public function getdblatitud()
+    {
+        return $this->dblatitud;
+    }
+    
+    public function getdblongitud()
+    {
+        return $this->dblongitud;
     }
     
     /* 
@@ -300,6 +322,20 @@ class Usuario
     public function setfeusunacimiento($feusunacimiento)
     {
         $this->feusunacimiento = $feusunacimiento;
+
+        return $this;
+    }
+
+    public function setdblatitud($dblatitud)
+    {
+        $this->dblatitud = $dblatitud;
+
+        return $this;
+    }
+
+    public function setdblongitud($dblongitud)
+    {
+        $this->dblongitud = $dblongitud;
 
         return $this;
     }
