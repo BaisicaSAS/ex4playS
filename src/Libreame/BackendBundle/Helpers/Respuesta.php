@@ -28,6 +28,7 @@ class Respuesta {
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdvidjuego; //Id del videojuego ofrecido
     private $pIdEjemplar; //Id del Ejemplar
+    private $pIdEjemusuario; //Id del Ejemplar
     private $pIdioma; //Idioma
     private $pAvaluo; //Avalúa
     private $pValVenta; //Valor venta
@@ -112,6 +113,11 @@ class Respuesta {
     public function getIdEjemplar()
     {
         return $this->pIdEjemplar;
+    }   
+
+    public function getIdEjemusuario()
+    {
+        return $this->pIdEjemusuario;
     }   
 
     public function getIdioma()
@@ -266,6 +272,12 @@ class Respuesta {
     public function setIdEjemplar($pIdEjemplar)
     {
         $this->pIdEjemplar = $pIdEjemplar;
+        return $this;
+    }   
+
+    public function setIdEjemusuario($pIdEjemusuario)
+    {
+        $this->pIdEjemusuario = $pIdEjemusuario;
         return $this;
     }   
 

@@ -56,6 +56,8 @@ class Solicitud {
     private $pIdUsuarioVer; //Id del mensaje
     //Id de un ejemplar
     private $pIdEjemplar;
+    //Id de un ejemplarusuario 
+    private $pIdEjemusuario;
     //Marca de megusta o no me gusta para un ejemplar
     private $pMegusta;
     //Comentario a realizar para un ejemplar
@@ -236,6 +238,10 @@ class Solicitud {
 
     public function getIdEjemplar() {
         return $this->pIdEjemplar;
+    }
+
+    public function getIdEjemusuario() {
+        return $this->pIdEjemusuario;
     }
 
     public function getMegusta() {
@@ -509,6 +515,11 @@ class Solicitud {
     
     public function setIdEjemplar($pidejemplar) {
         $this->pIdEjemplar = $pidejemplar;
+        return $this;
+    }
+    
+    public function setIdEjemusuario($pidejemusuario) {
+        $this->pIdEjemusuario = $pidejemusuario;
         return $this;
     }
     

@@ -781,7 +781,7 @@ class Logica {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                    'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),
+                    'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),'idejemusuario' => $respuesta->getIdEjemusuario(),
                     'titulo'=>$respuesta->getTitulo(), 'idvidjuego' => $respuesta->getIdvidjuego())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;

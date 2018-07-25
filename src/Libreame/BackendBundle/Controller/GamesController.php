@@ -42,7 +42,7 @@ class GamesController extends Controller
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const inJsonInv = -10; //Datos inconsistentes
     const inDatosOb = -11; //Datos obligatorios no relacionados (Cuando no relaciona idejemplar, por ahora)
-    const inEjemInv = -12; //Ejemplar relacionado es inválido
+    const inEjemInv = -12; //Ejemplar relacionado es inválido o su estado es incorrecto
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
     const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
     const txMeNoIdS =  'Pendiente'; //Mensaje estandar para pendiente/Sin identificar, con campo Longitud menor a 10
@@ -438,6 +438,7 @@ class GamesController extends Controller
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         //$this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
                         $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accion']);
+                        $this->objSolicitud->setIdEjemusuario($json_datos['idsolicitud']['idejemusuario']);
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setIdvidjuego($json_datos['idsolicitud']['idvidjuego']);
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
@@ -677,7 +678,7 @@ class GamesController extends Controller
                         //echo "estructuraCorrecta :: VAL ENTRA POR PUBLICAR \n";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
                                  /*isset($datos['idsolicitud']['imagen']) and  */isset($datos['idsolicitud']['accion']) and 
-                                 isset($datos['idsolicitud']['idejemplar']) and
+                                 isset($datos['idsolicitud']['idejemplar']) and isset($datos['idsolicitud']['idejemusuario']) and
                                  isset($datos['idsolicitud']['idvidjuego']) and  isset($datos['idsolicitud']['titulo']) and 
                                  isset($datos['idsolicitud']['consola']) and isset($datos['idsolicitud']['fabricante']) and 
                                  isset($datos['idsolicitud']['repetir']) );

@@ -2290,156 +2290,158 @@ echo "Decrypted: ".$newClear."</br>";
             //$imgbase64 = $psolicitud->getImageneje();
             $vjuegoExiste = GamesController::inFallido;
             //Si existe el videojuego, en la base de datos, se recupera por el ID
-            if ($psolicitud->getIdvidjuego() != ""){
-                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
-                $vjuegoExiste = GamesController::inExitoso;
-                $videojuego = ManejoDataRepository::getVideojuego($psolicitud->getIdvidjuego(), $em);
-                $asocConsola = GamesController::inFallido;
-                if ($psolicitud->getConsola() != "") {
-                    $consola = ManejoDataRepository::getConsolaByNombre($psolicitud->getConsola(), $em);
-                    $asocConsola = GamesController::inExitoso;
-                } else {
-                    $consola = ManejoDataRepository::getConsolaGenerica($em);
-                    $asocConsola = GamesController::inExitoso;
-                }
-                $asocFabricante = GamesController::inFallido;
-                if ($psolicitud->getFabricante() != "") {
-                    $fabricante = ManejoDataRepository::getFabricanteByNombre($psolicitud->getFabricante(), $em);
-                    $asocFabricante = GamesController::inExitoso;
-                } else {
-                    $fabricante = ManejoDataRepository::getFabricanteGenerico($em);
-                    $asocFabricante = GamesController::inExitoso;
-                }
-            } else {
-                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuego = NULL \n";
-                
-                $asocFabricante = GamesController::inFallido;
-                if ($psolicitud->getFabricante() != "") {
-                    $fabricante = ManejoDataRepository::getFabricanteByNombre($psolicitud->getFabricante(), $em);
-                    if ($fabricante == NULL) {
-                        //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Asigna fabricante ".$psolicitud->getFabricante()."\n";
-                        $fabricante = new Fabricante();
-                        $fabricante->settxnomfabricante($psolicitud->getFabricante());
-                        $fabricante->settxpaisfabricante(GamesController::txMeNoIdS);
-                        $em->persist($fabricante);
-                        $em->flush();
+            if ($psolicitud->getIdEjemusuario() == ""){
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Ejemplarusuario es vacio: Entra a crear la publicación \n";
+                if ($psolicitud->getIdvidjuego() != ""){
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
+                    $vjuegoExiste = GamesController::inExitoso;
+                    $videojuego = ManejoDataRepository::getVideojuego($psolicitud->getIdvidjuego(), $em);
+                    $asocConsola = GamesController::inFallido;
+                    if ($psolicitud->getConsola() != "") {
+                        $consola = ManejoDataRepository::getConsolaByNombre($psolicitud->getConsola(), $em);
+                        $asocConsola = GamesController::inExitoso;
+                    } else {
+                        $consola = ManejoDataRepository::getConsolaGenerica($em);
+                        $asocConsola = GamesController::inExitoso;
+                    }
+                    $asocFabricante = GamesController::inFallido;
+                    if ($psolicitud->getFabricante() != "") {
+                        $fabricante = ManejoDataRepository::getFabricanteByNombre($psolicitud->getFabricante(), $em);
                         $asocFabricante = GamesController::inExitoso;
+                    } else {
+                        $fabricante = ManejoDataRepository::getFabricanteGenerico($em);
+                        $asocFabricante = GamesController::inExitoso;
+                    }
+                } else {
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Videojuego = NULL \n";
+
+                    $asocFabricante = GamesController::inFallido;
+                    if ($psolicitud->getFabricante() != "") {
+                        $fabricante = ManejoDataRepository::getFabricanteByNombre($psolicitud->getFabricante(), $em);
+                        if ($fabricante == NULL) {
+                            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Asigna fabricante ".$psolicitud->getFabricante()."\n";
+                            $fabricante = new Fabricante();
+                            $fabricante->settxnomfabricante($psolicitud->getFabricante());
+                            $fabricante->settxpaisfabricante(GamesController::txMeNoIdS);
+                            $em->persist($fabricante);
+                            $em->flush();
+                            $asocFabricante = GamesController::inExitoso;
+                        } else {
+                            $asocFabricante = GamesController::inExitoso;
+                            $fabricante = ManejoDataRepository::getFabricanteGenerico($em);
+                        }
                     } else {
                         $asocFabricante = GamesController::inExitoso;
                         $fabricante = ManejoDataRepository::getFabricanteGenerico($em);
-                    }
-                } else {
-                    $asocFabricante = GamesController::inExitoso;
-                    $fabricante = ManejoDataRepository::getFabricanteGenerico($em);
-                }   
+                    }   
 
-                $asocConsola = GamesController::inFallido;
-                if ($psolicitud->getConsola() != "") {
-                    $consola = ManejoDataRepository::getConsolaByNombre($psolicitud->getConsola(), $em);
-                    if ($consola == NULL) {
-                        //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Asigna la consola al objeto ".$psolicitud->getConsola()."\n";
-                        $consola = new Consola();
-                        $consola->settxnombreconsola($psolicitud->getConsola());
-                        $consola->setfelanzamiento($fecha);
-                        $consola->setconsolafabricante($fabricante);
-                        $em->persist($consola);
-                        $em->flush();
-                        $asocConsola = GamesController::inExitoso;
-                    } else {
+                    $asocConsola = GamesController::inFallido;
+                    if ($psolicitud->getConsola() != "") {
+                        $consola = ManejoDataRepository::getConsolaByNombre($psolicitud->getConsola(), $em);
+                        if ($consola == NULL) {
+                            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Asigna la consola al objeto ".$psolicitud->getConsola()."\n";
+                            $consola = new Consola();
+                            $consola->settxnombreconsola($psolicitud->getConsola());
+                            $consola->setfelanzamiento($fecha);
+                            $consola->setconsolafabricante($fabricante);
+                            $em->persist($consola);
+                            $em->flush();
+                            $asocConsola = GamesController::inExitoso;
+                        } else {
+                            $asocConsola = GamesController::inExitoso;
+                            $consola = ManejoDataRepository::getConsolaGenerica($em);
+                        }
+                    }  else {
                         $asocConsola = GamesController::inExitoso;
                         $consola = ManejoDataRepository::getConsolaGenerica($em);
-                    }
-                }  else {
-                    $asocConsola = GamesController::inExitoso;
-                    $consola = ManejoDataRepository::getConsolaGenerica($em);
-                }  
-                
-                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Busca el videojuego por el nombre \n";
-                $videojuego = ManejoDataRepository::getVideojuegoByNombre($psolicitud->getTitulo(), $em);
-                if ($videojuego == NULL) {
-                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: No existe el videojuego [".$psolicitud->getTitulo()."] \n";
-                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Entra a crearlo ".$psolicitud->getConsola()." - ".$psolicitud->getFabricante()."\n";
-                    $videojuego = new Videojuego();
-                    $videojuego->setfelanzamiento($fecha);
-                    $videojuego->setincategvideojuego(GamesController::inDatoTre); //L más baja mientras se recategoriza
-                    $videojuego->settxgenerovideojuego(GamesController::txMenNoId);
-                    $videojuego->settximagen(GamesController::txMenNoId);
-                    $videojuego->settxnomvideojuego($psolicitud->getTitulo());
-                    $videojuego->settxobservaciones(GamesController::txMenNoId);
-                    $videojuego->settxurlinformacion(GamesController::txMenNoId);
-                    $videojuego->setvideojuegoConsola($consola);
-                    $em->persist($videojuego);
-                    $em->flush();
-                    /*@TODO Que hcer con la imágen? 
-                     * $videojuego->settximagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $videojuego->getidvideojuego(), GamesController::txIndCarpImgEjem));
-                     * $em->persist($videojuego);
-                     */
-                } 
-                
-            }
-                    
-            //$avaluo = (Double)$psolicitud->getAvaluo();
-            //$puntos = (Integer)$avaluo/ GamesController::inValPunto;
-            
-            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Listo el Videojuego - ahora Creará el ejemplar \n";
-            $ejemplar = new Ejemplar();
-            $ejemplar->setejemplarVideojuego($videojuego);
-            $ejemplar->setfecargue($fecha);
-            $ejemplar->setinejemplarpublicado(GamesController::inExitoso);
-            //@TODO : Puntos
-            //$ejemplar->setInejepuntos($puntos);
-            $em->persist($ejemplar);
-            $em->flush();
+                    }  
 
-            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Ahora genera el vínculo ejemplar - usuario \n";
-            //Genera asociacion ejemplar usuario
-            $ejeUsuario = new Ejemplarusuario();
-            $ejeUsuario->setejemplarusuarioejemplar($ejemplar);
-            $ejeUsuario->setejemplarusuariousuario($usuario);
-            $ejeUsuario->setfeduenodesde($fecha);//Movimiento de publicación
-            $ejeUsuario->setfepublicacion($fecha);
-            $ejeUsuario->setinpublicado(GamesController::inExitoso); //Publicado = 1
-            $ejeUsuario->setinvigente(GamesController::inExitoso);
-            $em->persist($ejeUsuario);
-            //$em->flush();
-            
-            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Registra los puntos para el usuario \n";
-            $punUsuario = new Puntosusuario();
-            $punUsuario->setfefechapuntos($fecha);
-            //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
-            $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
-            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
-            $punUsuario->setinpuntaje($inpuntaje);
-            $punUsuario->setinsumaresta(GamesController::inSuma_);
-            $punUsuario->setpuntosusuariousuario($usuario);
-            //$punUsuario->setpunusuarioResenavideojuego($punusuarioResenavideojuego);
-            //$punUsuario->setpunusuarioactiusuario();
-            $punUsuario->setpunusuarioejemplar($ejemplar);
-            $em->persist($punUsuario);
-            
-            //El objeto respuesta 
-            $respuesta->setIdEjemplar($ejemplar->getidejemplar());
-            $respuesta->setTitulo($videojuego->gettxnomvideojuego());
-            $respuesta->setIdvidjuego($videojuego->getidvideojuego());
-            
-            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: FINALIZÓ \n";
-            
-            ///PROXIMO PASO : CREAR LA TAREA PARA LOS USUARIOS QUE DARÁN VISTO BUENO AL PRECIO DEL LIBRO
-            //Se buscan 10 usuarios de manera aleatoria para generarle una tarea
-            /*$cont = 0;
-            $arrUsers = [];
-            $cantUsuarios = ManejoDataRepository::getCantidadUsuarios();
-            while ($cont < 10) {
-               $idRand = rand(1, $cantUsuarios);
-               $usuConsulta = ManejoDataRepository::getUsuarioById($idRand);
-               if ($usuConsulta != NULL){
-                    if (($usuConsulta->getInusuestado() == GamesController::inUsuActi) && (!in_array($idRand, $arrUsers))){
-                       $arrUsers[] = $idRand;
-                       $cont++;
-                    }
-               }
-            }
-            
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Busca el videojuego por el nombre \n";
+                    $videojuego = ManejoDataRepository::getVideojuegoByNombre($psolicitud->getTitulo(), $em);
+                    if ($videojuego == NULL) {
+                        //echo "ManejoDataRepository :: generarPublicacionEjemplar :: No existe el videojuego [".$psolicitud->getTitulo()."] \n";
+                        //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Entra a crearlo ".$psolicitud->getConsola()." - ".$psolicitud->getFabricante()."\n";
+                        $videojuego = new Videojuego();
+                        $videojuego->setfelanzamiento($fecha);
+                        $videojuego->setincategvideojuego(GamesController::inDatoTre); //L más baja mientras se recategoriza
+                        $videojuego->settxgenerovideojuego(GamesController::txMenNoId);
+                        $videojuego->settximagen(GamesController::txMenNoId);
+                        $videojuego->settxnomvideojuego($psolicitud->getTitulo());
+                        $videojuego->settxobservaciones(GamesController::txMenNoId);
+                        $videojuego->settxurlinformacion(GamesController::txMenNoId);
+                        $videojuego->setvideojuegoConsola($consola);
+                        $em->persist($videojuego);
+                        $em->flush();
+                        /*@TODO Que hcer con la imágen? 
+                         * $videojuego->settximagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $videojuego->getidvideojuego(), GamesController::txIndCarpImgEjem));
+                         * $em->persist($videojuego);
+                         */
+                    } 
+
+                }
+
+                //$avaluo = (Double)$psolicitud->getAvaluo();
+                //$puntos = (Integer)$avaluo/ GamesController::inValPunto;
+
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Listo el Videojuego - ahora Creará el ejemplar \n";
+                $ejemplar = new Ejemplar();
+                $ejemplar->setejemplarVideojuego($videojuego);
+                $ejemplar->setfecargue($fecha);
+                $ejemplar->setinejemplarpublicado(GamesController::inExitoso);
+                //@TODO : Puntos
+                //$ejemplar->setInejepuntos($puntos);
+                $em->persist($ejemplar);
+                $em->flush();
+
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Ahora genera el vínculo ejemplar - usuario \n";
+                //Genera asociacion ejemplar usuario
+                $ejeUsuario = new Ejemplarusuario();
+                $ejeUsuario->setejemplarusuarioejemplar($ejemplar);
+                $ejeUsuario->setejemplarusuariousuario($usuario);
+                $ejeUsuario->setfeduenodesde($fecha);//Movimiento de publicación
+                $ejeUsuario->setfepublicacion($fecha);
+                $ejeUsuario->setinpublicado(GamesController::inExitoso); //Publicado = 1
+                $ejeUsuario->setinvigente(GamesController::inExitoso);
+                $em->persist($ejeUsuario);
+                //$em->flush();
+
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Registra los puntos para el usuario \n";
+                $punUsuario = new Puntosusuario();
+                $punUsuario->setfefechapuntos($fecha);
+                //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
+                $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
+                $punUsuario->setinpuntaje($inpuntaje);
+                $punUsuario->setinsumaresta(GamesController::inSuma_);
+                $punUsuario->setpuntosusuariousuario($usuario);
+                //$punUsuario->setpunusuarioResenavideojuego($punusuarioResenavideojuego);
+                //$punUsuario->setpunusuarioactiusuario();
+                $punUsuario->setpunusuarioejemplar($ejemplar);
+                $em->persist($punUsuario);
+
+                //El objeto respuesta 
+                $respuesta->setIdEjemplar($ejemplar->getidejemplar());
+                $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                $respuesta->setTitulo($videojuego->gettxnomvideojuego());
+                $respuesta->setIdvidjuego($videojuego->getidvideojuego());
+
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: FINALIZÓ \n";
+
+                ///PROXIMO PASO : CREAR LA TAREA PARA LOS USUARIOS QUE DARÁN VISTO BUENO AL PRECIO DEL LIBRO
+                //Se buscan 10 usuarios de manera aleatoria para generarle una tarea
+                /*$cont = 0;
+                $arrUsers = [];
+                $cantUsuarios = ManejoDataRepository::getCantidadUsuarios();
+                while ($cont < 10) {
+                   $idRand = rand(1, $cantUsuarios);
+                   $usuConsulta = ManejoDataRepository::getUsuarioById($idRand);
+                   if ($usuConsulta != NULL){
+                        if (($usuConsulta->getInusuestado() == GamesController::inUsuActi) && (!in_array($idRand, $arrUsers))){
+                           $arrUsers[] = $idRand;
+                           $cont++;
+                        }
+                   }
+                }
             for ($i=0;$i<10;$i++){
                $usuConsulta = ManejoDataRepository::getUsuarioById($arrUsers[$i]);
                $tarea = new LbTareas();
@@ -2455,7 +2457,51 @@ echo "Decrypted: ".$newClear."</br>";
                $em->persist($tarea);
             }*/
             
-            
+            } else {
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Ejemplar usuario NO es vacio: Entra a editar la publicación \n";
+                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemusuario(), $em);
+                //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Ejemplar bloqueado [".$ejemplarusuario->getinbloqueado()."] o en negociacion [".$ejemplarusuario->getinnegociacion()."] o no está vigente [".$ejemplarusuario->getinvigente()."] o no está publicado [".$ejemplarusuario->getinpublicado()."] \n";
+                if (($ejemplarusuario->getinbloqueado()==GamesController::inDatoUno)or($ejemplarusuario->getinnegociacion()==GamesController::inDatoUno)or($ejemplarusuario->getinvigente()==GamesController::inDatoCer)or($ejemplarusuario->getinpublicado()==GamesController::inDatoUno)) {
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: El ejemplar no puede ser publicado (en negociacion, publicado, no vidente o bloqueado \n";
+                    $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
+                    $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                    $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                    $respuesta->setIdEjemplar($ejemplar->getidejemplar());
+                    $respuesta->setTitulo($videojuego->gettxnomvideojuego());
+                    $respuesta->setIdvidjuego($videojuego->getidvideojuego());
+                    $em->flush();
+                    $em->getConnection()->rollback();
+                    $respuestaProc = GamesController::inEjemInv; 
+                    return $respuestaProc;
+                } else {
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: ID Ejemplar usuario válido \n";
+                    $ejemplarusuario->setinpublicado(GamesController::inDatoUno); //Publica el ejemplar
+                    $em->persist($ejemplarusuario);
+                    $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
+                    $ejemplar->setinejemplarpublicado(GamesController::inDatoUno); //publica el ejemplar
+                    $em->persist($ejemplar);
+                    $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Registra los puntos para el usuario \n";
+                    $punUsuario = new Puntosusuario();
+                    $punUsuario->setfefechapuntos($fecha);
+                    //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
+                    $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
+                    //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
+                    $punUsuario->setinpuntaje($inpuntaje);
+                    $punUsuario->setinsumaresta(GamesController::inSuma_);
+                    $punUsuario->setpuntosusuariousuario($usuario);
+                    //$punUsuario->setpunusuarioResenavideojuego($punusuarioResenavideojuego);
+                    //$punUsuario->setpunusuarioactiusuario();
+                    $punUsuario->setpunusuarioejemplar($ejemplar);
+                    $em->persist($punUsuario);
+
+                    //El objeto respuesta 
+                    $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                    $respuesta->setIdEjemplar($ejemplar->getidejemplar());
+                    $respuesta->setTitulo($videojuego->gettxnomvideojuego());
+                    $respuesta->setIdvidjuego($videojuego->getidvideojuego());
+                }    
+            }
             $em->flush();
             $em->getConnection()->commit();
             $respuestaProc = GamesController::inExitoso; 
@@ -2488,9 +2534,9 @@ echo "Decrypted: ".$newClear."</br>";
         //Cuando llega a este punto ya ha validado todas las condiciones del usuario, 
         //planes, restricciones, penalizaciones, etc...DEFINIR BIEN
         try{
-            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Inicia a generar la des-publicacion !!! \n";
+            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Inicia a generar la des-publicacion !!! \n";
             //echo utf8_encode($psolicitud->getTitulo())."\n";
-            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
+            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ".$psolicitud->getTitulo()." \n";
             //echo utf8_decode($psolicitud->getTitulo())."\n";*/
             
             //error_reporting(E_ALL);
@@ -2505,49 +2551,57 @@ echo "Decrypted: ".$newClear."</br>";
             $videojuego = new Videojuego();
             //$imgbase64 = $psolicitud->getImageneje();
             $vjuegoExiste = GamesController::inFallido;
-            //Si existe el videojuego, en la base de datos, se recupera por el ID
-            if (($psolicitud->getIdEjemplar() != "")){
-                echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
+            //Si existe el ejemplarusuario, en la base de datos, se recupera por el ID
+            if (($psolicitud->getIdEjemusuario() != "")){
+                //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID Videojuegono NO es vacio: Entra a recuperarlo \n";
                 $vjuegoExiste = GamesController::inExitoso;
                 //En el json de entrada, el ejemplar = ejemplarusuario
-                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemplar(), $em);
+                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemusuario(), $em);
                 if ($ejemplarusuario == NULL) {
-                    echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario inválido \n";
+                    //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario inválido \n";
                     $em->flush();
                     $em->getConnection()->rollback();
                     $respuestaProc = GamesController::inEjemInv; 
                     return $respuestaProc;
                 } else {
-                    echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: valida si el ejemplar está bloqueado o en negociacion no se puede desbloquear \n";
+                    //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: valida si el ejemplar está bloqueado o en negociacion no se puede desbloquear \n";
                     $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
                     if ($ejemplar == NULL) {
-                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplar inválido : No existe \n";
+                        //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplar inválido : No existe \n";
                         $em->flush();
                         $em->getConnection()->rollback();
                         $respuestaProc = GamesController::inEjemInv; 
                         return $respuestaProc;
                     } else {
-                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario valido : aquí debe despublicarlo \n";
-                        echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: si no esta bloquaedo o en negociacion lo des-publica \n";
+                        //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario valido : aquí debe despublicarlo \n";
+                        //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: si no esta bloquaedo o en negociacion lo des-publica \n";
                         if (($ejemplarusuario->getinbloqueado()==GamesController::inDatoUno)or($ejemplarusuario->getinnegociacion()==GamesController::inDatoUno)or($ejemplarusuario->getinvigente()==GamesController::inDatoCer)or($ejemplarusuario->getinpublicado()==GamesController::inDatoCer)) {
-                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Ejemplar bloqueado o en negociacion o no está vigente \n";
+                            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Ejemplar bloqueado [".$ejemplarusuario->getinbloqueado()."] o en negociacion [".$ejemplarusuario->getinnegociacion()."] o no está vigente [".$ejemplarusuario->getinvigente()."] o no está publicado [".$ejemplarusuario->getinpublicado()."] \n";
                             $em->flush();
                             $em->getConnection()->rollback();
+                            //El objeto respuesta 
+                            $ejemplar = ManejoDataRepository::getEjemplarById($ejemplarusuario->getejemplarusuarioejemplar(), $em);
+                            $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                            $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                            $respuesta->setIdEjemplar($ejemplar->getidejemplar());
+                            $respuesta->setTitulo($videojuego->gettxnomvideojuego());
+                            $respuesta->setIdvidjuego($videojuego->getidvideojuego());
+
                             $respuestaProc = GamesController::inEjemInv; 
                             return $respuestaProc;
                         } else {
-                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Marca ejemplar y ejemplar usuario como no publicado \n";
+                            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Marca ejemplar y ejemplar usuario como no publicado \n";
                             $ejemplarusuario->setinpublicado(GamesController::inDatoCer); //Despublica el ejemplar
                             $em->persist($ejemplarusuario);
                             $ejemplar->setinejemplarpublicado(GamesController::inDatoCer); //Despublica el ejemplar
                             $em->persist($ejemplar);
-                            echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Registra los puntos para el usuario \n";
+                            //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: Registra los puntos para el usuario \n";
                             $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
                             $punUsuario = new Puntosusuario();
                             $punUsuario->setfefechapuntos($fecha);
                             //$inpuntaje = ManejoDataRepository::getPuntajeBarts(GamesController::inDatoTre);
                             $inpuntaje = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego());
-                            echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
+                            //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Puntaje [".$inpuntaje."] \n";
                             $punUsuario->setinpuntaje($inpuntaje);
                             $punUsuario->setinsumaresta(GamesController::inResta);
                             $punUsuario->setpuntosusuariousuario($usuario);
@@ -2558,7 +2612,8 @@ echo "Decrypted: ".$newClear."</br>";
                             $respuestaProc = GamesController::inExitoso; 
                             $em->flush();
                             //El objeto respuesta 
-                            $respuesta->setIdEjemplar($ejemplarusuario->getidejemplarusuario());
+                            $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                            $respuesta->setIdEjemplar($ejemplar->getidejemplar());
                             $respuesta->setTitulo($videojuego->gettxnomvideojuego());
                             $respuesta->setIdvidjuego($videojuego->getidvideojuego());
 
@@ -2568,7 +2623,7 @@ echo "Decrypted: ".$newClear."</br>";
                     }
                 }
             } else {
-                echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario = NULL \n";
+                //echo "ManejoDataRepository :: generarDESPublicacionEjemplar :: ID ejemplarusuario = NULL \n";
                 $em->flush();
                 $em->getConnection()->rollback();
                 $respuestaProc = GamesController::inDatosOb; 
