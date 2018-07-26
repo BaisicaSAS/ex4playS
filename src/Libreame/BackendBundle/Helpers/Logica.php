@@ -1174,6 +1174,17 @@ class Logica {
         } 
     }    
     
+    public static function bin2text($bin_str) 
+    { 
+        $text_str = ''; 
+        $chars = explode("\n", chunk_split(str_replace("\n", '', $bin_str), 8)); 
+        $_I = count($chars); 
+        for ($i = 0; $i < $_I; $i++) 
+        { $text_str .= chr(bindec($chars[$i])); }
+        return $text_str; 
+    } 
+     
+
     //ex4plays :: Modificado
     //Adicionado el $em
     public function registroUsuario($pSolicitud, $em)

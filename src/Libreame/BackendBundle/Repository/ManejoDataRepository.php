@@ -133,21 +133,25 @@ class ManejoDataRepository extends EntityRepository {
                 } else {
                     //Si la clave enviada es inválida
                     //echo "validaSesionUsuario :: revisa si la clave es correcta \n";
-                    if ($usuario->getTxclaveusuario() != $psolicitud->getClave()){
-                        //echo "validaSesionUsuario :: Clave invalida \n";
-                        $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
-                    } else {
-                        //Valida si la sesion está activa
-                        //echo "validaSesionUsuario :: Verifica se la sesion está activa \n";
-                        if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, $psolicitud->getSession(), $em)){
-                            //echo "validaSesionUsuario :: Sesion inactiva \n";
-                            $respuesta = GamesController::inUsSeIna; //Sesion inactiva
+                    //ex4play : Aunque el campo de clave se mantenga, sólo se valida en REGISTRO y LOGIN
+                    
+                    //Valida si la sesion está activa
+                    //echo "validaSesionUsuario :: Verifica se la sesion está activa \n";
+                    if (!ManejoDataRepository::usuarioSesionActiva($psolicitud, $psolicitud->getSession(), $em)){
+                        //echo "validaSesionUsuario :: Sesion inactiva \n";
+                        $respuesta = GamesController::inUsSeIna; //Sesion inactiva
 
-                        } else {
-                            $respuesta = GamesController::inULogged; //Sesion activa
-                            //echo "validaSesionUsuario :: La sesion es VALIDA \n";
-                        }
-                    }   
+                    } else {
+                        $respuesta = GamesController::inULogged; //Sesion activa
+                        //echo "validaSesionUsuario :: La sesion es VALIDA \n";
+                        if (($psolicitud->getAccion()==GamesController::txAccRegistro)OR($psolicitud->getAccion()==GamesController::txAccIngresos)){
+                            //if ($usuario->getTxclaveusuario() != $psolicitud->getClave()){
+                            if (ManejoDataRepository::fnDecrypt($usuario->getTxclave(), GamesController::txSecret) != ManejoDataRepository::fnDecrypt($psolicitud->getClave(), GamesController::txSecret)){
+                                //echo "validaSesionUsuario :: Clave invalida \n";
+                                $respuesta = GamesController::inUsClInv; //Usuario o clave inválidos
+                            }
+                        }   
+                    }
                 }
             }
 
@@ -2391,7 +2395,6 @@ echo "Decrypted: ".$newClear."</br>";
                 //@TODO : Puntos
                 //$ejemplar->setInejepuntos($puntos);
                 $em->persist($ejemplar);
-                $em->flush();
 
                 //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Ahora genera el vínculo ejemplar - usuario \n";
                 //Genera asociacion ejemplar usuario
@@ -2403,7 +2406,6 @@ echo "Decrypted: ".$newClear."</br>";
                 $ejeUsuario->setinpublicado(GamesController::inExitoso); //Publicado = 1
                 $ejeUsuario->setinvigente(GamesController::inExitoso);
                 $em->persist($ejeUsuario);
-                //$em->flush();
 
                 //echo "ManejoDataRepository :: generarPublicacionEjemplar :: Registra los puntos para el usuario \n";
                 $punUsuario = new Puntosusuario();
@@ -2418,10 +2420,11 @@ echo "Decrypted: ".$newClear."</br>";
                 //$punUsuario->setpunusuarioactiusuario();
                 $punUsuario->setpunusuarioejemplar($ejemplar);
                 $em->persist($punUsuario);
+                $em->flush();
 
                 //El objeto respuesta 
                 $respuesta->setIdEjemplar($ejemplar->getidejemplar());
-                $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());
+                $respuesta->setIdEjemusuario($ejeUsuario->getidejemplarusuario());
                 $respuesta->setTitulo($videojuego->gettxnomvideojuego());
                 $respuesta->setIdvidjuego($videojuego->getidvideojuego());
 
@@ -2494,6 +2497,7 @@ echo "Decrypted: ".$newClear."</br>";
                     //$punUsuario->setpunusuarioactiusuario();
                     $punUsuario->setpunusuarioejemplar($ejemplar);
                     $em->persist($punUsuario);
+                    $em->flush();
 
                     //El objeto respuesta 
                     $respuesta->setIdEjemusuario($ejemplarusuario->getidejemplarusuario());

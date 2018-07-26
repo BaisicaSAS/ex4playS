@@ -40,6 +40,7 @@ class Login
     
     /* ex4palys :: Adicionado $em
      */
+    
     public static function loginUsuario($pSolicitud, $em)
     {   
         //error_reporting(E_ALL);
@@ -70,7 +71,10 @@ class Login
                 //Verifica si el usuario está activo
                 if ($estado == GamesController::inUsuActi) {
                     //Verifica si la clave es correcta
-                    if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
+                    //if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
+                    //$clavebinaria = base64_decode($usuario->getTxclave()); 
+                    //echo "clavebinaria = [".$clavebinaria."]";
+                    if (ManejoDataRepository::fnDecrypt($usuario->getTxclave(), GamesController::txSecret) == ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret)){
                         //echo "loginUsuario : Verifica si el usuario tiene una sesion activa \n";
                         $estadoSesion = GamesController::inDatoCer;
                         //Recupera el estado de login (sesion activa, inactiva) del suario
@@ -156,9 +160,9 @@ class Login
                 //Verifica si el usuario está activo
                 if ($estado == GamesController::inUsuActi)
                 {
-                    
                     //Verifica si la clave es correcta
-                    if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
+                    //if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
+                    if (ManejoDataRepository::fnDecrypt($usuario->getTxclave(), GamesController::txSecret) == ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret)){
                         //Verifica si el usuario NO tiene la sesion activa
                         if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $pSolicitud->getSession(), $em) == FALSE){
                             $respuesta->setRespuesta(GamesController::inUsSeIna);

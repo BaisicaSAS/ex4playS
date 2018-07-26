@@ -618,6 +618,7 @@ class GamesController extends Controller
                         //echo "<script>alert('VAL ENTRA POR REGISTRO')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
                                 and isset($datos['idsolicitud']['telefono']));
+                        //echo $resp.": fue la respuesta - [".$datos['idsolicitud']['clave']."]";
                         break;
                     }
                     case self::txAccIngresos : { //Dato:2 : Login

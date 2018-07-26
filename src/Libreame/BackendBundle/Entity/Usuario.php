@@ -365,7 +365,6 @@ class Usuario
             $usuario->setTxnickname($pSolicitud->getEmail());
             $usuario->setFecreacionusuario($fechaReg);
 
-            $usuario->setTxclaveusuario($pSolicitud->getClave());  
             $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
             $usuario->setUsuarioInlugar($Lugar);  
             $txusuvalidacion = Logica::generaRand(GamesController::inTamVali);
@@ -373,8 +372,12 @@ class Usuario
             //echo "va al cifrado \n"; 
             //$usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), $txusuvalidacion));
             //@TODO : Clave de cifrado establecida : [fyxwwk-+ieekrz2ve1pkv0ayxkimxce
-            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), GamesController::txSecret));  
-
+            //$usuario->setTxclave(ManejoDataRepository::fnEncrypt($pSolicitud->getClave(), GamesController::txSecret));  
+            //$clavebinaria = Logica::bin2text(ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret)); 
+            //echo "clavebin [".$clavebinaria."]";
+            $usuario->setTxclave($pSolicitud->getClave(), GamesController::txSecret);  
+            //@TODO : Inhabilitarla...esta clave no se guardara despues: Se guardará una constante
+            $usuario->setTxclaveusuario(ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret));  
 
             return $usuario;
         } catch (Exception $ex)  {    
