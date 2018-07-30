@@ -50,18 +50,18 @@ class Login
         setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;
         try {
-            //echo "loginUsuario : Ingresa Login \n";
+            echo "loginUsuario : Ingresa Login \n";
 
             $sesion = new Sesion();
             $actsesion = new Actsesion();
             $txemail = utf8_decode($pSolicitud->getEmail());
-            //echo "loginUsuario : Mail usuario ".$pSolicitud->getEmail()."-".$txemail." \n";
+            echo "loginUsuario : Mail usuario ".$pSolicitud->getEmail()."-".$txemail." \n";
             /*$usuario = NULL;
-            //echo "loginUsuario : USUARIO = NULL \n";*/
-            //echo "loginUsuario : VA A RECUPERAR EL USUARIO \n";
+            echo "loginUsuario : USUARIO = NULL \n";*/
+            echo "loginUsuario : VA A RECUPERAR EL USUARIO \n";
             $usuario = ManejoDataRepository::getUsuarioByMail($txemail, $em);
             //Verifica si el usuario existe
-            //echo "loginUsuario : va a verificar si el usuario quedó o no NULL \n";
+            echo "loginUsuario : va a verificar si el usuario quedó o no NULL \n";
             if ($usuario != NULL){
                 //echo "loginUsuario : no es null -> usuario ".$usuario->getTxmailusuario()." \n";
                 $respuesta->setArrUsuarios($usuario);
@@ -72,14 +72,16 @@ class Login
                 if ($estado == GamesController::inUsuActi) {
                     //Verifica si la clave es correcta
                     //if ($usuario->getTxclaveusuario() == $pSolicitud->getClave()){
-                    //$clavebinaria = base64_decode($usuario->getTxclave()); 
-                    //echo "clavebinaria = [".$clavebinaria."]";
-                    if (ManejoDataRepository::fnDecrypt($usuario->getTxclave(), GamesController::txSecret) == ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret)){
-                        //echo "loginUsuario : Verifica si el usuario tiene una sesion activa \n";
+                    $claveenviada = ManejoDataRepository::fnDecrypt(base64_decode($pSolicitud->getClave()), GamesController::txSecret);
+                    $clavebinaria = ManejoDataRepository::fnDecrypt(base64_decode($usuario->getTxclave()), GamesController::txSecret); 
+                    echo "clavebinaria guardada = [".$clavebinaria."] \n";
+                    echo "clave enviada = [". $claveenviada."] \n";
+                    if (ManejoDataRepository::fnDecrypt(base64_decode($usuario->getTxclave()), GamesController::txSecret) == ManejoDataRepository::fnDecrypt(base64_decode($pSolicitud->getClave()), GamesController::txSecret)){
+                        echo "loginUsuario : Verifica si el usuario tiene una sesion activa \n";
                         $estadoSesion = GamesController::inDatoCer;
                         //Recupera el estado de login (sesion activa, inactiva) del suario
                         $sesion = ManejoDataRepository::recuperaEstadoSesionUsuario($usuario,$pSolicitud,$em,$estadoSesion);
-                        //echo "loginUsuario : retornó la sesion \n";
+                        echo "loginUsuario : retornó la sesion \n";
                         switch ($estadoSesion) {
                             case GamesController::inDatoCer: //Error, debe especificar sesion : El usuario tiene una sesion activa
                                 $respuesta->setRespuesta(GamesController::inUSeActi);    
@@ -87,7 +89,7 @@ class Login
                             case GamesController::inDatoUno: //Logear
                                 $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),$em);
                                 //Genera sesion activa sin fecha de finalización
-                                //echo "loginUsuario : Crea la sesion ".$sesion->gettxsesnumero()." \n ";
+                                echo "loginUsuario : Crea la sesion ".$sesion->gettxsesnumero()." \n ";
                                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                                 $respuesta->setRespuesta(GamesController::inULogged);    
                                 $respuesta->setSession($sesion->gettxsesnumero());  
@@ -98,7 +100,7 @@ class Login
                             case GamesController::inDatoDos: //Logín valido : No cambia sesion, registra intento de relogeo
                                 ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Intento Nuevo Login usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,$em);
                                 $respuesta->setRespuesta(GamesController::inULogged);    
-                                //echo "loginUsuario : GENERA la sesion ".$sesion->gettxsesnumero()." \n ";
+                                echo "loginUsuario : GENERA la sesion ".$sesion->gettxsesnumero()." \n ";
                                 $respuesta->setSession($sesion->gettxsesnumero());  
                                 //Busca la cantidad de mensajes del usuario sin leer 
                                 $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
@@ -111,16 +113,16 @@ class Login
                                 break;
                         } 
                     } else {
-                        //echo "loginUsuario : Clave incorrecta \n ";
+                        echo "loginUsuario : Clave incorrecta \n ";
                         $respuesta->setRespuesta(GamesController::inUsClInv);
                     }    
                 } else {
-                    //echo "loginUsuario : Usuario no está activo \n ";
+                    echo "loginUsuario : Usuario no está activo \n ";
                     $respuesta->setRespuesta(GamesController::inUsInact);
                 }
 
             } else {
-                //echo "loginUsuario : Usuario no existe \n ";
+                    echo "loginUsuario : Usuario no existe \n ";
                 $respuesta->setRespuesta(GamesController::inUsClInv);
             }
 
