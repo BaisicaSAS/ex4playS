@@ -1096,7 +1096,22 @@ echo "Encrypted: ".$crypted."</br>";
 $newClear = fnDecrypt($crypted, $Pass);
 echo "Decrypted: ".$newClear."</br>";
 */
-    public static function fnEncrypt($sValue, $sSecretKey) {
+    public static function fnEncrypt/*aes128Encrypt*/($data, $key) {
+        if(16 !== strlen($key)) $key = hash('MD5', $key, true);
+        $padding = 16 - (strlen($data) % 16);
+        $data .= str_repeat(chr($padding), $padding);
+        return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, str_repeat("\0", 16)));
+    }
+    
+    public static function fnDecrypt/*aes128Decrypt*/($data, $key) {
+        $data = base64_decode($data);
+        if(16 !== strlen($key)) $key = hash('MD5', $key, true);
+        $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, str_repeat("\0", 16));
+        $padding = ord($data[strlen($data) - 1]); 
+        return substr($data, 0, -$padding); 
+    }
+    
+    /*public static function fnEncrypt($sValue, $sSecretKey) {
         //echo "Valor [".$sValue."] - Secret [".$sSecretKey."]";
         //return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sDecrypted, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
         //return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
@@ -1107,7 +1122,7 @@ echo "Decrypted: ".$newClear."</br>";
         //echo "Valor [".$sValue."* - Secret [".$sSecretKey."]";
         //return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $sSecretKey, base64_decode($sValue), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
         return trim(base64_encode(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND))));
-    }   
+    } */  
 ///********************* LO QUE NO SE USA ********************************///
     
     
