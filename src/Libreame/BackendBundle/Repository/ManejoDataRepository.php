@@ -526,6 +526,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->from('LibreameBackendBundle:ejemplarusuario', 'e')
                 ->Where(' e.ejemplarusuariousuario = :usuario ')
                 ->setParameter('usuario', $usuario)
+                ->andWhere(' e.invigente = :vigente ')
+                ->setParameter('vigente', GamesController::inDatoUno) // 0 es trato Cerrado
                 ->setMaxResults(1);
             $ejemplares = (Int)$qej->getQuery()->getSingleScalarResult();
             
@@ -696,7 +698,7 @@ class ManejoDataRepository extends EntityRepository {
                     ->setParameter('pvideojuegos', $arVideojuegos)
                     ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                     ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                    ->andWhere(' e.inejemplarpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                    ->andWhere(' e.inejemplarpublicado = :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
                     ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
                     //->andWhere(' h.inhisejemovimiento = :pmovimiento')
                     //->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
@@ -753,7 +755,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pFejemplar', $limiteSup)
                 ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                 ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                ->andWhere(' e.inejemplarpublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                ->andWhere(' e.inejemplarpublicado = :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
                 ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
                 //->andWhere(' h.inhisejemovimiento = :pmovimiento')
                 //->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
@@ -1004,16 +1006,9 @@ class ManejoDataRepository extends EntityRepository {
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
             //echo "setCambiarClave : Recuperó el usuario ".$usuario->getTxnickname()." \n";
             //echo 'usuario FALLIDO '.$resp;
-            //if ($psolicitud->getUsuFecNac() != ""){
-            //    $d = new DateTime($psolicitud->getUsuFecNac());
-            //}
-            
-            $usuario->setTxclaveusuario($psolicitud->getClaveNueva());
             //echo "setCambiarClave : cambia clave \n";
             //echo "setCambiarClave : clave : [".$psolicitud->getClaveNueva()."] \n";
-            //echo "setCambiarClave : Validacion : [".$usuario->getTxusuvalidacion()."] \n";
-            //$usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), $usuario->getTxusuvalidacion()));  
-            $usuario->setTxclave(ManejoDataRepository::fnEncrypt($psolicitud->getClaveNueva(), GamesController::txSecret));  
+            $usuario->setTxclave($psolicitud->getClaveNueva());  
             //echo "setCambiarClave : encripta clave \n";
             $em->persist($usuario);
             $em->flush();

@@ -377,7 +377,8 @@ class Usuario
             //echo "clavebin [".$clavebinaria."]";
             $usuario->setTxclave($pSolicitud->getClave(), GamesController::txSecret);  
             //@TODO : Inhabilitarla...esta clave no se guardara despues: Se guardará una constante
-            $usuario->setTxclaveusuario(ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret));  
+            //$usuario->setTxclaveusuario(ManejoDataRepository::fnDecrypt($pSolicitud->getClave(), GamesController::txSecret));  
+            $usuario->setTxclaveusuario("--");  
 
             return $usuario;
         } catch (Exception $ex)  {    

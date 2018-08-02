@@ -75,13 +75,13 @@ class GamesController extends Controller
     const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
     const txAccPubliEje =  '13'; //Publicar un ejemplar
     //DEPRECADO: const txAccModifEje =  '14'; //Modificar un ejemplar
-    const txAccElimiPub =  '15'; //Eliminar una publicacion :: Despublicar
+    //const txAccElimiPub =  '15'; //Eliminar una publicacion :: Despublicar
     const txAccVisuaBib =  '16'; //Visualizar Biblioteca
     const txAccModifOfe =  '17'; //Modificar una oferta
     const txAccElimiOfe =  '18'; //Eliminar una oferta
     const txAccPubMensa =  '19'; //CHATEAR :: Interactuar con oferta::Enviar un mensaje a una solicitud especifica / Publicar o Responder
-    //DEPRECADO: const txAccConcNego =  '20'; //Concretar una negociación: Aceptar un usuario y descartar a los demás
-    //DEPRECADO: const txAccDesiNego =  '21'; //Desistir de una negociación ya realizada
+    const txAccAceNegoc =  '20'; //Aceptar una negociación: Aceptar un usuario 
+    const txAccEntRecVJ =  '21'; //Entrega o recibe videojuego (Debe tener un indicador de entrega / recibo en el json)
     const txAccCaliTrat =  '22'; //Calificar un trato
     //DEPRECADO: const txAccModCalTr =  '23'; //Modificar calificación trato
     const txAccEnviaPQR =  '24'; //Enviar una PQR

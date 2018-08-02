@@ -139,7 +139,7 @@ class GestionUsuarios {
      * Cambia las clave del usuario
      */
     
-    public function actualizarClaveUsuario(Solicitud $psolicitud, $em)
+    public static function actualizarClaveUsuario(Solicitud $psolicitud, $em)
     {   
         //echo "actualizarClaveUsuario : INGRESA ACTUALIZAR CLAVE \n";
          /*setlocale (LC_TIME, "es_CO");
