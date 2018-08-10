@@ -38,7 +38,28 @@ Libreame\BackendBundle\Entity\Trato:
             nullable: true
             options:
                 unsigned: false
-                comment: '0 Cerrado 1 Declinado revisar bien'
+                comment: 'Estado general del trato 0: Solicitado 1: Cancelado 2: Finalizado '
+                default: '0'
+        inestadoentrega:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: ''
+                default: '0'
+        inestadocancela:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: ''
+                default: '0'
+        inestadocalifica:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                comment: ''
                 default: '0'
     manyToOne:
         tratoejemplar:

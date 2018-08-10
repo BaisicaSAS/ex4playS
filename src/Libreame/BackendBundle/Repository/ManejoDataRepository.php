@@ -2242,6 +2242,51 @@ echo "Decrypted: ".$newClear."</br>";
     
     //Activa un usuario en accion de Validacion de Registro
     // * ex4plays :: eliminada la variable DEVICE 
+    public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario)
+    {
+        try{
+
+            $respuesta=  GamesController::inFallido; 
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            
+            $trato = new Trato();
+            $actividadusuario = new Actividadusuario();
+            $em->getConnection()->beginTransaction();
+
+
+            //echo "ManejoData : solicitaEjemplarVideojuego :: Crea el trato ";
+            $idtratotexto = "D".$ejemplarusuario->getejemplarusuariousuario()
+                    ."S".$usuario->getIdusuario()."EU".$ejemplarusuario->getidejemplarusuario()
+                    ."E".$ejemplar->getidejemplar();
+
+            $trato->setidtratotexto($idtratotexto);
+            $trato->settratoejemplar($ejemplar);
+            $trato->settratousrdueno($ejemplarusuario->getejemplarusuariousuario());
+            $trato->settratousrsolicita($usuario);
+            $trato->setfefechatrato($fecha);
+            $em->persist($trato);
+            
+            //echo "ManejoData : solicitaEjemplarVideojuego  :: Marca ejemplar usuario : En negociacion ";
+            $ejemplarusuario->setinnegociacion(GamesController::inDatoUno);    
+            $em->persist($ejemplarusuario);
+            
+            //$actividadusuario->
+        
+            $em->flush();
+            
+            $em->getConnection()->commit();
+            $respuesta=  GamesController::inExitoso; 
+            
+            return $respuesta;
+
+        } catch (Exception $ex) {
+                return  GamesController::inFallido;
+        } 
+    }    
+    
+    //Activa un usuario en accion de Validacion de Registro
+    // * ex4plays :: eliminada la variable DEVICE 
     public function activarUsuarioRegistro(Usuario $usuario, $em)
     {
         try{

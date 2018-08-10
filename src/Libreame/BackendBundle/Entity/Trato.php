@@ -43,6 +43,27 @@ class Trato
     private $inestadotrato = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="inestadoentrega", type="integer", nullable=true)
+     */
+    private $inestadoentrega = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inestadocancela", type="integer", nullable=true)
+     */
+    private $inestadocancela = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inestadocalifica", type="integer", nullable=true)
+     */
+    private $inestadocalifica = '0';
+
+    /**
      * @var \AppBundle\Entity\Ejemplar
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ejemplar")
@@ -72,6 +93,123 @@ class Trato
      */
     private $tratousrsolicita;
 
+    //getter y setter
+    public function getidtrato()
+    {
+        return $this->idtrato;
+    }
+ 
+    public function getidtratotexto()
+    {
+        return $this->idtratotexto;
+    }
+ 
+    public function getinestadotrato()
+    {
+        return $this->inestadotrato;
+    }
+ 
+    public function getinestadoentrega()
+    {
+        return $this->inestadoentrega;
+    }
+ 
+    public function getinestadocalifica()
+    {
+        return $this->inestadocalifica;
+    }
+ 
+    public function getinestadocancela()
+    {
+        return $this->inestadocancela;
+    }
+ 
+    public function gettratoejemplar()
+    {
+        return $this->tratoejemplar;
+    }
+ 
+    public function gettratousrdueno()
+    {
+        return $this->tratousrdueno;
+    }
+ 
+    public function gettratousrsolicita()
+    {
+        return $this->tratousrsolicita;
+    }
+ 
+    public function getfefechatrato()
+    {
+        return $this->fefechatrato;
+    }
+ 
+    //setter
+    public function setidtratotexto($idtratotexto)
+    {
+        $this->idtratotexto = $idtratotexto;
 
+        return $this;
+    }
+
+    public function setinestadotrato($inestadotrato)
+    {
+        $this->inestadotrato = $inestadotrato;
+
+        return $this;
+    }
+
+    public function setinestadoentrega($inestadoentrega)
+    {
+        $this->inestadoentrega = $inestadoentrega;
+
+        return $this;
+    }
+
+    public function setinestadocancela($inestadocancela)
+    {
+        $this->inestadocancela = $inestadocancela;
+
+        return $this;
+    }
+
+    public function setinestadocalifica($inestadocalifica)
+    {
+        $this->inestadocalifica = $inestadocalifica;
+
+        return $this;
+    }
+
+    public function settratoejemplar($tratoejemplar)
+    {
+        $this->tratoejemplar = $tratoejemplar;
+
+        return $this;
+    }
+
+    public function settratousrdueno($tratousrdueno)
+    {
+        $this->tratousrdueno = $tratousrdueno;
+
+        return $this;
+    }
+
+    public function settratousrsolicita($tratousrsolicita)
+    {
+        $this->tratousrsolicita = $tratousrsolicita;
+
+        return $this;
+    }
+
+    public function setfefechatrato($fefechatrato)
+    {
+        $this->fefechatrato = $fefechatrato;
+
+        return $this;
+    }
+
+
+
+    
 }
 

@@ -13,6 +13,8 @@ use Libreame\BackendBundle\Entity\Ejemplarusuario;
 use Libreame\BackendBundle\Entity\Videojuego;
 use Libreame\BackendBundle\Entity\Sesion;
 use Libreame\BackendBundle\Entity\Actsesion;
+use Libreame\BackendBundle\Entity\Trato;
+use Libreame\BackendBundle\Entity\Actividadusuario;
 /**
  * Description of Feeds
  *
@@ -188,6 +190,55 @@ class GestionEjemplares {
        
     }
 
+    public static function solicitarEjemplar(Solicitud $psolicitud, $em)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $usuario = new Usuario();
+
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali= ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "solicitarEjemplar :: Validez de sesion ".$respSesionVali." \n";
+            if ($respSesionVali== GamesController::inULogged) 
+            {    
+                //echo "solicitarEjemplar :: FindAll ";
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+                $ejemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar(), $em);
+                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemusuario(), $em);        
+                
+                //Crea el trato
+                //echo "solicitarEjemplar :: Crea el trato";
+                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarusuario);
+                
+                $respuesta->setRespuesta(GamesController::inExitoso);
+                
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+
+                $em->getConnection()->commit();
+     
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+                
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $ejemplares = array();
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            $ejemplares = array();
+            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+        }
+       
+    }
     
 }
 /*http://localhost/Ex4ReadBE/web/app_dev.php/ingreso

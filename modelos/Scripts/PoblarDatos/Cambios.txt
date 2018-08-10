@@ -66,3 +66,10 @@ ADD COLUMN `innegociacion` INT NOT NULL DEFAULT 0 COMMENT 'Indica si el ejemplar
 ALTER TABLE `ex4play`.`usuario` 
 ADD COLUMN `dblatitud` DOUBLE NOT NULL DEFAULT 0 AFTER `feusunacimiento`,
 ADD COLUMN `dblongitud` DOUBLE NOT NULL DEFAULT 0 AFTER `dblatitud`;
+
+
+ALTER TABLE `ex4play`.`trato` 
+CHANGE COLUMN `inestadotrato` `inestadotrato` INT(11) NOT NULL DEFAULT 0 COMMENT 'Estado general del trato 0: Solicitado 1: Cancelado 2: Finalizado ' ,
+ADD COLUMN `inestadoentrega` INT NOT NULL DEFAULT 0 AFTER `inestadotrato`,
+ADD COLUMN `inestadocalifica` INT NOT NULL DEFAULT 0 AFTER `inestadoentrega`,
+ADD COLUMN `inestadocancela` INT NOT NULL DEFAULT 0 AFTER `inestadocalifica`;

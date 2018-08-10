@@ -57,6 +57,19 @@ class GamesController extends Controller
     const txAnyData =  'ANY'; //String para indicar cualquier usuario
     const txSecret = '[fyxwwk-+ieekrz2';
    
+    const inEsTrSol = 0;  //Solicitado
+
+    const inEsTrCnD = 1;  //Cancelado dueño
+    const inEsTrCnS = 2;  //Cancelado solicitante
+    const inEsTrCnA = 3;  //Cancelado por ambos
+
+    const inEsTrAcD = 1 ; //Aceptado por el dueño
+    const inEsTrAcS = 2;  //Aceptado por el solicitante
+    const inEsTrAcA = 3;  //Aceptado por ambos
+
+    const inEsTrClD = 1;  //calificado por el dueño
+    const inEsTrClS = 2;  //Calificado por el solicitante
+    const inEsTrClA = 3;  //Calificado por ambos
 
     
     //Acciones de la plataforma
@@ -503,6 +516,16 @@ class GamesController extends Controller
                         $this->objSolicitud->setClaveNueva($json_datos['idsolicitud']['clavenueva']);
                         break;
                     }
+                    
+                    case self::txAccReaOfert: { //Dato:32 : Realizar la solicitud de un videojuego
+                        //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setIdEjemusuario($json_datos['idsolicitud']['idejemusuario']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
+                        break;
+                    }
+                    
+                    
 
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
@@ -715,6 +738,13 @@ class GamesController extends Controller
                         //echo "<script>alert('VAL ENTRA POR CAMBIAR CLAVE')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['claveactual']) and
                                 isset($datos['idsolicitud']['clavenueva']));
+                        break;
+                    }
+
+                    case self::txAccReaOfert: { //Dato:32 : Solicitar un videojuego
+                        //echo "<script>alert('VAL ENTRA POR CAMBIAR CLAVE')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['idejemusuario']) and
+                                isset($datos['idsolicitud']['idejemplar']));
                         break;
                     }
 

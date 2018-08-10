@@ -126,6 +126,13 @@ class Logica {
                     break;
                 } 
                 
+                case GamesController::txAccReaOfert: {//Dato:32 : Solicitar un ejemplar
+                    //echo "ejecutaAccion : Antes de entrar a Cambio de clave -".$solicitud->getEmail()." \n";
+                    //$objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = GestionEjemplares::solicitarEjemplar($solicitud, $em);
+                    break;
+                } 
+                
                 case GamesController::txAccActParam: {//Dato:12 : Actualizar datos parametros usuario
                     //echo "ejecutaAccion : Antes de entrar a Actualizar datos parametros usuario-".$solicitud->getEmail()." \n";
                     //$objGestUsuarios = $this->get('gest_usuarios_service');
@@ -316,6 +323,10 @@ class Logica {
 
                 case GamesController::txAccRecClave: //Dato:29 : Cambio de clave
                     $JSONResp = Logica::respuestaCambiarClave($respuesta, $pSolicitud);
+                    break;
+
+                case GamesController::txAccReaOfert: //Dato:32 : Solicitar videojuego
+                    $JSONResp = Logica::respuestaSolicitarEjemplar($respuesta, $pSolicitud);
                     break;
 
                 case GamesController::txAccMarcMens: //Dato:36 : Marcar Mensaje
@@ -789,10 +800,24 @@ class Logica {
     }    
     
     /*
-        * respuestaCambiarClave: 
+     * respuestaCambiarClave: 
      * Funcion que genera el JSON de respuesta para la accion de Cambiar clave de usuario:: GamesController::txAccRecClave
      */
     public function respuestaCambiarClave(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return GamesController::inPlatCai;
+        } 
+    }    
+    
+    /*
+     * respuestaSolicitarEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de solicitar ejemplar:: GamesController::txAccReaOfer
+     */
+    public function respuestaSolicitarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
