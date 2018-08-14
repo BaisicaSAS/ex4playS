@@ -73,3 +73,14 @@ CHANGE COLUMN `inestadotrato` `inestadotrato` INT(11) NOT NULL DEFAULT 0 COMMENT
 ADD COLUMN `inestadoentrega` INT NOT NULL DEFAULT 0 AFTER `inestadotrato`,
 ADD COLUMN `inestadocalifica` INT NOT NULL DEFAULT 0 AFTER `inestadoentrega`,
 ADD COLUMN `inestadocancela` INT NOT NULL DEFAULT 0 AFTER `inestadocalifica`;
+
+
+ALTER TABLE `ex4play`.`actividadusuario` 
+ADD COLUMN `actusuario_idusuariolee` BIGINT(20) NOT NULL COMMENT 'Id del usuario que lee - recibe la actividad' AFTER `actusuario_idusuarioescribe`,
+ADD INDEX `fk_actividadusuario_usuario2_idx` (`actusuario_idusuariolee` ASC);
+ALTER TABLE `ex4play`.`actividadusuario` 
+ADD CONSTRAINT `fk_actividadusuario_usuario2`
+  FOREIGN KEY (`actusuario_idusuariolee`)
+  REFERENCES `ex4play`.`usuario` (`idusuario`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;

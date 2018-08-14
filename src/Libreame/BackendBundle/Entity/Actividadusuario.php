@@ -51,6 +51,83 @@ class Actividadusuario
      */
     private $actusuariousuarioescribe;
 
+    /**
+     * @var \AppBundle\Entity\Usuario
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="actusuario_idusuariolee", referencedColumnName="idusuario")
+     * })
+     */
+    private $actusuariousuariolee;
+
+    
+    /***/
+    /*SETTERS Y GETTERS 
+    /***/
+    public function getidactividadusuario()
+    {
+        return $this->idactividadusuario;
+    }
+
+    public function getactusuarioejemplar()
+    {
+        return $this->actusuarioejemplar;
+    }
+
+    public function getactusuariotrato()
+    {
+        return $this->actusuariotrato;
+    }
+
+    public function getactusuariousuarioescribe()
+    {
+        return $this->actusuariousuarioescribe;
+    }
+
+    public function getactusuariousuariolee()
+    {
+        return $this->actusuariousuariolee;
+    }
+
+     /*setter*/
+
+    public function setidactividadusuario($idactividadusuario)
+    {
+        $this->idactividadusuario = $idactividadusuario;
+
+        return $this;
+    }
+
+    public function setactusuarioejemplar($actusuarioejemplar)
+    {
+        $this->actusuarioejemplar = $actusuarioejemplar;
+
+        return $this;
+    }
+
+    public function setactusuariotrato($actusuariotrato)
+    {
+        $this->actusuariotrato = $actusuariotrato;
+
+        return $this;
+    }
+
+    public function setactusuariousuarioescribe($actusuariousuarioescribe)
+    {
+        $this->actusuariousuarioescribe = $actusuariousuarioescribe;
+
+        return $this;
+    }
+
+    public function setactusuariousuariolee($actusuariousuariolee)
+    {
+        $this->actusuariousuariolee = $actusuariousuariolee;
+
+        return $this;
+    }
+
+
 
 }
 

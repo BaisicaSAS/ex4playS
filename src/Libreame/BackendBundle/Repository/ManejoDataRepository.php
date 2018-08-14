@@ -24,6 +24,9 @@ use Libreame\BackendBundle\Entity\Ejemplar;
 use Libreame\BackendBundle\Entity\Videojuego;
 use Libreame\BackendBundle\Entity\Consola;
 use Libreame\BackendBundle\Entity\Fabricante;
+use Libreame\BackendBundle\Entity\Actividadusuario;
+use Libreame\BackendBundle\Entity\Trato;
+//use Libreame\BackendBundle\Entity\Fabricante;
 
 
 /**
@@ -2242,21 +2245,21 @@ echo "Decrypted: ".$newClear."</br>";
     
     //Activa un usuario en accion de Validacion de Registro
     // * ex4plays :: eliminada la variable DEVICE 
-    public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario)
+    public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario, $em)
     {
         try{
 
             $respuesta=  GamesController::inFallido; 
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
+            //$em->getConnection()->beginTransaction();
             
             $trato = new Trato();
             $actividadusuario = new Actividadusuario();
-            $em->getConnection()->beginTransaction();
 
 
             //echo "ManejoData : solicitaEjemplarVideojuego :: Crea el trato ";
-            $idtratotexto = "D".$ejemplarusuario->getejemplarusuariousuario()
+            $idtratotexto = "D".$ejemplarusuario->getejemplarusuariousuario()->getIdusuario()
                     ."S".$usuario->getIdusuario()."EU".$ejemplarusuario->getidejemplarusuario()
                     ."E".$ejemplar->getidejemplar();
 
@@ -2266,16 +2269,19 @@ echo "Decrypted: ".$newClear."</br>";
             $trato->settratousrsolicita($usuario);
             $trato->setfefechatrato($fecha);
             $em->persist($trato);
+            $em->flush();
             
             //echo "ManejoData : solicitaEjemplarVideojuego  :: Marca ejemplar usuario : En negociacion ";
             $ejemplarusuario->setinnegociacion(GamesController::inDatoUno);    
             $em->persist($ejemplarusuario);
             
-            //$actividadusuario->
+            $actividadusuario->setactusuariotrato($trato);
+            $actividadusuario->setactusuarioejemplar($ejemplar);
+            $actividadusuario->setactusuariousuarioescribe($usuario->getIdusuario());
+            $actividadusuario->setactusuariousuariolee($ejemplarusuario->getejemplarusuariousuario());
+            $em->persist($actividadusuario);
         
-            $em->flush();
-            
-            $em->getConnection()->commit();
+            //$em->getConnection()->commit();
             $respuesta=  GamesController::inExitoso; 
             
             return $respuesta;

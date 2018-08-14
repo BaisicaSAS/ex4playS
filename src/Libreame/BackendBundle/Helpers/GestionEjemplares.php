@@ -211,7 +211,7 @@ class GestionEjemplares {
                 
                 //Crea el trato
                 //echo "solicitarEjemplar :: Crea el trato";
-                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarusuario);
+                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarusuario, $em);
                 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 
@@ -222,10 +222,8 @@ class GestionEjemplares {
                 //Guarda la actividad de la sesion:: 
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
-
-                $em->getConnection()->commit();
      
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares, $em);
+                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplar, $em);
                 
             } else {
                 $respuesta->setRespuesta($respSesionVali);

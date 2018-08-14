@@ -88,7 +88,7 @@ class GamesController extends Controller
     const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
     const txAccPubliEje =  '13'; //Publicar un ejemplar
     //DEPRECADO: const txAccModifEje =  '14'; //Modificar un ejemplar
-    //const txAccElimiPub =  '15'; //Eliminar una publicacion :: Despublicar
+    const txAccElimiPub =  '15'; //Eliminar una publicacion :: Despublicar
     const txAccVisuaBib =  '16'; //Visualizar Biblioteca
     const txAccModifOfe =  '17'; //Modificar una oferta
     const txAccElimiOfe =  '18'; //Eliminar una oferta

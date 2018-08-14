@@ -5,6 +5,9 @@ Libreame\BackendBundle\Entity\Actividadusuario:
         fk_actividadusuario_usuario1_idx:
             columns:
                 - actusuario_idusuarioescribe
+        fk_actividadusuario_usuario2_idx:
+            columns:
+                - actusuario_idusuariolee
         fk_actividadusuario_ejemplar1_idx:
             columns:
                 - actusuario_idejemplar
@@ -50,6 +53,16 @@ Libreame\BackendBundle\Entity\Actividadusuario:
             inversedBy: null
             joinColumns:
                 actusuario_idusuarioescribe:
+                    referencedColumnName: idusuario
+            orphanRemoval: false
+        actusuariousuariolee:
+            targetEntity: Usuario
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                actusuario_idusuariolee:
                     referencedColumnName: idusuario
             orphanRemoval: false
     lifecycleCallbacks: {  }
