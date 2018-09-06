@@ -24,6 +24,26 @@ Libreame\BackendBundle\Entity\Actividadusuario:
             id: true
             generator:
                 strategy: IDENTITY
+    fields:
+        actusuario_fecha:
+            type: datetime
+            nullable: false
+            options:
+                comment: 'Fecha y hora de la actividad'
+        actusuario_mensaje:
+            type: string
+            nullable: false
+            length: 300
+            options:
+                fixed: false
+                comment: 'Mensaje enviado'
+        actusuario_tipoaccion:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Accion que se ejecuta en cada momento: Solicitar, escribir, aceptar, cancelar, entregar, recibir, calificar'
+
     manyToOne:
         actusuarioejemplar:
             targetEntity: Ejemplar

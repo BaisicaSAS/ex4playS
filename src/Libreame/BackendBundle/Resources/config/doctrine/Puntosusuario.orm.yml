@@ -5,9 +5,9 @@ Libreame\BackendBundle\Entity\Puntosusuario:
         fk_puntosusuario_usuario1_idx:
             columns:
                 - puntosusuario_idusuario
-        fk_puntosusuario_actividadusuario1_idx:
+        fk_puntosusuario_trato1_idx:
             columns:
-                - punusuario_idactiusuario
+                - punusuario_idtrato
         fk_puntosusuario_resenavideojuego1_idx:
             columns:
                 - punusuario_resenavideojuego
@@ -44,15 +44,15 @@ Libreame\BackendBundle\Entity\Puntosusuario:
                 comment: '1 Suma 2 Resta'
                 default: '1'
     manyToOne:
-        punusuarioactiusuario:
-            targetEntity: Actividadusuario
+        punusuarioidtrato:
+            targetEntity: Trato
             cascade: {  }
             fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
-                punusuario_idactiusuario:
-                    referencedColumnName: idactividadusuario
+                punusuario_idtrato:
+                    referencedColumnName: idtrato
             orphanRemoval: false
         punusuarioejemplar:
             targetEntity: Ejemplar

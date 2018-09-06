@@ -84,3 +84,31 @@ ADD CONSTRAINT `fk_actividadusuario_usuario2`
   REFERENCES `ex4play`.`usuario` (`idusuario`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+ALTER TABLE `ex4play`.`puntosusuario` 
+DROP FOREIGN KEY `fk_puntosusuario_actividadusuario1`;
+ALTER TABLE `ex4play`.`puntosusuario` 
+DROP COLUMN `punusuario_idactiusuario`,
+CHANGE COLUMN `inefectivos` `inefectivos` INT(11) NOT NULL DEFAULT '0' COMMENT 'Puntos efectivos 1, Puntos NO efectivos 0, Puntos comprometidos 2' ,
+ADD COLUMN `punusuario_idtrato` BIGINT(20) NULL DEFAULT NULL AFTER `punusuario_idejemplar`,
+ADD INDEX `fk_puntosusuario_trato1_idx` (`punusuario_idtrato` ASC),
+DROP INDEX `fk_puntosusuario_actividadusuario1_idx` ;
+ALTER TABLE `ex4play`.`puntosusuario` 
+ADD CONSTRAINT `fk_puntosusuario_trato1`
+  FOREIGN KEY (`punusuario_idtrato`)
+  REFERENCES `ex4play`.`trato` (`idtrato`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+ALTER TABLE `ex4play`.`actividadusuario` 
+ADD COLUMN `actusuario_fecha` DATETIME NOT NULL COMMENT 'Fecha y hora de la actividad' AFTER `actusuario_idtrato`,
+ADD COLUMN `actusuario_mensaje` VARCHAR(300) NOT NULL COMMENT 'Mensaje enviado' AFTER `actusuario_fecha`,
+ADD COLUMN `actusuario_tipoaccion` INT NOT NULL DEFAULT 0 COMMENT 'Accion que se ejecuta en cada momento: Solicitar, escribir, aceptar, cancelar, entregar, recibir, calificar' AFTER `actusuario_mensaje`;
+
+
+ALTER TABLE `ex4play`.`trato` 
+ADD COLUMN `intrato_acciondueno` INT NOT NULL DEFAULT 0 COMMENT '0. Solicitud Aceptada: El Dueño Acepta la solicitud\n1. Solicitud rechazada: El dueño no acepta la solicitud\n2. Videojuego Entregado\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n10. Trato iniciado\n' AFTER `inestadocancela`,
+ADD COLUMN `intrato_accionsolicitante` INT NOT NULL DEFAULT 0 COMMENT '0. Ejemplar Solicitado: Cuando se ejecuta la solicitud\n1. Solicitud Cancelada\n2. Videojuego Recibido\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n' AFTER `intrato_acciondueno`, 
+COMMENT = 'Cada trato realizado' ;

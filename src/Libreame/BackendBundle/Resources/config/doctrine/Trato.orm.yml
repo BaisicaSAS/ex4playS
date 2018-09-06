@@ -61,6 +61,21 @@ Libreame\BackendBundle\Entity\Trato:
                 unsigned: false
                 comment: ''
                 default: '0'
+        intratoacciondueno:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0. Solicitud Aceptada: El Dueño Acepta la solicitud\n1. Solicitud rechazada: El dueño no acepta la solicitud\n2. Videojuego Entregado\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n10. Trato iniciado\n'
+                default: '0'
+        intratoaccionsolicitante:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0. Ejemplar Solicitado: Cuando se ejecuta la solicitud\n1. Solicitud Cancelada\n2. Videojuego Recibido\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n'
+                default: '0'
+        
     manyToOne:
         tratoejemplar:
             targetEntity: Ejemplar

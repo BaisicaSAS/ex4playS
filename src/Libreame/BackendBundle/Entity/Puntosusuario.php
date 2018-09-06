@@ -43,14 +43,14 @@ class Puntosusuario
     private $insumaresta = '1';
 
     /**
-     * @var \AppBundle\Entity\Actividadusuario
+     * @var \AppBundle\Entity\Trato
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Actividadusuario")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trato")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="punusuario_idactiusuario", referencedColumnName="idactividadusuario")
+     *   @ORM\JoinColumn(name="punusuario_idtrato", referencedColumnName="idtrato")
      * })
      */
-    private $punusuarioactiusuario;
+    private $punusuarioidtrato;
 
     /**
      * @var \AppBundle\Entity\Ejemplar
@@ -105,9 +105,9 @@ class Puntosusuario
         return $this->insumaresta;
     }
     
-    public function getpunusuarioactiusuario()
+    public function getpunusuarioidtrato()
     {
-        return $this->punusuarioactiusuario;
+        return $this->punusuarioidtrato;
     }
     
     public function getpunusuarioejemplar()
@@ -147,9 +147,9 @@ class Puntosusuario
         return $this;
     }
     
-    public function setpunusuarioactiusuario($punusuarioactiusuario)
+    public function setpunusuarioidtrato($punusuarioidtrato)
     {
-        $this->punusuarioactiusuario = $punusuarioactiusuario;
+        $this->punusuarioidtrato = $punusuarioidtrato;
         return $this;
     }
     

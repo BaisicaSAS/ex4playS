@@ -61,6 +61,30 @@ class Actividadusuario
      */
     private $actusuariousuariolee;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="actusuario_fecha", type="datetime", nullable=false)
+     */
+    private $actusuariofecha;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="actusuario_mensaje", type="string", nullable=false)
+     */
+    private $actusuariomensaje;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="actusuario_tipoaccion", type="integer", nullable=false)
+     */
+    private $actusuariotipoaccion = '0';
+
+
     
     /***/
     /*SETTERS Y GETTERS 
@@ -88,6 +112,21 @@ class Actividadusuario
     public function getactusuariousuariolee()
     {
         return $this->actusuariousuariolee;
+    }
+
+    public function getactusuariofecha()
+    {
+        return $this->actusuariofecha;
+    }
+
+    public function getactusuariomensaje()
+    {
+        return $this->actusuariomensaje;
+    }
+
+    public function getactusuariotipoaccion()
+    {
+        return $this->actusuariotipoaccion;
     }
 
      /*setter*/
@@ -123,6 +162,27 @@ class Actividadusuario
     public function setactusuariousuariolee($actusuariousuariolee)
     {
         $this->actusuariousuariolee = $actusuariousuariolee;
+
+        return $this;
+    }
+
+    public function setactusuariofecha($actusuariofecha)
+    {
+        $this->actusuariofecha = $actusuariofecha;
+
+        return $this;
+    }
+
+    public function setactusuariomensaje($actusuariomensaje)
+    {
+        $this->actusuariomensaje = $actusuariomensaje;
+
+        return $this;
+    }
+
+    public function setactusuariotipoaccion($actusuariotipoaccion)
+    {
+        $this->actusuariotipoaccion = $actusuariotipoaccion;
 
         return $this;
     }

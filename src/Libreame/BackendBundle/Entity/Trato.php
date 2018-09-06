@@ -92,6 +92,27 @@ class Trato
      * })
      */
     private $tratousrsolicita;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="intrato_acciondueno", type="integer", nullable=false)
+     */
+    private $intratoacciondueno = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="intrato_accionsolicitante", type="integer", nullable=false)
+     */
+    private $intratoaccionsolicitante = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inestadocalifica", type="integer", nullable=true)
+     */
+    private $inestadocalifica = '0';
+
 
     //getter y setter
     public function getidtrato()
@@ -143,6 +164,17 @@ class Trato
     {
         return $this->fefechatrato;
     }
+ 
+    public function getintratoacciondueno()
+    {
+        return $this->intratoacciondueno;
+    }
+ 
+    public function getintratoaccionsolicitante()
+    {
+        return $this->intratoaccionsolicitante;
+    }
+ 
  
     //setter
     public function setidtratotexto($idtratotexto)
@@ -204,6 +236,20 @@ class Trato
     public function setfefechatrato($fefechatrato)
     {
         $this->fefechatrato = $fefechatrato;
+
+        return $this;
+    }
+
+    public function setintratoacciondueno($intratoacciondueno)
+    {
+        $this->intratoacciondueno = $intratoacciondueno;
+
+        return $this;
+    }
+
+    public function setintratoaccionsolicitante($intratoaccionsolicitante)
+    {
+        $this->intratoaccionsolicitante = $intratoaccionsolicitante;
 
         return $this;
     }
