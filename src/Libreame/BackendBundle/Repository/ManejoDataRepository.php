@@ -37,9 +37,6 @@ use Libreame\BackendBundle\Entity\Trato;
 class ManejoDataRepository extends EntityRepository {
 
     var $inImagenValida;
-    //BARTs * Caegoría
-    //var $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10];
-    //private $em;
      
 
     ///********************* LO QUE SE USA ********************************///
@@ -55,8 +52,9 @@ class ManejoDataRepository extends EntityRepository {
         //2. Juegos entre 6 meses y 1 año de liberados  = 30 Barts
         //3. Juegos de 1 año o mas   = 10 Barts
         //4. Juegos de popularidad / demanda alta (Sin importar la antiguedad) = 50 Barts
-        //5. Juegos de popularidad / demanda baja (Sin importar la antiguedad) = 10 Barts
-        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10, '4' => 50, '5' => 10];
+        //5. Juegos de popularidad / demanda media (Sin importar la antiguedad) = 30 Barts
+        //6. Juegos de popularidad / demanda baja (Sin importar la antiguedad) = 10 Barts
+        $puntajeBARTs = ['1' => 50, '2' => 30, '3' => 10, '4' => 50, '5' => 30, '6' => 10];
         try{
             //$barts = ManejoDataRepository::$puntajeBARTs[$incategoria];
             $barts = $puntajeBARTs[$incategoria];
@@ -2243,16 +2241,140 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
+    //Obtiene la cantidad de BARTs del usuario
+    public function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, $em)
+    {   
+        try{
+            //Puntos efectivos positivos
+            $qpuSEf = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :insuma')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :efectivos')    
+                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('insuma', GamesController::inSuma_)
+                ->setParameter('incontar', GamesController::inDatoUno)
+                ->setParameter('inefectivos', GamesController::inDatoUno)
+                ->setMaxResults(1);
+            
+            //Puntos crédito (o No Efectivos)  positivos
+            $qpuSCr = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :insuma')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :efectivos')    
+                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('insuma', GamesController::inSuma_)
+                ->setParameter('incontar', GamesController::inDatoUno)
+                ->setParameter('inefectivos', GamesController::inDatoCer)
+                ->setMaxResults(1);
+            
+            //Puntos efectivos negativos
+            $qpuREf = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :inresta')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :efectivos')    
+                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('incontar', GamesController::inDatoUno)
+                ->setParameter('inefectivos', GamesController::inDatoUno)
+                ->setMaxResults(1);
+            
+            //Puntos crédito (o No Efectivos) negativos
+            $qpuRCr = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :inresta')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :efectivos')    
+                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('incontar', GamesController::inDatoUno)
+                ->setParameter('inefectivos', GamesController::inDatoCer)
+                ->setMaxResults(1);
+            
+            
+            $efectivos = GamesController::inDatoCer;
+            if($qpuSEf->getQuery()->getOneOrNullResult() == NULL){
+                $efectivos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $efectivos = (int)$qpuSEf->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            $efectivosNeg = GamesController::inDatoCer;
+            if($qpuREf->getQuery()->getOneOrNullResult() == NULL){
+                $efectivosNeg = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $efectivosNeg = (int)$qpuREf->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+
+            $credito = GamesController::inDatoCer;
+            if($qpuSCr->getQuery()->getOneOrNullResult() == NULL){
+                $credito = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $credito = (int)$qpuSCr->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            $creditoNeg = GamesController::inDatoCer;
+            if($qpuRCr->getQuery()->getOneOrNullResult() == NULL){
+                $creditoNeg = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $creditoNeg = (int)$qpuRCr->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+
+            $efectivos = $efectivos - $efectivosNeg;
+            $credito = $credito - $creditoNeg;
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
+    
+    //Obtiene los datos de saldos de BARTs y parametros según el plan que posee 
+    public function obtenerDatosParamUsuario(Usuario $usuario, $em)
+    {
+        try{
+            $efectivos = 0;
+            $credito = 0;
+            obtenerSaldosBARTs($usuario, $efectivos, $credito, $em);
+            $parametros['BARTsCR'] = $credito]; //BARTs en crédito
+            $parametros['BARTsEF'] = $efectivos; //BARTs efectivos
+            $pa   rametros['CANTVJ_MES'] = $puntajeBARTs[$incategoria]; //Cantidad videojuegos usuario mes
+            $parametros['PEND_CALIF'] = $puntajeBARTs[$incategoria]; //Cantidad de calificaciones pendientes
+            $parametros['VENC_PLAN'] = $puntajeBARTs[$incategoria]; //Fecha de vencimiento del plan del usuario 
+            $parametros['CREDITO_PLAN'] = $puntajeBARTs[$incategoria]; //Cantidad de videojuegos en crédito del plan
+            $parametros['CANTVJ_PLAN'] = $puntajeBARTs[$incategoria]; //Cantidad videojuegos usuario permitido plan
+
+            return $parametros;
+        } catch (Exception $ex) {
+                return NULL;
+        }    
+    }
+    
+    
     //Activa un usuario en accion de Validacion de Registro
     // * ex4plays :: eliminada la variable DEVICE 
     public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario, $em)
     {
         try{
-
+            //obtiene los datos del ejemplar, precio en BARTs, "saldos" de BARTs y demás parametros
+            //$parametros = ['BARTsCR' => 0,'BARTsEF' => 0,'CANTVJ_MES' => 0,'PEND_CALIF' => 0,'VENC_PLAN' => '','CREDITO_PLAN' => 0,'CANTVJ_PLAN' => 0];
+            $parametros = obtenerDatosParamUsuario($usuario, $em);
+            
+            
+            
             $respuesta=  GamesController::inFallido; 
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
-            //$em->getConnection()->beginTransaction();
+            $em->getConnection()->beginTransaction();
             
             $trato = new Trato();
             $actividadusuario = new Actividadusuario();
@@ -2284,6 +2406,7 @@ echo "Decrypted: ".$newClear."</br>";
             //$em->getConnection()->commit();
             $respuesta=  GamesController::inExitoso; 
             
+            $em->getConnection()->commit();
             return $respuesta;
 
         } catch (Exception $ex) {

@@ -112,3 +112,10 @@ ALTER TABLE `ex4play`.`trato`
 ADD COLUMN `intrato_acciondueno` INT NOT NULL DEFAULT 0 COMMENT '0. Solicitud Aceptada: El Dueño Acepta la solicitud\n1. Solicitud rechazada: El dueño no acepta la solicitud\n2. Videojuego Entregado\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n10. Trato iniciado\n' AFTER `inestadocancela`,
 ADD COLUMN `intrato_accionsolicitante` INT NOT NULL DEFAULT 0 COMMENT '0. Ejemplar Solicitado: Cuando se ejecuta la solicitud\n1. Solicitud Cancelada\n2. Videojuego Recibido\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n' AFTER `intrato_acciondueno`, 
 COMMENT = 'Cada trato realizado' ;
+
+
+ALTER TABLE `ex4play`.`videojuego` 
+ADD COLUMN `inpopularidad` INT NOT NULL DEFAULT 0 COMMENT 'Popularidad del videojuego ' AFTER `incategvideojuego`;
+
+ALTER TABLE `ex4play`.`puntosusuario` 
+ADD COLUMN `incontar` INT NOT NULL DEFAULT 0 COMMENT '0 No contar - 1 Contar (Es decir incluir o no incluir en la suma)' AFTER `inefectivos`;

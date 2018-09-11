@@ -43,6 +43,13 @@ Libreame\BackendBundle\Entity\Puntosusuario:
                 unsigned: false
                 comment: '1 Suma 2 Resta'
                 default: '1'
+        incontar:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: '0 No contar - 1 Contar (Es decir incluir o no incluir en la suma)'
+                default: '0'
     manyToOne:
         punusuarioidtrato:
             targetEntity: Trato

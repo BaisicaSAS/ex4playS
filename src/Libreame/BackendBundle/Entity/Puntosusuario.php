@@ -43,6 +43,13 @@ class Puntosusuario
     private $insumaresta = '1';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="incontar", type="integer", nullable=false)
+     */
+    private $incontar = '0';
+
+    /**
      * @var \AppBundle\Entity\Trato
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trato")
@@ -105,6 +112,11 @@ class Puntosusuario
         return $this->insumaresta;
     }
     
+    public function getincontar()
+    {
+        return $this->incontar;
+    }
+    
     public function getpunusuarioidtrato()
     {
         return $this->punusuarioidtrato;
@@ -144,6 +156,12 @@ class Puntosusuario
     public function setinsumaresta($insumaresta)
     {
         $this->insumaresta = $insumaresta;
+        return $this;
+    }
+    
+    public function setincontar($incontar)
+    {
+        $this->incontar = $incontar;
         return $this;
     }
     

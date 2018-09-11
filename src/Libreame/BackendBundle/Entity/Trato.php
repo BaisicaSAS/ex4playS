@@ -106,13 +106,6 @@ class Trato
      */
     private $intratoaccionsolicitante = '0';
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="inestadocalifica", type="integer", nullable=true)
-     */
-    private $inestadocalifica = '0';
-
 
     //getter y setter
     public function getidtrato()

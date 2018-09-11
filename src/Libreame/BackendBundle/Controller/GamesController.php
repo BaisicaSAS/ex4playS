@@ -119,6 +119,7 @@ class GamesController extends Controller
     const txAccVerUsMeg =  '41'; //Ver usuarios a los que les gusta
     const txAccCommEjem =  '42'; //Realizar-editar-borrar Cometario ejemplar
     const txAccVerComEj =  '43'; //Ver comentarios ejemplar 
+    const txAccVerTrato =  '44'; //Ver hilo de un trato
     
     const txAccListaEdi =  '50'; //Listar editoriales
     const txAccListaAut =  '51'; //Listar autores

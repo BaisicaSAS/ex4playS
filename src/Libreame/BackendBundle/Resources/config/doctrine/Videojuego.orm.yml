@@ -34,6 +34,12 @@ Libreame\BackendBundle\Entity\Videojuego:
             options:
                 unsigned: false
                 comment: 'Categoria del videojuego'
+        inpopularidad:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Popularidad del videojuego'
         txurlinformacion:
             type: string
             nullable: false

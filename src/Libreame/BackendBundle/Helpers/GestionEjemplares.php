@@ -207,11 +207,12 @@ class GestionEjemplares {
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 $ejemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar(), $em);
-                $ejemplarusuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemusuario(), $em);        
+                $videojuego = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+                $ejemplarduenousuario = ManejoDataRepository::getEjemplarusuario($psolicitud->getIdEjemusuario(), $em);        
                 
                 //Crea el trato
                 //echo "solicitarEjemplar :: Crea el trato";
-                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarusuario, $em);
+                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarduenousuario, $em);
                 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 

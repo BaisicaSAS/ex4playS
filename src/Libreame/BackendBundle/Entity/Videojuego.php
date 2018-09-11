@@ -44,6 +44,13 @@ class Videojuego
     private $incategvideojuego;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="inpopularidad", type="integer", nullable=false)
+     */
+    private $inpopularidad=0;
+
+    /**
      * @var \AppBundle\Entity\Consola
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Consola")
@@ -103,6 +110,11 @@ class Videojuego
         return $this->incategvideojuego;
     }
 
+    public function getinpopularidad()
+    {
+        return $this->inpopularidad;
+    }
+
     public function getvideojuegoconsola()
     {
         return $this->videojuegoConsola;
@@ -146,6 +158,13 @@ class Videojuego
     public function setincategvideojuego($incategvideojuego)
     {
         $this->incategvideojuego = $incategvideojuego;
+
+        return $this;
+    }
+
+    public function setinpopularidad($inpopularidad)
+    {
+        $this->inpopularidad = $inpopularidad;
 
         return $this;
     }
