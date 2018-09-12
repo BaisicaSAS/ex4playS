@@ -39,6 +39,9 @@ class Respuesta {
     private $pIdPadre; //Id Mensaje padre del hilo
     private $pPromCalificaciones; //Promedio de calificaciones  
     private $pPuntosUsuario; //Puntos del usuario
+    private $pBartsEfectivos; //Puntos del usuario
+    private $pBartsComprometidos; //Puntos del usuario
+    private $pBartsCredito; //Puntos del usuario
     private $pCantMegusta; //Cantidad de Megusta de un ejemplar
     private $pCantComenta; //Cantidad de Comentarios de un ejemplar
     private $pIndAcept; //Indica si el usuario acepto el trato / no lo acepto / No lo ha indicado
@@ -169,6 +172,21 @@ class Respuesta {
     public function getPunUsuario()
     {
         return $this->pPuntosUsuario;
+    }   
+
+    public function getBartEf()
+    {
+        return $this->pBartsEfectivos;
+    }   
+
+    public function getBartCr()
+    {
+        return $this->pBartsCredito;
+    }   
+
+    public function getartCo()
+    {
+        return $this->pBartsComprometidos;
     }   
 
     public function getCantMegusta() {
@@ -339,6 +357,24 @@ class Respuesta {
     public function setPunUsuario($pPuntosUsario)
     {
         $this->pPuntosUsuario = $pPuntosUsario;
+        return $this;
+    }   
+
+    public function setBartEf($pBartEf)
+    {
+        $this->pBartsEfectivos = $pBartEf;
+        return $this;
+    }   
+
+    public function setBartCr($pBartCr)
+    {
+        $this->pBartsCredito = $pBartCr;
+        return $this;
+    }   
+
+    public function setBartCo($pBartCo)
+    {
+        $this->pBartsComprometidos = $pBartCo;
         return $this;
     }   
 

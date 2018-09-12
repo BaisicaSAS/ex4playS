@@ -49,6 +49,14 @@ class Puntosusuario
      */
     private $incontar = '0';
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="$inefectivos", type="integer", nullable=false)
+     */
+    private $inefectivos = '0';
+
     /**
      * @var \AppBundle\Entity\Trato
      *
@@ -162,6 +170,12 @@ class Puntosusuario
     public function setincontar($incontar)
     {
         $this->incontar = $incontar;
+        return $this;
+    }
+    
+    public function setinefectivos($inefectivos)
+    {
+        $this->inefectivos = $inefectivos;
         return $this;
     }
     

@@ -21,7 +21,24 @@ class GamesController extends Controller
     const inTPRevista = 1; //Tipo publicación : Revista
     
     //Valor de cada punto en ex4read
-    const inValPunto = 200; //Valor de cada punto en el sistema en pesos = $ 200
+    const txEntrada = "ENTRADA"; //Trx de entrada
+    const txSalida = "SALIDA"; //Trx de Salida
+    
+    //Tratos de entrada o de salida (Para el dueño son de salida, para el otro es de entrada)
+    
+    
+    //Acciones de Actividadusuario 
+    const inActSolicitar = 0; 
+    const inActEscribir = 1; 
+    const inActAceptar = 2; 
+    const inActCancelar = 3; 
+    const inActRechazar = 4; 
+    const inActEntregar = 5; 
+    const inActRecibir = 5; 
+    const inActCalificar = 5; 
+    
+    const inContar = 1; 
+    const inNoContar = 0; 
     
     //Constantes globales
     const inSuma_ =  1; //Proceso fallido
@@ -414,7 +431,7 @@ class GamesController extends Controller
                     case self::txAccRecOfert: { //Dato:8 : Recuperar Oferta
                         //echo "<script>alert('ENTRA POR RECUPERAR OFERTA')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                       $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setIdOferta($json_datos['idsolicitud']['idoferta']);
                         break;
                     }

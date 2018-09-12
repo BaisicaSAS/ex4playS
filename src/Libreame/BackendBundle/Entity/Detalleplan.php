@@ -59,6 +59,109 @@ class Detalleplan
      */
     private $detalleplanplan;
 
-
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="invjcredito", type="integer", nullable=false)
+     */
+    private $invjcredito;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="incatjuegoscredito", type="integer", nullable=false)
+     */
+    private $incatjuegoscredito;
+    
+    
+    /* 
+     * getters ex4playS
+    */
+    public function getiddetalleplan()
+    {
+        return $this->iddetalleplan;
+    }
+    
+    public function getinnumtarifa()
+    {
+        return $this->innumtarifa;
+    }
+    
+    public function getindiastarifa()
+    {
+        return $this->indiastarifa;
+    }
+    
+    public function getincantidadcambios()
+    {
+        return $this->incantidadcambios;
+    }
+    
+    public function getinperiodicidad()
+    {
+        return $this->inperiodicidad;
+    }
+    
+    public function getdetalleplanplan()
+    {
+        return $this->detalleplanplan;
+    }
+    
+    public function getinvjcredito()
+    {
+        return $this->invjcredito;
+    }
+    
+    public function getincatjuegoscredito()
+    {
+        return $this->incatjuegoscredito;
+    }
+    
+    /* 
+     * setters ex4playS
+    */
+   
+    public function setinnumtarifa($innumtarifa)
+    {
+        $this->innumtarifa = $innumtarifa;
+        return $this;
+    }
+    
+    public function setindiastarifa($indiastarifa)
+    {
+        $this->indiastarifa = $indiastarifa;
+        return $this;
+    }
+    
+    public function setincantidadcambios($incantidadcambios)
+    {
+        $this->incantidadcambios = $incantidadcambios;
+        return $this;
+    }
+    
+    public function setinperiodicidad($inperiodicidad)
+    {
+        $this->inperiodicidad = $inperiodicidad;
+        return $this;
+    }
+    
+    public function setdetalleplanplan($detalleplanplan)
+    {
+        $this->detalleplanplan = $detalleplanplan;
+        return $this;
+    }
+    
+    public function setinvjcredito($invjcredito)
+    {
+        $this->invjcredito = $invjcredito;
+        return $this;
+    }
+    
+    public function setincatjuegoscredito($incatjuegoscredito)
+    {
+        $this->incatjuegoscredito = $incatjuegoscredito;
+        return $this;
+    }
+    
 }
 

@@ -119,3 +119,10 @@ ADD COLUMN `inpopularidad` INT NOT NULL DEFAULT 0 COMMENT 'Popularidad del video
 
 ALTER TABLE `ex4play`.`puntosusuario` 
 ADD COLUMN `incontar` INT NOT NULL DEFAULT 0 COMMENT '0 No contar - 1 Contar (Es decir incluir o no incluir en la suma)' AFTER `inefectivos`;
+
+ALTER TABLE `ex4play`.`detalleplan` 
+ADD COLUMN `invjcredito` INT NOT NULL DEFAULT -1 COMMENT 'Cantidad de videojuegos en credito para el plan -1 indefinido' AFTER `inperiodicidad`,
+ADD COLUMN `incatjuegoscredito` INT NOT NULL DEFAULT 0 COMMENT 'Categoría de videojuegos en credito para el plan (0 Menor categoria, 1 Mayor categoria)' AFTER `invjcredito`;
+
+ALTER TABLE `ex4play`.`actividadusuario` 
+ADD COLUMN `actusuario_leido` INT NOT NULL DEFAULT 0 COMMENT 'Leido : 1 - No leido : 0' AFTER `actusuario_tipoaccion`;

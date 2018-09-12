@@ -43,6 +43,12 @@ Libreame\BackendBundle\Entity\Actividadusuario:
             options:
                 unsigned: false
                 comment: 'Accion que se ejecuta en cada momento: Solicitar, escribir, aceptar, cancelar, entregar, recibir, calificar'
+        actusuario_leido:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Leido : 1 - No leido : 0'
 
     manyToOne:
         actusuarioejemplar:

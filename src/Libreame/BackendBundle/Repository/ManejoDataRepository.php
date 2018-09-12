@@ -17,6 +17,7 @@ use Libreame\BackendBundle\Entity\Actsesion;
 use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
 use Libreame\BackendBundle\Entity\Planusuario;
+use Libreame\BackendBundle\Entity\Detalleplan;
 use Libreame\BackendBundle\Entity\Puntosusuario;
 use Libreame\BackendBundle\Entity\Calificatrato; 
 use Libreame\BackendBundle\Entity\Ejemplarusuario;
@@ -410,6 +411,23 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('planusuariousuario' => $usuario));
             
             return $planus;
+            
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return new Planusuario();
+        } 
+    }
+                
+    //Obtiene el detalle del plan del usuario
+    public static function getDetallePlan(Usuario $usuario, $em)
+    {   
+        try{            
+            $planus = $em->getRepository('LibreameBackendBundle:Planusuario')->
+                    findOneBy(array('planusuariousuario' => $usuario));
+            
+            $detalleplan = $em->getRepository('LibreameBackendBundle:Detalleplan')->
+                    findOneBy(array('detalleplanidplan' => $planus->getplanusuarioidplan()));
+            return $detalleplan;
             
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
@@ -1727,26 +1745,51 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
-
-    //Obtiene los mensajes asociados a un usuario
-    public function getMensajesUsuario(LbUsuarios $usuario)
+    //Obtiene la cantidad de mensajes sin leer  (Alertas)
+    public function getMensajesSinLeerUsuario(Usuario $usuario, $em)
     {   
-        try{
-            $em = $this->getDoctrine()->getManager();
+        try{            
             
-            //echo "[id: ".$usuario->getInusuario()."]\n";
-            //echo "[USUARIO: ".$usuario->getTxusuemail()."]\n";
+            $qMensajes = $em->createQueryBuilder()
+                ->select('COALESCE(COUNT(a.actusuarioleido), 0) AS mensajes')
+                ->from('LibreameBackendBundle:Actividadusuario', 'a')
+                ->Where('a.actusuarioidusuariolee = :usuario')
+                ->andWhere('a.actusuarioleido = :leido')    
+                ->setParameter('usuario', $usuario)
+                ->setParameter('leido', GamesController::inDatoCer)
+                ->setMaxResults(1);
             
-            $sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
-                    . " WHERE e.inmenusuario = :usr"
-                    . " OR e.inmenusuarioorigen = :usr";
+            $mensajes = GamesController::inDatoCer;
+            if($qMensajes->getQuery()->getOneOrNullResult() == NULL){
+                $mensajes = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $mensajes = (int)$qMensajes->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+
+            return $mensajes;
+
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
+
+    //Obtiene los trato asociados a un usuario
+    public function getTratosUsuario(Usuario $usuario, $em)
+    {   
+        try{            
+            echo "Trae tratos usuario  \n";
+            
+            $sql = "SELECT t FROM LibreameBackendBundle:trato t "
+                    . " WHERE t.tratousrdueno = :usr "
+                    . " OR t.tratousrsolicita = :usr ";
 
             $query = $em->createQuery($sql)->setParameter('usr', $usuario);
-            //echo $sql;ge
+
             return $query->getResult();
 
         } catch (Exception $ex) {
-                return new LbMensajes();
+                return new Trato();
         } 
     }
     
@@ -2242,9 +2285,10 @@ echo "Decrypted: ".$newClear."</br>";
     }
     
     //Obtiene la cantidad de BARTs del usuario
-    public function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, $em)
+    public function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, &$comprometidos, $em)
     {   
         try{
+            //Puntos efectivos 1, Puntos NO efectivos 0, Puntos comprometidos 2
             //Puntos efectivos positivos
             $qpuSEf = $em->createQueryBuilder()
                 ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
@@ -2253,10 +2297,10 @@ echo "Decrypted: ".$newClear."</br>";
                 ->andWhere('a.insumaresta = :insuma')    
                 ->andWhere('a.incontar = :contar')    
                 ->andWhere('a.inefectivos = :efectivos')    
-                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('pusuario', $usuario)
                 ->setParameter('insuma', GamesController::inSuma_)
-                ->setParameter('incontar', GamesController::inDatoUno)
-                ->setParameter('inefectivos', GamesController::inDatoUno)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('efectivos', GamesController::inDatoUno)
                 ->setMaxResults(1);
             
             //Puntos crédito (o No Efectivos)  positivos
@@ -2266,11 +2310,25 @@ echo "Decrypted: ".$newClear."</br>";
                 ->Where('a.puntosusuariousuario = :pusuario')
                 ->andWhere('a.insumaresta = :insuma')    
                 ->andWhere('a.incontar = :contar')    
-                ->andWhere('a.inefectivos = :efectivos')    
-                ->setParameter('pusuario', $pUsuario)
+                ->andWhere('a.inefectivos = :credito')    
+                ->setParameter('pusuario', $usuario)
                 ->setParameter('insuma', GamesController::inSuma_)
-                ->setParameter('incontar', GamesController::inDatoUno)
-                ->setParameter('inefectivos', GamesController::inDatoCer)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('credito', GamesController::inDatoCer)
+                ->setMaxResults(1);
+            
+            //Puntos comprometidos positivos
+            $qpuSCo = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :insuma')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :comprometidos')    
+                ->setParameter('pusuario', $usuario)
+                ->setParameter('insuma', GamesController::inSuma_)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('comprometidos', GamesController::inDatoDos)
                 ->setMaxResults(1);
             
             //Puntos efectivos negativos
@@ -2281,10 +2339,10 @@ echo "Decrypted: ".$newClear."</br>";
                 ->andWhere('a.insumaresta = :inresta')    
                 ->andWhere('a.incontar = :contar')    
                 ->andWhere('a.inefectivos = :efectivos')    
-                ->setParameter('pusuario', $pUsuario)
+                ->setParameter('pusuario', $usuario)
                 ->setParameter('insuma', GamesController::inResta)
-                ->setParameter('incontar', GamesController::inDatoUno)
-                ->setParameter('inefectivos', GamesController::inDatoUno)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('efectivos', GamesController::inDatoUno)
                 ->setMaxResults(1);
             
             //Puntos crédito (o No Efectivos) negativos
@@ -2294,13 +2352,26 @@ echo "Decrypted: ".$newClear."</br>";
                 ->Where('a.puntosusuariousuario = :pusuario')
                 ->andWhere('a.insumaresta = :inresta')    
                 ->andWhere('a.incontar = :contar')    
-                ->andWhere('a.inefectivos = :efectivos')    
-                ->setParameter('pusuario', $pUsuario)
+                ->andWhere('a.inefectivos = :credito')    
+                ->setParameter('pusuario', $usuario)
                 ->setParameter('insuma', GamesController::inResta)
-                ->setParameter('incontar', GamesController::inDatoUno)
-                ->setParameter('inefectivos', GamesController::inDatoCer)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('credito', GamesController::inDatoCer)
                 ->setMaxResults(1);
             
+            //Puntos comprometidos negativos
+            $qpuRCo = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.inpuntaje), 0) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:Puntosusuario', 'a')
+                ->Where('a.puntosusuariousuario = :pusuario')
+                ->andWhere('a.insumaresta = :inresta')    
+                ->andWhere('a.incontar = :contar')    
+                ->andWhere('a.inefectivos = :comprometidos')    
+                ->setParameter('pusuario', $usuario)
+                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('contar', GamesController::inDatoUno)
+                ->setParameter('comprometidos', GamesController::inDatoDos)
+                ->setMaxResults(1);
             
             $efectivos = GamesController::inDatoCer;
             if($qpuSEf->getQuery()->getOneOrNullResult() == NULL){
@@ -2330,8 +2401,24 @@ echo "Decrypted: ".$newClear."</br>";
                 $creditoNeg = (int)$qpuRCr->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
 
+            $comprometidos = GamesController::inDatoCer;
+            if($qpuSCo->getQuery()->getOneOrNullResult() == NULL){
+                $comprometidos = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $comprometidos = (int)$qpuSCo->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            $comprometidosNeg = GamesController::inDatoCer;
+            if($qpuRCo->getQuery()->getOneOrNullResult() == NULL){
+                $comprometidosNeg = GamesController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $comprometidosNeg = (int)$qpuRCo->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
+            }    
+
             $efectivos = $efectivos - $efectivosNeg;
             $credito = $credito - $creditoNeg;
+            $comprometidos = $comprometidos - $comprometidosNeg;
+            
         } catch (Exception $ex) {
                 return GamesController::inDatoCer;
         } 
@@ -2344,16 +2431,27 @@ echo "Decrypted: ".$newClear."</br>";
         try{
             $efectivos = 0;
             $credito = 0;
-            obtenerSaldosBARTs($usuario, $efectivos, $credito, $em);
-            $parametros['BARTsCR'] = $credito]; //BARTs en crédito
+            $comprometidos = 0;
+            ManejoDataRepository::obtenerSaldosBARTs($usuario, $efectivos, $credito, $comprometidos, $em);
+            $parametros['BARTsCR'] = $credito; //BARTs en crédito
             $parametros['BARTsEF'] = $efectivos; //BARTs efectivos
-            $pa   rametros['CANTVJ_MES'] = $puntajeBARTs[$incategoria]; //Cantidad videojuegos usuario mes
-            $parametros['PEND_CALIF'] = $puntajeBARTs[$incategoria]; //Cantidad de calificaciones pendientes
-            $parametros['VENC_PLAN'] = $puntajeBARTs[$incategoria]; //Fecha de vencimiento del plan del usuario 
-            $parametros['CREDITO_PLAN'] = $puntajeBARTs[$incategoria]; //Cantidad de videojuegos en crédito del plan
-            $parametros['CANTVJ_PLAN'] = $puntajeBARTs[$incategoria]; //Cantidad videojuegos usuario permitido plan
+            $parametros['BARTsCO'] = $comprometidos; //BARTs comprometidos
+            
+            //Parametros de Usuario
+            //$planusuario = new Planusuario();
+            $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
+            //$detalleplan = new Detalleplan();
+            $detalleplan = ManejoDataRepository::getDetallePlan($usuario, $em);
+            
+            $parametros['CANTVJ_MES'] = ManejoDataRepository::getJuegosMesUsuario($usuario, $em); //Cantidad videojuegos usuario mes
+            $parametros['PEND_CALIF'] = ManejoDataRepository::getCalificacionesPendientes($usuario, $em); //Cantidad de calificaciones pendientes
+            $parametros['VENC_PLAN'] = $planusuario->getfevigencia(); //Fecha de vencimiento del plan del usuario 
+            $parametros['CREDITO_PLAN'] = $detalleplan->getinvjcredito(); //Cantidad de videojuegos en crédito del plan -1 indefinido
+            $parametros['CREDITO_CATEG'] = $detalleplan->getincatjuegoscredito(); //Categoría de videojuegos en credito para el plan (0 Menor categoria, 1 Mayor categoria)
+            $parametros['CANTVJ_PLAN'] = $detalleplan->getincantidadcambios(); //Cantidad videojuegos usuario permitido plan
 
             return $parametros;
+            
         } catch (Exception $ex) {
                 return NULL;
         }    
@@ -2366,47 +2464,88 @@ echo "Decrypted: ".$newClear."</br>";
     {
         try{
             //obtiene los datos del ejemplar, precio en BARTs, "saldos" de BARTs y demás parametros
+            /*
+            $parametros['BARTsCR'] = $credito; //BARTs en crédito
+            $parametros['BARTsEF'] = $efectivos; //BARTs efectivos
+            $parametros['BARTsCO'] = $comprometidos; //BARTs comprometidos
+            $parametros['CANTVJ_MES'] = ManejoDataRepository::getJuegosMesUsuario($usuario, $em); //Cantidad videojuegos usuario mes
+            $parametros['PEND_CALIF'] = ManejoDataRepository::getCalificacionesPendientes($usuario, $em); //Cantidad de calificaciones pendientes
+            $parametros['VENC_PLAN'] = $planusuario->getfevigencia(); //Fecha de vencimiento del plan del usuario 
+            $parametros['CREDITO_PLAN'] = $detalleplan->getinvjcredito(); //Cantidad de videojuegos en crédito del plan -1 indefinido
+            $parametros['CREDITO_CATEG'] = $detalleplan->getincatjuegoscredito(); //Categoría de videojuegos en credito para el plan (0 Menor categoria, 1 Mayor categoria)
+            $parametros['CANTVJ_PLAN'] = $detalleplan->getincantidadcambios(); //Cantidad videojuegos usuario permitido plan
+            */
             //$parametros = ['BARTsCR' => 0,'BARTsEF' => 0,'CANTVJ_MES' => 0,'PEND_CALIF' => 0,'VENC_PLAN' => '','CREDITO_PLAN' => 0,'CANTVJ_PLAN' => 0];
-            $parametros = obtenerDatosParamUsuario($usuario, $em);
-            
-            
             
             $respuesta=  GamesController::inFallido; 
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
             $em->getConnection()->beginTransaction();
             
-            $trato = new Trato();
-            $actividadusuario = new Actividadusuario();
-
-
-            //echo "ManejoData : solicitaEjemplarVideojuego :: Crea el trato ";
-            $idtratotexto = "D".$ejemplarusuario->getejemplarusuariousuario()->getIdusuario()
-                    ."S".$usuario->getIdusuario()."EU".$ejemplarusuario->getidejemplarusuario()
-                    ."E".$ejemplar->getidejemplar();
-
-            $trato->setidtratotexto($idtratotexto);
-            $trato->settratoejemplar($ejemplar);
-            $trato->settratousrdueno($ejemplarusuario->getejemplarusuariousuario());
-            $trato->settratousrsolicita($usuario);
-            $trato->setfefechatrato($fecha);
-            $em->persist($trato);
-            $em->flush();
+            $parametros = ManejoDataRepository::obtenerDatosParamUsuario($usuario, $em);
             
-            //echo "ManejoData : solicitaEjemplarVideojuego  :: Marca ejemplar usuario : En negociacion ";
-            $ejemplarusuario->setinnegociacion(GamesController::inDatoUno);    
-            $em->persist($ejemplarusuario);
-            
-            $actividadusuario->setactusuariotrato($trato);
-            $actividadusuario->setactusuarioejemplar($ejemplar);
-            $actividadusuario->setactusuariousuarioescribe($usuario->getIdusuario());
-            $actividadusuario->setactusuariousuariolee($ejemplarusuario->getejemplarusuariousuario());
-            $em->persist($actividadusuario);
-        
-            //$em->getConnection()->commit();
-            $respuesta=  GamesController::inExitoso; 
-            
-            $em->getConnection()->commit();
+            $inValidado = GamesController::inDatoUno;
+            $VJMESUSR = $parametros['CANTVJ_MES']; 
+            $VJMESPLAN = $parametros['CANTVJ_PLAN'];
+            $BARTSVJ = ManejoDataRepository::getPuntajeBarts($ejemplar->getejemplarVideojuego()->getincategvideojuego());
+            $BARTSUSR = $parametros['BARTsCR'] + $parametros['BARTsEF'] - $parametros['BARTsCO'];
+            $PENDCALIF = $parametros['PEND_CALIF'];
+            $FECVENCPLAN = $parametros['VENC_PLAN'];
+            if ($BARTSVJ > $BARTSUSR) $inValidado = GamesController::inDatoCer;//Si los BARTs NO Alcanzan
+            if ($PEND_CALIF == GamesController::inDatoUno) $inValidado = GamesController::inDatoCer;//Si tiene calificaciones pendientes por realizar
+            if ($fecha > $FECVENCPLAN) $inValidado = GamesController::inDatoCer;//Si está vencido el plan
+            if ($VJMESUSR >= $VJMESPLAN) $inValidado = GamesController::inDatoCer;//Videojuegos del plan superados
+                
+            if ($inValidado == GamesController::inDatoUno) { 
+                $trato = new Trato();
+                $actividadusuario = new Actividadusuario();
+                $puntosusuario = new Puntosusuario();
+
+                //echo "ManejoData : solicitaEjemplarVideojuego :: Crea el trato ";
+                $idtratotexto = "D".$ejemplarusuario->getejemplarusuariousuario()->getIdusuario()
+                        ."S".$usuario->getIdusuario()."EU".$ejemplarusuario->getidejemplarusuario()
+                        ."E".$ejemplar->getidejemplar();
+
+                $trato->setidtratotexto($idtratotexto);
+                $trato->settratoejemplar($ejemplar);
+                $trato->settratousrdueno($ejemplarusuario->getejemplarusuariousuario());
+                $trato->settratousrsolicita($usuario);
+                $trato->setfefechatrato($fecha);
+                $em->persist($trato);
+                $em->flush();
+
+                //echo "ManejoData : solicitaEjemplarVideojuego  :: Marca ejemplar usuario : En negociacion ";
+                $ejemplarusuario->setinnegociacion(GamesController::inDatoUno);    
+                $em->persist($ejemplarusuario);
+
+                $actividadusuario->setactusuariotrato($trato);
+                $actividadusuario->setactusuarioejemplar($ejemplar);
+                $actividadusuario->setactusuariousuarioescribe($usuario->getIdusuario());
+                $actividadusuario->setactusuariousuariolee($ejemplarusuario->getejemplarusuariousuario());
+                $actividadusuario->setactusuarioleido(GamesController::inDatoCer);
+                $actividadusuario->setactusuariofecha($fecha);
+                $actividadusuario->setactusuariomensaje("El usuario ".$usuario->getTxnickname().", solicita tu juego ".$ejemplar->getejemplarVideojuego()->gettxnomvideojuego());
+
+                $actividadusuario->setactusuariotipoaccion(GamesController::inActSolicitar);
+                $em->persist($actividadusuario);
+
+                //AQUI SE DEBE ENVIAR EMAIL DE NOTIFICACION PARA AMBOS
+
+                $puntosusuario->setpunusuarioidtrato($trato);
+                $puntosusuario->setincontar(GamesController::inContar);
+                $puntosusuario->setfefechapuntos($fecha);
+                $puntosusuario->setinpuntaje(ManejoDataRepository::getPuntajeBarts($ejemplar->getejemplarVideojuego()->getincategvideojuego()));
+                $puntosusuario->setinsumaresta(GamesController::inSuma_);
+                $puntosusuario->setpuntosusuariousuario($usuario);
+                $puntosusuario->setpunusuarioejemplar($ejemplar);
+                $em->persist($puntosusuario);
+                $em->flush();
+
+                //$em->getConnection()->commit();
+                $respuesta=  GamesController::inExitoso; 
+
+                $em->getConnection()->commit();
+            }
             return $respuesta;
 
         } catch (Exception $ex) {

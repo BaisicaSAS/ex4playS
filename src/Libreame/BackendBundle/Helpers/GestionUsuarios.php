@@ -12,7 +12,9 @@ use Libreame\BackendBundle\Entity\Lugar;
 use Libreame\BackendBundle\Entity\Calificatrato;
 use Libreame\BackendBundle\Entity\Planusuario;
 use Libreame\BackendBundle\Entity\Plansuscripcion;
-use Libreame\BackendBundle\Entity\LbMensajes;
+use Libreame\BackendBundle\Entity\Detalleplan;
+use Libreame\BackendBundle\Entity\Trato;
+use Libreame\BackendBundle\Entity\Actividadusuario;
 /**
  * Description of Gestion Usuarios
  *
@@ -58,8 +60,17 @@ class GestionUsuarios {
                     //echo "Calculó promedio :: ".":: \n";
                     $respuesta->setPromCalificaciones(ManejoDataRepository::getPromedioCalifica($usuario->getIdusuario(),$em));
                     //echo "setPromCalificaciones :: ".":: \n";
-                    $respuesta->setPunUsuario(ManejoDataRepository::getPuntosUsuario($usuario, $em));
+                    $efectivos = 0;
+                    $credito = 0;
+                    $comprometidos = 0;
+                    ManejoDataRepository::obtenerSaldosBARTs($usuario, $efectivos, $credito, $comprometidos, $em);
+                    $respuesta->setBartEf($efectivos);
+                    //echo "setBartEf"." \n";
+                    $respuesta->setBartCr($credito);
+                    //echo "setBartCr"." \n";
+                    $respuesta->setBartCo($comprometidos);
                     //echo "setPunUsuario"." \n";
+                    
                     
                     //Calificaciones recibidas
                     $calificacionesrec = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario, $em);
@@ -184,25 +195,28 @@ class GestionUsuarios {
      * Retorna la información de los mensajes del usuario
      */
     
-    public function recuperarMensajes($psolicitud)
+    public function recuperarMensajes($psolicitud, $em)
     {
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
-        $mensaje = new LbMensajes();
+        $trato = new Trato();
         $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
-        $usuario = new LbUsuarios();
+        //$objLogica = $this->get('logica_service');
+        echo "Recuperar mensajes \n";
+        $usuario = new Usuario();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
+            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==AccesoController::inULogged) 
+            if ($respSesionVali==GamesController::inULogged) 
             {    
                 //Busca el usuario 
-                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                //echo "[".$usuario->getTxusuemail()."]";
-                $mensaje = ManejoDataRepository::getMensajesUsuario($usuario);
-
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+                echo "[".$usuario->getTxmailusuario()."] \n";
+                echo "Va a recuperar los tratos \n";
+                $trato = ManejoDataRepository::getTratosUsuario($usuario, $em);
+                echo "Ejecuto getTratosUsuario\n";
+                
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
                 //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
@@ -210,14 +224,16 @@ class GestionUsuarios {
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                $respuesta->setRespuesta(GamesController::inExitoso);
+                echo "Exitoso : 1 \n";
             } else {
+                echo "Sesion invalida \n";
                 $respuesta->setRespuesta($respSesionVali);
             }
         } catch (Exception $ex) {
-            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $respuesta->setRespuesta(GamesController::inPlatCai);
         } finally {
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $mensaje);
+            return Logica::generaRespuesta($respuesta, $psolicitud, $trato, $em);
         }
     }
     

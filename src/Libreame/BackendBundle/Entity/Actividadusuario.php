@@ -84,6 +84,13 @@ class Actividadusuario
      */
     private $actusuariotipoaccion = '0';
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="actusuario_leido", type="integer", nullable=false)
+     */
+    private $actusuarioleido = '0';
+
 
     
     /***/
@@ -127,6 +134,11 @@ class Actividadusuario
     public function getactusuariotipoaccion()
     {
         return $this->actusuariotipoaccion;
+    }
+
+    public function getactusuarioleido()
+    {
+        return $this->actusuarioleido;
     }
 
      /*setter*/
@@ -183,6 +195,13 @@ class Actividadusuario
     public function setactusuariotipoaccion($actusuariotipoaccion)
     {
         $this->actusuariotipoaccion = $actusuariotipoaccion;
+
+        return $this;
+    }
+
+    public function setactusuarioleido($actusuarioleido)
+    {
+        $this->actusuarioleido = $actusuarioleido;
 
         return $this;
     }

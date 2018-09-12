@@ -25,6 +25,7 @@ use Libreame\BackendBundle\Entity\Ejemplarusuario;
 use Libreame\BackendBundle\Entity\Videojuego;
 use Libreame\BackendBundle\Entity\Consola;
 use Libreame\BackendBundle\Entity\Fabricante;
+use Libreame\BackendBundle\Entity\Trato;
 
 class Logica {   
 
@@ -84,8 +85,7 @@ class Logica {
 
                 case GamesController::txAccRecOpera: {//Dato:5 : Recuperar Mensajes
                     //echo "<script>alert('Antes de entrar a Recuperar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
-                    $objGestUsuarios = new GestionUsuarios();
-                    $respuesta = $objGestUsuarios->recuperarMensajes($solicitud);
+                    $respuesta = GestionUsuarios::recuperarMensajes($solicitud, $em);
                     break;
                 } 
 
@@ -272,7 +272,7 @@ class Logica {
 
                 //accion de recuperar mensajes
                 case GamesController::txAccRecOpera:  //Dato: 5
-                    $JSONResp = Logica::respuestaRecuperarMensajes($respuesta, $pSolicitud, $parreglo);
+                    $JSONResp = Logica::respuestaRecuperarMensajes($respuesta, $pSolicitud, $parreglo, $em);
                     break;
 
                 //accion de buscar ejemplares
@@ -480,7 +480,9 @@ class Logica {
                         'usulugar' => $lugar->getinlugar(), 
                         'usunomlugar' => utf8_encode($lugar->gettxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'puntosusuario' => $respuesta->getPunUsuario(),
+                        'bartsefectivos' => $respuesta->getPunUsuarioEf(),
+                        'bartscredito' => $respuesta->getPunUsuarioCr(),
+                        'bartscomprometidos' => $respuesta->getPunUsuarioCo(),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
                         'planusuario' => $respuesta->getArrPlanUsuario(),
@@ -662,38 +664,57 @@ class Logica {
      * respuestaRecuperarMensajes: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar mensajes:: GamesController::txAccRecOpera:
      */
-    public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+    public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
         try{
             $arUsuario = array();
             $arrTmp = array();
-            $mensaje = new LbMensajes();
+            $trato = new Trato();
             
-            foreach ($parreglo as $mensaje){
-                //echo $mensaje->getTxmensaje()."\n";
+            foreach ($parreglo as $trato){
+                echo "...Generando respuesta \n";
                 //Recupera los usuarios ID + Nombre
-                if ($mensaje->getInmenusuarioorigen() != NULL)
+                if ($trato->gettratousrsolicita() != NULL)
                 {
                     //echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
-                    $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen()->getInusuario());
-                    $u1 = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
+                    $usuario = ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario());
+                    $u1 = array('idusuario' => $usuario->getIdusuario(), 'nombre' => $usuario->getTxnickname());  
                 } else {
                     $u1 = array('idusuario' => "", 'nombre' => "");                      
                 } 
                     
                 //echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
-                $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario()->getInusuario());
-                $u2 = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
+                $usuario2 = ManejoDataRepository::getUsuarioById($trato->gettratousrdueno()->getIdusuario());
+                $u2 = array('idusuario' => $usuario2->getIdusuario(), 'nombre' => $usuario2->getTxnickname());  
                 
-                if ($mensaje->getInmensajepadre() == NULL)
-                    $idpadre = $mensaje->getInmensajepadre();
-                else
-                    $idpadre = "";
+                //Revisa si el usuario logueado es el solicitante o el dueño
+                if (ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)==ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario(), $em)) {
+                   $logueadodueño = GamesController::inDatoCer;//Logueado es el solicitante
+                   $tipotrx = GamesController::txEntrada;
+                } else {
+                   $logueadodueño = GamesController::inDatoUno;//Logueado es el dueño
+                   $tipotrx = GamesController::txSalida;
+                }
                 
-                $arrTmp[] = array('idmensaje' => $mensaje->getInmensaje(), 
-                  'mensaje' => $mensaje->getTxmensaje(),'tipomensaje' => $mensaje->getInmenorigen(), 
-                  'idorigen' => $mensaje->getInmemidrelacionado(),
-                  'padre' => $idpadre, 'remitente' => $u1, 
-                  'destinatario' => $u2, 'leido' => $mensaje->getInmenleido()
+                $cantalertas = ManejoDataRepository::getMensajesSinLeerUsuario(ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em));
+                
+                //Estado general del trato 0: Solicitado 1: Cancelado 2: Finalizado 
+                if ($trato->getinestadotrato() == GamesController::inDatoCer) {
+                    $sololectura = GamesController::inDatoCer;
+                } else {
+                    $sololectura = GamesController::inDatoUno;
+                }
+                /* ACCIONES DUEÑO 
+                0. Ejemplar Solicitado: Cuando se ejecuta la solicitud
+                1. Solicitud Cancelada
+                2. Videojuego Recibido
+                3. Queja impuesta
+                4. Calificación realizada
+                5. Conversación */
+                $arrTmp[] = array('idtrato' => $trato->getidtrato(), 
+                    'fecha' => $trato->getfefechatrato(),'estadotrato' => $trato->getinestadotrato(), 
+                    'tipotransaccion' => $tipotrx, 'cantalertas' => $cantalertas,'dueno' => $u2, 'solicitante' => $u1, 
+                    'sololectura' => $sololectura, 'accionsolicitante' => $trato->getintratoaccionsolicitante(),
+                    'acciondueno' => $trato->getintratoacciondueno()
                 ) ;
                 
                 //echo "ID Mensaje ".$mensaje->getInmensaje()."\n";

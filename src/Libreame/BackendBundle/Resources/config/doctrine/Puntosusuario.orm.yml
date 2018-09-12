@@ -43,6 +43,13 @@ Libreame\BackendBundle\Entity\Puntosusuario:
                 unsigned: false
                 comment: '1 Suma 2 Resta'
                 default: '1'
+        inefectivos:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Puntos efectivos 1, Puntos NO efectivos 0, Puntos comprometidos 2'
+                default: '0'
         incontar:
             type: integer
             nullable: false

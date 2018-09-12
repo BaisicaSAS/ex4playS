@@ -44,6 +44,20 @@ Libreame\BackendBundle\Entity\Detalleplan:
                 unsigned: false
                 comment: 'Periodicidad de la cantidad de cambios es decir en cantidad de cambios hay 1, y aqui se especifica: 0 Durante la vigencia , 1 Mensual, 2 Bimestral, 3 Trimestral, 4 Semestral, 5 Anual'
                 default: '0'
+        invjcredito:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Cantidad de videojuegos en credito para el plan -1 indefinido  '
+                default: '-1'
+        incatjuegoscredito:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Categoría de videojuegos en credito para el plan (0 Menor categoria, 1 Mayor categoria)'
+                default: '0'
     manyToOne:
         detalleplanplan:
             targetEntity: Plansuscripcion
