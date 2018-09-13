@@ -1789,7 +1789,7 @@ echo "Decrypted: ".$newClear."</br>";
                 ->orWhere('a.tratousrsolicita = :usuario')    
                 ->setParameter('usuario', $usuario->getIdusuario())
                 ->setMaxResults(1)
-                ->getQuery()->getOneOrNullResult();
+                ->getQuery()->getSingleScalarResult();
 
         
             if ($cantT > 0) {
