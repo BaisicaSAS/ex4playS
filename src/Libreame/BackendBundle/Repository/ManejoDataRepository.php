@@ -1777,16 +1777,38 @@ echo "Decrypted: ".$newClear."</br>";
     //Obtiene los trato asociados a un usuario
     public function getTratosUsuario(Usuario $usuario, $em)
     {   
-        try{            
+        try{       
+            error_reporting(E_ALL);
+            
             echo "Trae tratos usuario  \n";
             
-            $sql = "SELECT t FROM LibreameBackendBundle:trato t "
-                    . " WHERE t.tratousrdueno = :usr "
-                    . " OR t.tratousrsolicita = :usr ";
+            $cantT = (int)$qCantTratos = $em->createQueryBuilder()
+                ->select('COALESCE(SUM(a.idtrato), 0) AS canttratos')
+                ->from('LibreameBackendBundle:Trato', 'a')
+                ->Where('a.tratousrdueno = :usuario')
+                ->orWhere('a.tratousrsolicita = :usuario')    
+                ->setParameter('usuario', $usuario->getIdusuario())
+                ->setMaxResults(1)
+                ->getQuery()->getOneOrNullResult();
 
-            $query = $em->createQuery($sql)->setParameter('usr', $usuario);
+        
+            if ($cantT > 0) {
+                echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
+                $qTratos = $em->createQueryBuilder()
+                    ->select('a')
+                    ->from('LibreameBackendBundle:Trato', 'a')
+                    ->Where('a.tratousrdueno = :usuario')
+                    //->orWhere('a.tratousrsolicita = :usuario')    
+                    ->setParameter('usuario', $usuario->getIdusuario())
+                    ->getQuery();
 
-            return $query->getResult();
+                $trato = $qTratos->getResult();
+            } else {
+                echo "No encontró tratos para el usuario ".$usuario->getTxmailusuario()." \n";
+                $trato = new Trato();
+            }
+
+            return $trato;
 
         } catch (Exception $ex) {
                 return new Trato();

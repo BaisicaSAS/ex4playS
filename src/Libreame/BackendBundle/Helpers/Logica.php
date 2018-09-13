@@ -664,38 +664,44 @@ class Logica {
      * respuestaRecuperarMensajes: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar mensajes:: GamesController::txAccRecOpera:
      */
-    public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
+    public static function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
         try{
             $arUsuario = array();
             $arrTmp = array();
             $trato = new Trato();
             
+            $usrlogueado = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             foreach ($parreglo as $trato){
                 echo "...Generando respuesta \n";
                 //Recupera los usuarios ID + Nombre
                 if ($trato->gettratousrsolicita() != NULL)
                 {
-                    //echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
                     $usuario = ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario());
                     $u1 = array('idusuario' => $usuario->getIdusuario(), 'nombre' => $usuario->getTxnickname());  
+                    echo "...Usuario solicita [".$usuario->getTxnomusuario()."-".$usuario->getTxnickname()."] \n";
                 } else {
                     $u1 = array('idusuario' => "", 'nombre' => "");                      
+                    echo "...Usuario solicita NO ESPECIFICADO :: ERROR \n";
                 } 
                     
                 //echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
                 $usuario2 = ManejoDataRepository::getUsuarioById($trato->gettratousrdueno()->getIdusuario());
                 $u2 = array('idusuario' => $usuario2->getIdusuario(), 'nombre' => $usuario2->getTxnickname());  
+                echo "...Usuario dueño [".$usuario2->getTxnomusuario()."-".$usuario2->getTxnickname()."] \n";
                 
                 //Revisa si el usuario logueado es el solicitante o el dueño
                 if (ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)==ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario(), $em)) {
                    $logueadodueño = GamesController::inDatoCer;//Logueado es el solicitante
                    $tipotrx = GamesController::txEntrada;
+                   echo $pSolicitud->getEmail()." logueado es el solicitante \n";
                 } else {
                    $logueadodueño = GamesController::inDatoUno;//Logueado es el dueño
                    $tipotrx = GamesController::txSalida;
+                   echo $pSolicitud->getEmail()." logueado es el dueño \n";
                 }
                 
-                $cantalertas = ManejoDataRepository::getMensajesSinLeerUsuario(ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em));
+                $cantalertas = ManejoDataRepository::getMensajesSinLeerUsuario($usrlogueado , $em);
+                echo $cantalertas." alertas para el usuario ".$usrlogueado->getTxnickname()." \n";
                 
                 //Estado general del trato 0: Solicitado 1: Cancelado 2: Finalizado 
                 if ($trato->getinestadotrato() == GamesController::inDatoCer) {
