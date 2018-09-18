@@ -1140,23 +1140,6 @@ echo "Decrypted: ".$newClear."</br>";
 ///********************* LO QUE NO SE USA ********************************///
     
     
-    //Obtiene varios objetos Editorial según el ID del libro 
-    public function getEditorialesLibro($inlibro)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('e')
-                ->from('LibreameBackendBundle:LbEditoriales', 'e')
-                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'e.inideditorial = el.inedilibroeditorial ')
-                ->Where(' el.inediliblibro = :plibro ')
-                ->setParameter('plibro', $inlibro);
-            return $q->getQuery()->getResult();
-        } catch (Exception $ex) {
-                return new LbEditoriales();
-        } 
-    }
-    
     //Obtiene el registro de Megusta del ejemplar
     public function getRegMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
     {   
@@ -1777,38 +1760,66 @@ echo "Decrypted: ".$newClear."</br>";
     //Obtiene los trato asociados a un usuario
     public function getTratosUsuario(Usuario $usuario, $em)
     {   
-        try{       
+        try{              
             error_reporting(E_ALL);
-            
+
             echo "Trae tratos usuario  \n";
-            
             $cantT = (int)$qCantTratos = $em->createQueryBuilder()
-                ->select('COALESCE(SUM(a.idtrato), 0) AS canttratos')
+                ->select('COALESCE(COUNT(a.idtrato), 0) AS canttratos')
                 ->from('LibreameBackendBundle:Trato', 'a')
                 ->Where('a.tratousrdueno = :usuario')
                 ->orWhere('a.tratousrsolicita = :usuario')    
-                ->setParameter('usuario', $usuario->getIdusuario())
+                ->setParameter('usuario', $usuario)
                 ->setMaxResults(1)
                 ->getQuery()->getSingleScalarResult();
 
-        
             if ($cantT > 0) {
+/*
+                $rsm  = new ResultSetMapping();
+                $rsm->addEntityResult('LibreameBackendBundle:Trato', 't');
+                $rsm->addFieldResult('t', 'idtrato', 'idtrato', Trato::class);
+                $rsm->addFieldResult('t', 'idtratotexto', 'idtratotexto', Trato::class);
+                $rsm->addFieldResult('t', 'fefechatrato', 'fefechatrato', Trato::class);
+                $rsm->addFieldResult('t', 'inestadotrato', 'inestadotrato', Trato::class);
+                $rsm->addFieldResult('t', 'inestadoentrega', 'inestadoentrega', Trato::class);
+                $rsm->addFieldResult('t', 'inestadocancela', 'inestadocancela', Trato::class);
+                $rsm->addFieldResult('t', 'inestadocalifica', 'inestadocalifica', Trato::class);
+                $rsm->addFieldResult('t', 'tratoejemplar', 'tratoejemplar', Trato::class);
+                $rsm->addFieldResult('t', 'tratousrdueno', 'tratousrdueno', Trato::class);
+                $rsm->addFieldResult('t', 'tratousrsolicita', 'tratousrsolicita', Trato::class);
+                $rsm->addFieldResult('t', 'intratoacciondueno', 'intratoacciondueno', Trato::class);
+                $rsm->addFieldResult('t', 'intratoaccionsolicitante', 'intratoaccionsolicitante', Trato::class);
+
+                echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
+                $txsql = "SELECT tr.idtrato, tr.idtratotexto, tr.fefechatrato, tr.inestadotrato, tr.inestadoentrega, "
+                        ." tr.inestadocancela, tr.inestadocalifica, tr.tratoejemplar, tr.tratousrdueno, "
+                        ." tr.tratousrsolicita, tr.intratoacciondueno, tr.intratoaccionsolicitante  "
+                        ." FROM Trato tr "
+                        ." WHERE tr.tratousrdueno = ".$usuario->getIdusuario(); 
+
+                $query = $em->createNativeQuery( $txsql, $rsm); 
+                $qTratos = $query->getArrayResult();
+                //$qTratos = $em->gettRepository('LibreameBackendBundle:Trato')->
+                //    findBy(array('tratousrdueno' => $usuario->getIdusuario(), 'tratousrsolicita' => $usuario->getIdusuario()));
+*/
                 echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
                 $qTratos = $em->createQueryBuilder()
-                    ->select('a')
+                    ->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato, a.inestadoentrega, a.inestadocancela, a.inestadocalifica, a.tratoejemplar, a.tratousrdueno, a.tratousrsolicita, a.intratoacciondueno, a.intratoaccionsolicitante' )  
+                    //->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato')  
+                    //->select('a')  
                     ->from('LibreameBackendBundle:Trato', 'a')
                     ->Where('a.tratousrdueno = :usuario')
-                    //->orWhere('a.tratousrsolicita = :usuario')    
-                    ->setParameter('usuario', $usuario->getIdusuario())
-                    ->getQuery();
+                    ->orWhere('a.tratousrsolicita = :usuario')    
+                    ->setParameter('usuario', $usuario)
+                    //->setMaxResults(10000)
+                    ->getQuery()->getResult();
 
-                $trato = $qTratos->getResult();
+                echo "Hizo el query \n";
+                echo "devuelve trato \n";
+                return $qTratos ;
             } else {
-                echo "No encontró tratos para el usuario ".$usuario->getTxmailusuario()." \n";
-                $trato = new Trato();
+                return new Trato();
             }
-
-            return $trato;
 
         } catch (Exception $ex) {
                 return new Trato();
