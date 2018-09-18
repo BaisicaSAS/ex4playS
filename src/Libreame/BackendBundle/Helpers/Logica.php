@@ -481,9 +481,9 @@ class Logica {
                         'usulugar' => $lugar->getinlugar(), 
                         'usunomlugar' => utf8_encode($lugar->gettxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'bartsefectivos' => $respuesta->getPunUsuarioEf(),
-                        'bartscredito' => $respuesta->getPunUsuarioCr(),
-                        'bartscomprometidos' => $respuesta->getPunUsuarioCo(),
+                        'bartsefectivos' => $respuesta->getBartEf(),
+                        'bartscredito' => $respuesta->getBartCr(),
+                        'bartscomprometidos' => $respuesta->getBartCo(),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
                         'planusuario' => $respuesta->getArrPlanUsuario(),
@@ -667,7 +667,7 @@ class Logica {
      */
     public static function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
         try{
-            echo "...Generando respuesta \n";
+            //echo "...Generando respuesta \n";
             $arUsuario = array();
             $arrTmp = array();
             $trato = new Trato();
@@ -848,7 +848,7 @@ class Logica {
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'restricciontrato' => $respuesta->getRespuestaTrato())));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 

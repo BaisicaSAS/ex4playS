@@ -47,6 +47,7 @@ class Respuesta {
     private $pIndAcept; //Indica si el usuario acepto el trato / no lo acepto / No lo ha indicado
     private $pIndOtroAcept; //Indica si el usuario CONTRAPARTE acepto el trato / no lo acepto / No lo ha indicado
     private $pBotonesMostrar; //Lista de botones a mostrar
+    private $pRespuestaTrato; //Lista de botones a mostrar
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -184,7 +185,7 @@ class Respuesta {
         return $this->pBartsCredito;
     }   
 
-    public function getartCo()
+    public function getBartCo()
     {
         return $this->pBartsComprometidos;
     }   
@@ -207,6 +208,10 @@ class Respuesta {
     
     public function getBotonesMostrar() {
         return $this->pBotonesMostrar;
+    }
+    
+    public function getRespuestaTrato() {
+        return $this->pRespuestaTrato;
     }
     
     /*
@@ -400,6 +405,11 @@ class Respuesta {
 
     public function setBotonesMostrar($pBotonesMostrar) {
         $this->pBotonesMostrar = $pBotonesMostrar;
+        return $this;
+    }
+
+    public function setRespuestaTrato($pRespuestaTrato) {
+        $this->pRespuestaTrato = $pRespuestaTrato;
         return $this;
     }
 

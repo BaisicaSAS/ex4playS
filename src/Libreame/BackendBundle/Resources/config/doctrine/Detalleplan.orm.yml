@@ -48,7 +48,6 @@ Libreame\BackendBundle\Entity\Detalleplan:
             type: integer
             nullable: false
             options:
-                unsigned: false
                 comment: 'Cantidad de videojuegos en credito para el plan -1 indefinido  '
                 default: '-1'
         incatjuegoscredito:

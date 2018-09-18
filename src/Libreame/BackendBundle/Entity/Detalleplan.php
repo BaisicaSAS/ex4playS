@@ -64,14 +64,14 @@ class Detalleplan
      *
      * @ORM\Column(name="invjcredito", type="integer", nullable=false)
      */
-    private $invjcredito;
+    private $invjcredito = '-1';
     
     /**
      * @var integer
      *
      * @ORM\Column(name="incatjuegoscredito", type="integer", nullable=false)
      */
-    private $incatjuegoscredito;
+    private $incatjuegoscredito = '0';
     
     
     /* 
@@ -109,6 +109,7 @@ class Detalleplan
     
     public function getinvjcredito()
     {
+       //if ($this->invjcredito == NULL) $this->invjcredito = 0;
         return $this->invjcredito;
     }
     

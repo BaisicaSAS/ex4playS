@@ -426,7 +426,7 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('planusuariousuario' => $usuario));
             
             $detalleplan = $em->getRepository('LibreameBackendBundle:Detalleplan')->
-                    findOneBy(array('detalleplanidplan' => $planus->getplanusuarioidplan()));
+                    findOneBy(array('detalleplanplan' => $planus->getidplanusuario()));
             return $detalleplan;
             
         } catch (Exception $ex) {
@@ -1763,7 +1763,7 @@ echo "Decrypted: ".$newClear."</br>";
         try{              
             error_reporting(E_ALL);
 
-            echo "Trae tratos usuario  \n";
+            //echo "Trae tratos usuario  \n";
             $cantT = (int)$qCantTratos = $em->createQueryBuilder()
                 ->select('COALESCE(COUNT(a.idtrato), 0) AS canttratos')
                 ->from('LibreameBackendBundle:Trato', 'a')
@@ -1802,7 +1802,7 @@ echo "Decrypted: ".$newClear."</br>";
                 //$qTratos = $em->gettRepository('LibreameBackendBundle:Trato')->
                 //    findBy(array('tratousrdueno' => $usuario->getIdusuario(), 'tratousrsolicita' => $usuario->getIdusuario()));
 */
-                echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
+                //echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
                 $qTratos = $em->createQueryBuilder()
                     ->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato, a.inestadoentrega, a.inestadocancela, a.inestadocalifica, a.tratoejemplar, a.tratousrdueno, a.tratousrsolicita, a.intratoacciondueno, a.intratoaccionsolicitante' )  
                     //->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato')  
@@ -1814,8 +1814,8 @@ echo "Decrypted: ".$newClear."</br>";
                     //->setMaxResults(10000)
                     ->getQuery()->getResult();
 
-                echo "Hizo el query \n";
-                echo "devuelve trato \n";
+                //echo "Hizo el query \n";
+                //echo "devuelve trato \n";
                 return $qTratos ;
             } else {
                 return new Trato();
@@ -2321,6 +2321,7 @@ echo "Decrypted: ".$newClear."</br>";
     public function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, &$comprometidos, $em)
     {   
         try{
+            //echo "Aqui calcula los BARTs \n";
             //Puntos efectivos 1, Puntos NO efectivos 0, Puntos comprometidos 2
             //Puntos efectivos positivos
             $qpuSEf = $em->createQueryBuilder()
@@ -2373,7 +2374,7 @@ echo "Decrypted: ".$newClear."</br>";
                 ->andWhere('a.incontar = :contar')    
                 ->andWhere('a.inefectivos = :efectivos')    
                 ->setParameter('pusuario', $usuario)
-                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('inresta', GamesController::inResta)
                 ->setParameter('contar', GamesController::inDatoUno)
                 ->setParameter('efectivos', GamesController::inDatoUno)
                 ->setMaxResults(1);
@@ -2387,7 +2388,7 @@ echo "Decrypted: ".$newClear."</br>";
                 ->andWhere('a.incontar = :contar')    
                 ->andWhere('a.inefectivos = :credito')    
                 ->setParameter('pusuario', $usuario)
-                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('inresta', GamesController::inResta)
                 ->setParameter('contar', GamesController::inDatoUno)
                 ->setParameter('credito', GamesController::inDatoCer)
                 ->setMaxResults(1);
@@ -2401,7 +2402,7 @@ echo "Decrypted: ".$newClear."</br>";
                 ->andWhere('a.incontar = :contar')    
                 ->andWhere('a.inefectivos = :comprometidos')    
                 ->setParameter('pusuario', $usuario)
-                ->setParameter('insuma', GamesController::inResta)
+                ->setParameter('inresta', GamesController::inResta)
                 ->setParameter('contar', GamesController::inDatoUno)
                 ->setParameter('comprometidos', GamesController::inDatoDos)
                 ->setMaxResults(1);
@@ -2412,6 +2413,7 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $efectivos = (int)$qpuSEf->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
+            //echo "Efectivos : ".$efectivos." \n";
             
             $efectivosNeg = GamesController::inDatoCer;
             if($qpuREf->getQuery()->getOneOrNullResult() == NULL){
@@ -2419,6 +2421,7 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $efectivosNeg = (int)$qpuREf->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
+            //echo "Efectivos Neg : ".$efectivosNeg." \n";
 
             $credito = GamesController::inDatoCer;
             if($qpuSCr->getQuery()->getOneOrNullResult() == NULL){
@@ -2426,6 +2429,7 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $credito = (int)$qpuSCr->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
+            //echo "Credito : ".$credito." \n";
             
             $creditoNeg = GamesController::inDatoCer;
             if($qpuRCr->getQuery()->getOneOrNullResult() == NULL){
@@ -2433,6 +2437,7 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $creditoNeg = (int)$qpuRCr->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
+            //echo "Credito Neg: ".$creditoNeg." \n";
 
             $comprometidos = GamesController::inDatoCer;
             if($qpuSCo->getQuery()->getOneOrNullResult() == NULL){
@@ -2440,6 +2445,7 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $comprometidos = (int)$qpuSCo->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
+            //echo "Comprometidos : ".$comprometidos." \n";
             
             $comprometidosNeg = GamesController::inDatoCer;
             if($qpuRCo->getQuery()->getOneOrNullResult() == NULL){
@@ -2447,7 +2453,10 @@ echo "Decrypted: ".$newClear."</br>";
             } else {
                 $comprometidosNeg = (int)$qpuRCo->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
-
+            //echo "Comprometidos Neg : ".$comprometidosNeg." \n";
+            
+            
+            
             $efectivos = $efectivos - $efectivosNeg;
             $credito = $credito - $creditoNeg;
             $comprometidos = $comprometidos - $comprometidosNeg;
@@ -2471,9 +2480,9 @@ echo "Decrypted: ".$newClear."</br>";
             $parametros['BARTsCO'] = $comprometidos; //BARTs comprometidos
             
             //Parametros de Usuario
-            //$planusuario = new Planusuario();
+            $planusuario = new Planusuario();
             $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
-            //$detalleplan = new Detalleplan();
+            $detalleplan = new Detalleplan();
             $detalleplan = ManejoDataRepository::getDetallePlan($usuario, $em);
             
             $parametros['CANTVJ_MES'] = ManejoDataRepository::getJuegosMesUsuario($usuario, $em); //Cantidad videojuegos usuario mes
@@ -2490,10 +2499,19 @@ echo "Decrypted: ".$newClear."</br>";
         }    
     }
     
+     public function getJuegosMesUsuario($usuario, $em){
+         return 0;
+    }
+             
+    
+             
+    public function getCalificacionesPendientes($usuario, $em){
+         return 0;
+    }
     
     //Activa un usuario en accion de Validacion de Registro
     // * ex4plays :: eliminada la variable DEVICE 
-    public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario, $em)
+    public function solicitaEjemplarVideojuego(Usuario $usuario, Ejemplar $ejemplar, Ejemplarusuario &$ejemplarusuario, &$respuesta, $em)
     {
         try{
             //obtiene los datos del ejemplar, precio en BARTs, "saldos" de BARTs y demás parametros
@@ -2510,7 +2528,7 @@ echo "Decrypted: ".$newClear."</br>";
             */
             //$parametros = ['BARTsCR' => 0,'BARTsEF' => 0,'CANTVJ_MES' => 0,'PEND_CALIF' => 0,'VENC_PLAN' => '','CREDITO_PLAN' => 0,'CANTVJ_PLAN' => 0];
             
-            $respuesta=  GamesController::inFallido; 
+            $respuestaProc =  GamesController::inFallido; 
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
             $em->getConnection()->beginTransaction();
@@ -2522,13 +2540,15 @@ echo "Decrypted: ".$newClear."</br>";
             $VJMESPLAN = $parametros['CANTVJ_PLAN'];
             $BARTSVJ = ManejoDataRepository::getPuntajeBarts($ejemplar->getejemplarVideojuego()->getincategvideojuego());
             $BARTSUSR = $parametros['BARTsCR'] + $parametros['BARTsEF'] - $parametros['BARTsCO'];
-            $PENDCALIF = $parametros['PEND_CALIF'];
+            $PEND_CALIF = $parametros['PEND_CALIF'];
             $FECVENCPLAN = $parametros['VENC_PLAN'];
             if ($BARTSVJ > $BARTSUSR) $inValidado = GamesController::inDatoCer;//Si los BARTs NO Alcanzan
-            if ($PEND_CALIF == GamesController::inDatoUno) $inValidado = GamesController::inDatoCer;//Si tiene calificaciones pendientes por realizar
-            if ($fecha > $FECVENCPLAN) $inValidado = GamesController::inDatoCer;//Si está vencido el plan
-            if ($VJMESUSR >= $VJMESPLAN) $inValidado = GamesController::inDatoCer;//Videojuegos del plan superados
-                
+            if ($PEND_CALIF == GamesController::inDatoUno) $inValidado = GamesController::inDatoDos;//Si tiene calificaciones pendientes por realizar
+            if ($fecha > $FECVENCPLAN) $inValidado = GamesController::inDatoTre;//Si está vencido el plan
+            if ($VJMESUSR >= $VJMESPLAN) $inValidado = GamesController::inDatoCua;//Videojuegos del plan superados
+              
+            //echo "Validado = ".$inValidado." \n || Si es 0 : No alcazan BARTs \n || 2 : Calif Pendientes \n || 3 : Plan Vencido \n || 4 : Cantidad de videojuegos superado \n ";
+            $respuesta->setRespuestaTrato($inValidado);
             if ($inValidado == GamesController::inDatoUno) { 
                 $trato = new Trato();
                 $actividadusuario = new Actividadusuario();
@@ -2575,11 +2595,11 @@ echo "Decrypted: ".$newClear."</br>";
                 $em->flush();
 
                 //$em->getConnection()->commit();
-                $respuesta=  GamesController::inExitoso; 
+                $respuestaProc =  GamesController::inExitoso; 
 
                 $em->getConnection()->commit();
             }
-            return $respuesta;
+            return $respuestaProc;
 
         } catch (Exception $ex) {
                 return  GamesController::inFallido;

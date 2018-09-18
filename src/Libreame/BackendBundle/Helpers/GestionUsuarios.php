@@ -63,6 +63,7 @@ class GestionUsuarios {
                     $efectivos = 0;
                     $credito = 0;
                     $comprometidos = 0;
+                    //echo "Recupera Barts :: ".":: \n";
                     ManejoDataRepository::obtenerSaldosBARTs($usuario, $efectivos, $credito, $comprometidos, $em);
                     $respuesta->setBartEf($efectivos);
                     //echo "setBartEf"." \n";
@@ -212,8 +213,8 @@ class GestionUsuarios {
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
-                echo "[".$usuario->getTxmailusuario()."] \n";
-                echo "Va a recuperar los tratos \n";
+                //echo "[".$usuario->getTxmailusuario()."] \n";
+                //echo "Va a recuperar los tratos \n";
                 $trato = ManejoDataRepository::getTratosUsuario($usuario, $em);
                 //echo "Ejecuto getTratosUsuario\n";
                 
@@ -225,15 +226,15 @@ class GestionUsuarios {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(GamesController::inExitoso);
-                echo "Exitoso : ".GamesController::inExitoso." \n";
+                //echo "Exitoso : ".GamesController::inExitoso." \n";
             } else {
-                echo "Sesion invalida [".$respSesionVali."] \n";
+                //echo "Sesion invalida [".$respSesionVali."] \n";
                 $respuesta->setRespuesta($respSesionVali);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(GamesController::inPlatCai);
         } finally {
-            echo "...Generará Respuesta ... ".count($trato)."\n";
+            //echo "...Generará Respuesta ... ".count($trato)."\n";
             return Logica::generaRespuesta($respuesta, $psolicitud, $trato, $em);
         }
     }

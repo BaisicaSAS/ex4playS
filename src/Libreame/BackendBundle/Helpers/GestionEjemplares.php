@@ -212,7 +212,7 @@ class GestionEjemplares {
                 
                 //Crea el trato
                 //echo "solicitarEjemplar :: Crea el trato";
-                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarduenousuario, $em);
+                $resp = ManejoDataRepository::solicitaEjemplarVideojuego($usuario, $ejemplar, $ejemplarduenousuario, $respuesta, $em);
                 
                 $respuesta->setRespuesta(GamesController::inExitoso);
                 
