@@ -441,4 +441,55 @@ class GestionUsuarios {
         }
        
     }    
+
+    
+    public function VerDetalleTrato($psolicitud, $em)
+    {
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $trato = new Trato();
+        $dettrato = new Actividadusuario();
+        $respuesta = new Respuesta();
+        //$objLogica = $this->get('logica_service');
+        //echo "Recuperar mensajes \n";
+        $usuario = new Usuario();
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+           //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==GamesController::inULogged) 
+            {    
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+                //echo "[".$usuario->getTxmailusuario()."] \n";
+                //echo "Va a recuperar el trato\n";
+                $trato = ManejoDataRepository::getTratoById($psolicitud->getIdTrato(), $em);
+                if ($trato->getinestadotrato() == GamesController::inEsTrSol){
+                    $editable = True;
+                }    
+                $dettrato = ManejoDataRepository::getDetalleTratoById($trato, $em);
+                //echo "Ejecuto getTratosUsuario\n";
+                
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                $respuesta->setRespuesta(GamesController::inExitoso);
+                //echo "Exitoso : ".GamesController::inExitoso." \n";
+            } else {
+                //echo "Sesion invalida [".$respSesionVali."] \n";
+                $respuesta->setRespuesta($respSesionVali);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+        } finally {
+            //echo "...Generará Respuesta ... ".count($trato)."\n";
+            return Logica::generaRespuesta($respuesta, $psolicitud, $dettrato, $em);
+        }
+    }
+    
+
 }

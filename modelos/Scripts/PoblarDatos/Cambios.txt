@@ -126,3 +126,14 @@ ADD COLUMN `incatjuegoscredito` INT NOT NULL DEFAULT 0 COMMENT 'Categoría de vi
 
 ALTER TABLE `ex4play`.`actividadusuario` 
 ADD COLUMN `actusuario_leido` INT NOT NULL DEFAULT 0 COMMENT 'Leido : 1 - No leido : 0' AFTER `actusuario_tipoaccion`;
+
+ALTER TABLE `ex4play`.`trato` 
+CHANGE COLUMN `intrato_acciondueno` `intratoacciondueno` INT(11) NOT NULL DEFAULT '0' COMMENT '0. Solicitud Aceptada: El Dueño Acepta la solicitud\n1. Solicitud rechazada: El dueño no acepta la solicitud\n2. Videojuego Entregado\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n10. Trato iniciado\n' ,
+CHANGE COLUMN `intrato_accionsolicitante` `intratoaccionsolicitante` INT(11) NOT NULL DEFAULT '0' COMMENT '0. Ejemplar Solicitado: Cuando se ejecuta la solicitud\n1. Solicitud Cancelada\n2. Videojuego Recibido\n3. Queja impuesta\n4. Calificación realizada\n5. Conversación\n' ;
+
+
+ALTER TABLE `ex4play`.`actividadusuario` 
+CHANGE COLUMN `actusuario_fecha` `actusuariofecha` DATETIME NOT NULL COMMENT 'Fecha y hora de la actividad' ,
+CHANGE COLUMN `actusuario_mensaje` `actusuariomensaje` VARCHAR(300) NOT NULL COMMENT 'Mensaje enviado' ,
+CHANGE COLUMN `actusuario_tipoaccion` `actusuariotipoaccion` INT(11) NOT NULL DEFAULT '0' COMMENT 'Accion que se ejecuta en cada momento: Solicitar, escribir, aceptar, cancelar, entregar, recibir, calificar' ,
+CHANGE COLUMN `actusuario_leido` `actusuarioleido` INT(11) NOT NULL DEFAULT '0' COMMENT 'Leido : 1 - No leido : 0' ;

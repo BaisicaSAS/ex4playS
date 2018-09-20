@@ -218,6 +218,12 @@ class Logica {
                     break;
                 } 
                 
+                case GamesController::txAccVerTrato: {//Dato:44 : Ver detalle trato
+                    //echo "<script>alert('Antes de entrar a Ver trato Usuario-".$solicitud->getEmail()."')</script>";
+                    $respuesta = GestionUsuarios::VerDetalleTrato($solicitud, $em);
+                    break;
+                } 
+                
                 
                 case GamesController::txAccListaEdi: {//Dato:50 : Listar editoriales
                     //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
@@ -357,6 +363,10 @@ class Logica {
                 
                 case GamesController::txAccVerComEj: //Dato:43 : Ver comentarios ejemplar
                     $JSONResp = Logica::respuestaVerComentariosEjemplar($respuesta, $pSolicitud, $parreglo);
+                    break;
+                
+                case GamesController::txAccVerTrato: //Dato:44 : Ver detalle trato
+                    $JSONResp = Logica::respuestaVerDetalleTrato($respuesta, $pSolicitud, $parreglo, $em);
                     break;
                 
                 case GamesController::txAccListaEdi: //Dato:50 : Listar editoriales
@@ -668,18 +678,21 @@ class Logica {
     public static function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
         try{
             //echo "...Generando respuesta \n";
-            $arUsuario = array();
             $arrTmp = array();
-            $trato = new Trato();
+            //$trato = new Trato();
             
             $usrlogueado = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em);
             $respuesta->setRespuesta(GamesController::inExitoso);
+            //echo "Recorre el arreglo...".count($parreglo)." \n";
             foreach ($parreglo as $trato){
-                //echo "...Trato...".$trato->getidtrato()." \n";
+                //echo "...Recupera el trato...".$trato['idtrato']." \n";
+                $tratoReg = ManejoDataRepository::getTratoById($trato['idtrato'], $em); 
+                //echo "...Trato...".$tratoReg->getidtrato()." \n";
                 //Recupera los usuarios ID + Nombre
-                if ($trato->gettratousrsolicita() != NULL)
-                {
-                    $usuario = ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario());
+                if ($tratoReg->gettratousrsolicita() != NULL)
+                {   
+                    //echo "Usr solicita ...".$tratoReg->gettratousrsolicita()->getIdusuario()." \n";
+                    $usuario = ManejoDataRepository::getUsuarioById($tratoReg->gettratousrsolicita(), $em);
                     $u1 = array('idusuario' => $usuario->getIdusuario(), 'nombre' => $usuario->getTxnickname());  
                     //echo "...Usuario solicita [".$usuario->getTxnomusuario()."-".$usuario->getTxnickname()."] \n";
                 } else {
@@ -688,12 +701,13 @@ class Logica {
                 } 
                     
                 //echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
-                $usuario2 = ManejoDataRepository::getUsuarioById($trato->gettratousrdueno()->getIdusuario());
+                //echo "Usr dueño ...".$tratoReg->gettratousrdueno()->getIdusuario()." \n";
+                $usuario2 = ManejoDataRepository::getUsuarioById($tratoReg->gettratousrdueno()->getIdusuario(), $em);
                 $u2 = array('idusuario' => $usuario2->getIdusuario(), 'nombre' => $usuario2->getTxnickname());  
                 //echo "...Usuario dueño [".$usuario2->getTxnomusuario()."-".$usuario2->getTxnickname()."] \n";
                 
                 //Revisa si el usuario logueado es el solicitante o el dueño
-                if (ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)==ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita()->getIdusuario(), $em)) {
+                if (ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail(), $em)==ManejoDataRepository::getUsuarioById($tratoReg->gettratousrsolicita()->getIdusuario(), $em)) {
                    $logueadodueño = GamesController::inDatoCer;//Logueado es el solicitante
                    $tipotrx = GamesController::txEntrada;
                    //echo $pSolicitud->getEmail()." logueado es el solicitante \n";
@@ -707,7 +721,7 @@ class Logica {
                 //echo $cantalertas." alertas para el usuario ".$usrlogueado->getTxnickname()." \n";
                 
                 //Estado general del trato 0: Solicitado 1: Cancelado 2: Finalizado 
-                if ($trato->getinestadotrato() == GamesController::inDatoCer) {
+                if ($tratoReg->getinestadotrato() == GamesController::inDatoCer) {
                     $sololectura = GamesController::inDatoCer;
                 } else {
                     $sololectura = GamesController::inDatoUno;
@@ -719,11 +733,11 @@ class Logica {
                 3. Queja impuesta
                 4. Calificación realizada
                 5. Conversación */
-                $arrTmp[] = array('idtrato' => $trato->getidtrato(), 
-                    'fecha' => $trato->getfefechatrato(),'estadotrato' => $trato->getinestadotrato(), 
+                $arrTmp[] = array('idtrato' => $tratoReg->getidtrato(), 
+                    'fecha' => $tratoReg->getfefechatrato(),'estadotrato' => $tratoReg->getinestadotrato(), 
                     'tipotransaccion' => $tipotrx, 'cantalertas' => $cantalertas,'dueno' => $u2, 'solicitante' => $u1, 
-                    'sololectura' => $sololectura, 'accionsolicitante' => $trato->getintratoaccionsolicitante(),
-                    'acciondueno' => $trato->getintratoacciondueno()
+                    'sololectura' => $sololectura, 'accionsolicitante' => $tratoReg->getintratoaccionsolicitante(),
+                    'acciondueno' => $tratoReg->getintratoacciondueno()
                 ) ;
                 //echo "ID Mensaje ".$|->getInmensaje()."\n";
                 unset($u1);
@@ -978,6 +992,20 @@ class Logica {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'comentarios' => $parreglo)));
+        } catch (Exception $ex) {
+                return GamesController::inPlatCai;
+        } 
+    }    
+    
+    /* respuestaVerDetalleTrato: 
+     * Funcion que genera el JSON de respuesta para la accion de comentar a ejemplar:: GamesController::txAccVerTrato
+
+    */
+    public function respuestaVerDetalleTrato(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'datalletrato' => $parreglo)));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 

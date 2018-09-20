@@ -435,6 +435,37 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //ex4plays :: Obtiene un objeto trato
+    public static function getTratoById($idtrato, $em)
+    {   
+        //error_reporting(E_ALL);
+        //echo "\n getTratoById : Ingresa ";
+        try{
+            //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
+            return $em->getRepository('LibreameBackendBundle:Trato')->
+                findOneBy(array('idtrato' => $idtrato));
+        } catch (Exception $ex) {
+                return new Trato();
+        } 
+    }
+
+    //ex4plays :: Obtiene un objeto trato
+    public static function getDetalleTratoById(Trato $trato, $em)
+    {   
+        //error_reporting(E_ALL);
+        //echo "\n getTratoById : Ingresa ";
+        try{
+            //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
+            $actusuario = $em->getRepository('LibreameBackendBundle:Actividadusuario')->
+                findOBy(array('actusuarioidtrato' => $trato));
+            
+            return $actusuario;
+            
+        } catch (Exception $ex) {
+                return new Actividadusuario();
+        } 
+    }
+
     //Obtiene la suma de puntos de usuario
     public static function getPuntosUsuario(Usuario $pUsuario, $em)
     {   
@@ -884,12 +915,12 @@ class ManejoDataRepository extends EntityRepository {
     }
 
    //Obtiene la consola por su nombre
-    public static function getConsolaByNombre($consola, $em)
+    public static function getConsolaByNombre($nomconsola, $em)
     {   
         try{
             
             $consola = $em->getRepository('LibreameBackendBundle:Consola')->
-                findOneBy(array("txnombreconsola"=>$consola));
+                findOneBy(array("txnombreconsola"=>$nomconsola));
                 //findOneByidconsola($videojuego->getvideojuegoConsola());
             
             return $consola;
@@ -966,11 +997,13 @@ class ManejoDataRepository extends EntityRepository {
     
 
     //Obtiene el objeto Usuario según su ID 
-    public static function getUsuarioById($inusuario, $em)
+    public static function getUsuarioById($idusuario, $em)
     {   
         try{
-            return $em->getRepository('LibreameBackendBundle:Usuario')->
-                findOneBy(array('idusuario' => $inusuario, 'inusuestado' => GamesController::inExitoso));
+            $usuario = $em->getRepository('LibreameBackendBundle:Usuario')->
+                findOneBy(array('idusuario' => $idusuario, 'inusuestado' => GamesController::inExitoso));
+            
+            return $usuario;
         } catch (Exception $ex) {
                 return new Usuario();
         } 
@@ -1729,14 +1762,14 @@ echo "Decrypted: ".$newClear."</br>";
     }
     
     //Obtiene la cantidad de mensajes sin leer  (Alertas)
-    public function getMensajesSinLeerUsuario(Usuario $usuario, $em)
+    public static function getMensajesSinLeerUsuario(Usuario $usuario, $em)
     {   
         try{            
             
             $qMensajes = $em->createQueryBuilder()
                 ->select('COALESCE(COUNT(a.actusuarioleido), 0) AS mensajes')
                 ->from('LibreameBackendBundle:Actividadusuario', 'a')
-                ->Where('a.actusuarioidusuariolee = :usuario')
+                ->Where('a.actusuariousuariolee = :usuario')
                 ->andWhere('a.actusuarioleido = :leido')    
                 ->setParameter('usuario', $usuario)
                 ->setParameter('leido', GamesController::inDatoCer)
@@ -1763,8 +1796,8 @@ echo "Decrypted: ".$newClear."</br>";
         try{              
             error_reporting(E_ALL);
 
-            //echo "Trae tratos usuario  \n";
-            $cantT = (int)$qCantTratos = $em->createQueryBuilder()
+            //echo "Traera tratos usuario  \n";
+            $cantT = (int)$em->createQueryBuilder()
                 ->select('COALESCE(COUNT(a.idtrato), 0) AS canttratos')
                 ->from('LibreameBackendBundle:Trato', 'a')
                 ->Where('a.tratousrdueno = :usuario')
@@ -1772,46 +1805,20 @@ echo "Decrypted: ".$newClear."</br>";
                 ->setParameter('usuario', $usuario)
                 ->setMaxResults(1)
                 ->getQuery()->getSingleScalarResult();
+                //echo "Los trajo ... cuantos?? \n";
 
             if ($cantT > 0) {
-/*
-                $rsm  = new ResultSetMapping();
-                $rsm->addEntityResult('LibreameBackendBundle:Trato', 't');
-                $rsm->addFieldResult('t', 'idtrato', 'idtrato', Trato::class);
-                $rsm->addFieldResult('t', 'idtratotexto', 'idtratotexto', Trato::class);
-                $rsm->addFieldResult('t', 'fefechatrato', 'fefechatrato', Trato::class);
-                $rsm->addFieldResult('t', 'inestadotrato', 'inestadotrato', Trato::class);
-                $rsm->addFieldResult('t', 'inestadoentrega', 'inestadoentrega', Trato::class);
-                $rsm->addFieldResult('t', 'inestadocancela', 'inestadocancela', Trato::class);
-                $rsm->addFieldResult('t', 'inestadocalifica', 'inestadocalifica', Trato::class);
-                $rsm->addFieldResult('t', 'tratoejemplar', 'tratoejemplar', Trato::class);
-                $rsm->addFieldResult('t', 'tratousrdueno', 'tratousrdueno', Trato::class);
-                $rsm->addFieldResult('t', 'tratousrsolicita', 'tratousrsolicita', Trato::class);
-                $rsm->addFieldResult('t', 'intratoacciondueno', 'intratoacciondueno', Trato::class);
-                $rsm->addFieldResult('t', 'intratoaccionsolicitante', 'intratoaccionsolicitante', Trato::class);
-
-                echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
-                $txsql = "SELECT tr.idtrato, tr.idtratotexto, tr.fefechatrato, tr.inestadotrato, tr.inestadoentrega, "
-                        ." tr.inestadocancela, tr.inestadocalifica, tr.tratoejemplar, tr.tratousrdueno, "
-                        ." tr.tratousrsolicita, tr.intratoacciondueno, tr.intratoaccionsolicitante  "
-                        ." FROM Trato tr "
-                        ." WHERE tr.tratousrdueno = ".$usuario->getIdusuario(); 
-
-                $query = $em->createNativeQuery( $txsql, $rsm); 
-                $qTratos = $query->getArrayResult();
-                //$qTratos = $em->gettRepository('LibreameBackendBundle:Trato')->
-                //    findBy(array('tratousrdueno' => $usuario->getIdusuario(), 'tratousrsolicita' => $usuario->getIdusuario()));
-*/
                 //echo "Encontró ".$cantT." tratos para el usuario ".$usuario->getTxmailusuario()." \n";
                 $qTratos = $em->createQueryBuilder()
-                    ->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato, a.inestadoentrega, a.inestadocancela, a.inestadocalifica, a.tratoejemplar, a.tratousrdueno, a.tratousrsolicita, a.intratoacciondueno, a.intratoaccionsolicitante' )  
-                    //->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato')  
+                    //->select('a.idtrato as idtrato, a.idtratotexto as idtratotexto, a.fefechatrato as fefechatrato, a.inestadotrato as inestadotrato, a.inestadoentrega as inestadoentrega, a.inestadocancela as inestadocancela, a.inestadocalifica as inestadocalifica, a.tratoejemplar as tratoejemplar, a.tratousrdueno as tratousrdueno, a.tratousrsolicita as tratousrsolicita, a.intratoacciondueno as intratoacciondueno, a.intratoaccionsolicitante as intratoaccionsolicitante' )  
+                    //->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato, a.inestadoentrega, a.inestadocancela, a.inestadocalifica, a.tratoejemplar, a.tratousrdueno, a.tratousrsolicita, a.intratoacciondueno, a.intratoaccionsolicitante ' )  
+                    ->select('a.idtrato, a.idtratotexto, a.fefechatrato, a.inestadotrato')  
                     //->select('a')  
                     ->from('LibreameBackendBundle:Trato', 'a')
                     ->Where('a.tratousrdueno = :usuario')
                     ->orWhere('a.tratousrsolicita = :usuario')    
                     ->setParameter('usuario', $usuario)
-                    //->setMaxResults(10000)
+                    ->setMaxResults(10000)
                     ->getQuery()->getResult();
 
                 //echo "Hizo el query \n";

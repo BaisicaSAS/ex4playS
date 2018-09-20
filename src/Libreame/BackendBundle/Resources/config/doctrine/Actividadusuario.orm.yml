@@ -25,25 +25,25 @@ Libreame\BackendBundle\Entity\Actividadusuario:
             generator:
                 strategy: IDENTITY
     fields:
-        actusuario_fecha:
+        actusuariofecha:
             type: datetime
             nullable: false
             options:
                 comment: 'Fecha y hora de la actividad'
-        actusuario_mensaje:
+        actusuariomensaje:
             type: string
             nullable: false
             length: 300
             options:
                 fixed: false
                 comment: 'Mensaje enviado'
-        actusuario_tipoaccion:
+        actusuariotipoaccion:
             type: integer
             nullable: false
             options:
                 unsigned: false
                 comment: 'Accion que se ejecuta en cada momento: Solicitar, escribir, aceptar, cancelar, entregar, recibir, calificar'
-        actusuario_leido:
+        actusuarioleido:
             type: integer
             nullable: false
             options:

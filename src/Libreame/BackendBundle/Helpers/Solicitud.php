@@ -77,6 +77,7 @@ class Solicitud {
     private $pModopublica; // Modo publicacion
     private $pRepetir; // Repetir Ejemplar en la publicacion
     
+    private $pIdTrato;
     
     /*  La variable tratoacep es realmente el indicador del significado del mensaje 
         -1	S, D	Mensaje de texto normal (El que existe actualente para enviar un mensaje en el chat)
@@ -310,6 +311,10 @@ class Solicitud {
     
     public function getRepetir() {
         return $this->pRepetir;
+    }
+    
+    public function getIdTrato() {
+        return $this->pIdTrato;
     }
     
     
@@ -605,6 +610,11 @@ class Solicitud {
     
     public function setRepetir($prepetir) {
         $this->pRepetir = $prepetir;
+        return $this;
+    }
+    
+    public function setIdTrato($pidtrato) {
+        $this->pIdTrato = $pidtrato;
         return $this;
     }
     

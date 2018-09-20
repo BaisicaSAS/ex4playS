@@ -34,8 +34,8 @@ class GamesController extends Controller
     const inActCancelar = 3; 
     const inActRechazar = 4; 
     const inActEntregar = 5; 
-    const inActRecibir = 5; 
-    const inActCalificar = 5; 
+    const inActRecibir = 6; 
+    const inActCalificar = 7; 
     
     const inContar = 1; 
     const inNoContar = 0; 
@@ -605,6 +605,14 @@ class GamesController extends Controller
                         break;
                     }
                     
+                    case self::txAccVerTrato: { //Dato:44 : Ver detalle de un trato
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdTrato($json_datos['idsolicitud']['idtrato']);
+                        break;
+                    }
+                    
                     
                     case self::txAccListaEdi: { //Dato:50 : Listar Editoriales
                         //echo "<script>alert('ENTRA POR LISTAR DE EDITORIALES')</script>";
@@ -811,6 +819,13 @@ class GamesController extends Controller
                         //echo "<script>alert('ENTRA POR VER COMENTARIOS EJEMPLAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
                                 isset($datos['idsolicitud']['ejemplar']));
+                        break;
+                    }
+
+                    case self::txAccVerTrato: { //Dato:44 : Ver detalle trato
+                        //echo "<script>alert('ENTRA POR VER DETALLE TRATO')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['idtrato']));
                         break;
                     }
 

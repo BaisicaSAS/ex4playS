@@ -64,7 +64,7 @@ class Actividadusuario
     /**
      * @var integer
      *
-     * @ORM\Column(name="actusuario_fecha", type="datetime", nullable=false)
+     * @ORM\Column(name="actusuariofecha", type="datetime", nullable=false)
      */
     private $actusuariofecha;
 
@@ -72,7 +72,7 @@ class Actividadusuario
     /**
      * @var integer
      *
-     * @ORM\Column(name="actusuario_mensaje", type="string", nullable=false)
+     * @ORM\Column(name="actusuariomensaje", type="string", nullable=false)
      */
     private $actusuariomensaje;
 
@@ -80,14 +80,14 @@ class Actividadusuario
     /**
      * @var integer
      *
-     * @ORM\Column(name="actusuario_tipoaccion", type="integer", nullable=false)
+     * @ORM\Column(name="actusuariotipoaccion", type="integer", nullable=false)
      */
     private $actusuariotipoaccion = '0';
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="actusuario_leido", type="integer", nullable=false)
+     * @ORM\Column(name="actusuarioleido", type="integer", nullable=false)
      */
     private $actusuarioleido = '0';
 
