@@ -1003,9 +1003,34 @@ class Logica {
     */
     public function respuestaVerDetalleTrato(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo, $em){
         try {
+            $arrTmp = array(); 
+            $detalle = new Actividadusuario();
+            
+            foreach ($parreglo as $detalle) {
+                $ejemplar = ManejoDataRepository::getEjemplarById($detalle->getactusuarioejemplar(), $em);
+                $usrlee = ManejoDataRepository::getUsuarioById($detalle->getactusuariousuarioescribe(), $em);
+                $usrescribe = ManejoDataRepository::getUsuarioById($detalle->getactusuariousuarioescribe(), $em);
+                $arrTmp[] = array("id" => $detalle->getidactividadusuario(), 
+                    "usrescribe" => array("idusuario" => $usrescribe->getidusuario(), "nomusuario" => $usrlee->gettxnomusuario()),
+                    "usrlee" => array("idusuario" => $usrlee->getidusuario(), "nomusuario" => $usrescribe->gettxnomusuario()),
+                    "fecha" => $detalle->getactusuariofecha(),
+                    "mensaje" => $detalle->getactusuariomensaje(),
+                    "accion" => $detalle->getactusuariotipoaccion(),
+                    "leido" => $detalle->getactusuarioleido()
+                );
+            }
+            $trato = ManejoDataRepository::getTratoById($detalle->getactusuariotrato(), $em);
+            $vj = ManejoDataRepository::getVideojuego($ejemplar->getejemplarVideojuego(), $em);
+            $ejemplarusuario = ManejoDataRepository::getEjemplarusuarioByUsrEjemplar($ejemplar->getidejemplar(),$trato->gettratousrdueno(),$em);
+            $arrEjemplar[] = array("idejemplar" => $ejemplar->getidejemplar(), 
+                "idejemplarusuario" => $ejemplarusuario->getidejemplarusuario(), 
+                "idvideojuego" =>  $vj->getidvideojuego(),
+                "nomvideojuego" =>  $vj->gettxnomvideojuego());
+            //echo "respuestaVerDetalleTrato :: Detalle trato hallados ".count($parreglo)." registros";
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'datalletrato' => $parreglo)));
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 
+                            'ejemplar' => $arrEjemplar, 'detalletrato' => $arrTmp)));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 

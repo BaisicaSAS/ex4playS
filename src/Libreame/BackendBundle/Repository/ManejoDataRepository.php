@@ -453,12 +453,13 @@ class ManejoDataRepository extends EntityRepository {
     public static function getDetalleTratoById(Trato $trato, $em)
     {   
         //error_reporting(E_ALL);
-        //echo "\n getTratoById : Ingresa ";
+        //echo "\n getDetalleTratoById : Ingresa ";
         try{
-            //echo "\n getUsuarioByEmail : Ingresa ".$txemail;
+            //echo "\n getDetalleTratoById : Busca \n";
             $actusuario = $em->getRepository('LibreameBackendBundle:Actividadusuario')->
-                findOBy(array('actusuarioidtrato' => $trato));
+                findBy(array('actusuariotrato' => $trato));
             
+            //echo "\n getDetalleTratoById : retorna ".count($actusuario)." registro \n ";
             return $actusuario;
             
         } catch (Exception $ex) {
@@ -846,6 +847,22 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $ejemplarusuario = $em->getRepository('LibreameBackendBundle:Ejemplarusuario')->
                 findOneBy(array("idejemplarusuario"=>$idejemplarusuario));
+            
+            //echo "\n ManejoDataRepository::getEjemplarusuario: idejemplarusuario: ".$ejemplarusuario->getidejemplarusuario();
+            //echo "\n ManejoDataRepository::getEjemplarusuario: cuenta: ".count($ejemplarusuario);
+            return $ejemplarusuario;
+        } catch (Exception $ex) {
+                return new Ejemplarusuario();
+        } 
+    }
+    
+   //Obtiene el objeto Ejemplarusuario según el ejemplar y el usuario
+    public static function getEjemplarusuarioByUsrEjemplar($idejemplar, $idusuario, $em)
+    {   
+        try{
+            $ejemplarusuario = $em->getRepository('LibreameBackendBundle:Ejemplarusuario')->
+                findOneBy(array("ejemplarusuariousuario"=>$idusuario, 
+                    "ejemplarusuarioejemplar"=>$idejemplar));
             
             //echo "\n ManejoDataRepository::getEjemplarusuario: idejemplarusuario: ".$ejemplarusuario->getidejemplarusuario();
             //echo "\n ManejoDataRepository::getEjemplarusuario: cuenta: ".count($ejemplarusuario);
@@ -2506,12 +2523,13 @@ echo "Decrypted: ".$newClear."</br>";
         }    
     }
     
+    //Obtiene los videojuegos que ha transado un usuario en un mes
      public function getJuegosMesUsuario($usuario, $em){
          return 0;
     }
              
     
-             
+    //Obtiene la cantidad de calficaciones pendientes de un usuario         
     public function getCalificacionesPendientes($usuario, $em){
          return 0;
     }

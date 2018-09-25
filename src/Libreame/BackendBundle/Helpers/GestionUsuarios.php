@@ -462,13 +462,13 @@ class GestionUsuarios {
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
                 //echo "[".$usuario->getTxmailusuario()."] \n";
-                //echo "Va a recuperar el trato\n";
+                //echo "VerDetalleTrato :: Va a recuperar el trato\n";
                 $trato = ManejoDataRepository::getTratoById($psolicitud->getIdTrato(), $em);
                 if ($trato->getinestadotrato() == GamesController::inEsTrSol){
                     $editable = True;
                 }    
                 $dettrato = ManejoDataRepository::getDetalleTratoById($trato, $em);
-                //echo "Ejecuto getTratosUsuario\n";
+                //echo "VerDetalleTrato :: Ejecutó getTratosUsuario - halló ".count($dettrato)." detalles \n";
                 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
