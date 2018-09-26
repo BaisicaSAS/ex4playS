@@ -528,7 +528,7 @@ class Logica {
                     $titulo = utf8_encode($videojuego->gettxnomvideojuego());
                     //echo "\n titulo [".utf8_encode($titulo)."]";
                     $categoria = $videojuego->getincategvideojuego(); //Cantidad de puntos
-                    $puntos = ManejoDataRepository::getPuntosCategoria($videojuego->getincategvideojuego()); //Cantidad de puntos
+                    $puntos = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego()); //Cantidad de puntos
                     //echo "\n puntos [".utf8_encode($puntos)."]";
                     $imagen = utf8_encode($videojuego->gettximagen());
                     //echo "\n imagen [".utf8_encode($videojuego->gettximagen())."]";
@@ -611,7 +611,7 @@ class Logica {
                     $titulo = utf8_encode($videojuego->gettxnomvideojuego());
                     //echo "\n titulo [".utf8_encode($titulo)."]";
                     $categoria = $videojuego->getincategvideojuego(); //Cantidad de puntos
-                    $puntos = ManejoDataRepository::getPuntosCategoria($videojuego->getincategvideojuego()); //Cantidad de puntos
+                    $puntos = ManejoDataRepository::getPuntajeBarts($videojuego->getincategvideojuego()); //Cantidad de puntos
                     //echo "\n puntos [".utf8_encode($puntos)."]";
                     $imagen = utf8_encode($videojuego->gettximagen());
                     //echo "\n imagen [".utf8_encode($videojuego->gettximagen())."]";

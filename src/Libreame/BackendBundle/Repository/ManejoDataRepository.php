@@ -27,7 +27,6 @@ use Libreame\BackendBundle\Entity\Consola;
 use Libreame\BackendBundle\Entity\Fabricante;
 use Libreame\BackendBundle\Entity\Actividadusuario;
 use Libreame\BackendBundle\Entity\Trato;
-//use Libreame\BackendBundle\Entity\Fabricante;
 
 
 /**
@@ -636,19 +635,7 @@ class ManejoDataRepository extends EntityRepository {
             $videojuego = $em->getRepository('LibreameBackendBundle:Videojuego')->
                     findBy(array('idvideojuego' => $ejemplar));
             
-            //generos
-            /*$qg = $em->createQueryBuilder()
-                ->select('g.ingenero, g.txgennombre, count(g.ingenero) as num')
-                ->from('LibreameBackendBundle:LbGeneros', 'g')
-                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
-                ->Where(' gl.inglilibro in (:libro) ')
-                ->setParameter('libro', $libusu)
-                ->groupBy('g.ingenero')
-                //->having(' count(g.ingenero) > 1')
-                ->orderBy(' num ', 'DESC')
-                ->setMaxResults($numpref);
-            
-            $generos = $qg->getQuery()->getResult();*/
+
             $arrGeneros = array();
             /*foreach ($generos as $gen){
                 if (!in_array($gen, $arrGeneros)) {
@@ -1001,17 +988,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene la cantidad de puntos por categoria: TODO: hacer una tabla
-    public static function getPuntosCategoria($categoria)
-    {   
-        try{
-            return $categoria * 30;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
-    
 
     //Obtiene el objeto Usuario según su ID 
     public static function getUsuarioById($idusuario, $em)
@@ -1026,18 +1002,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene todos los Ids de las membresias del usuario
-    public static function getMembresiasUsuario(LbUsuarios $usuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbMembresias')->
-                    findBy(array('inmemusuario' => $usuario));
-        } catch (Exception $ex) {
-                return new LbMembresias();
-        } 
-    }
-        
     public static function getEjemplarById($ejemplar, $em)
     {   
         try{
@@ -1142,7 +1106,7 @@ class ManejoDataRepository extends EntityRepository {
             
             return $resp;
         } catch (Exception $ex) {
-                return new LbUsuarios();
+                return new Usuario();
         } 
     }
     
@@ -1188,50 +1152,6 @@ echo "Decrypted: ".$newClear."</br>";
         return trim(base64_encode(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $sSecretKey, $sValue, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND))));
     } */  
 ///********************* LO QUE NO SE USA ********************************///
-    
-    
-    //Obtiene el registro de Megusta del ejemplar
-    public function getRegMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbMegusta')->
-                findOneBy(array('inmegejemplar' => $pEjemplar, 'inmegusuario' => $pUsuario));
-        } catch (Exception $ex) { 
-                return new LbMegusta();
-        } 
-    }
-
-    
-    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
-    public function getMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qmg = $em->createQueryBuilder()
-                ->select('COALESCE(a.inmegmegusta, 0)')
-                ->from('LibreameBackendBundle:LbMegusta', 'a')
-                ->Where('a.inmegejemplar = :pejemplar')
-                ->setParameter('pejemplar', $pEjemplar)
-                ->andWhere('a.inmegusuario = :pusuario')
-                ->setParameter('pusuario', $pUsuario)
-                ->setMaxResults(1)
-                ->orderBy('a.femegmegusta', 'DESC');
-            
-            $meg = GamesController::inDatoCer;
-            if($qmg->getQuery()->getOneOrNullResult() == NULL){
-                $meg = GamesController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
-            } else {
-                $meg = (int)$qmg->getQuery()->getSingleScalarResult();//Si hay registro devuelve lo que hay
-            }    
-            
-            //echo "megusta ".$meg;
-            return $meg;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-
     //Obtiene la descripcion de la condicion actual del ejemplar
     // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 
     // 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega
@@ -1256,402 +1176,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
-    public function getUsrMegustaEjemplar(Solicitud $psolicitud)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $Megusta = $em->getRepository('LibreameBackendBundle:LbMegusta')->findBy(array('inmegejemplar' => $psolicitud->getIdEjemplar())/*, 
-                    array('femegmegusta', 'ASC')*/);
-            $arUsuar = [];
-            $usr = new LbUsuarios();
-            foreach($Megusta as $mg){
-               $usr = ManejoDataRepository::getUsuarioById($mg->getInMegUsuario()->getInUsuario());
-               if  ($mg->getInmegmegusta() == GamesController::inDatoUno){
-                 $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
-                     "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
-               } else {   
-                    if (in_array(strtolower($mg->getInMegUsuario()->getInUsuario()), $arUsuar)){
-                        unset($arUsuar[$mg->getInMegUsuario()->getInUsuario()]);
-                    }
-               }
-            }
-            
-            return $arUsuar;
-        } catch (Exception $ex) {
-                return $arUsuar;
-        } 
-    }
-    
-    
-    public function getNegociacionEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qneg = $em->createQueryBuilder()
-                ->select('DISTINCT a.txnegidconversacion')
-                ->from('LibreameBackendBundle:LbNegociacion', 'a')
-                ->Where('a.innegejemplar = :pejemplar')
-                ->setParameter('pejemplar', $pejemplar)
-                ->andWhere('a.innegusuduenho = :pusuario')
-                ->setParameter('pusuario', $pusuario);
-            
-            $arrNegociacion = array();
-            $idneg = $qneg->getQuery()->getResult();
-            foreach($idneg as $idconversacion){
-                //echo "conversa ".$idconversacion;
-                
-                $negociacion = $em->getRepository('LibreameBackendBundle:LbNegociacion')->
-                        findBy(array('txnegidconversacion' => $idconversacion,
-                                    'innegmenseliminado' => GamesController::inDatoCer), 
-                                    array('fenegfechamens' => 'asc'));
-                $negoc = new LbNegociacion();
-                $arrConversacion = array();
-                foreach ($negociacion as $negoc) {
-                    $usuaNeg = ManejoDataRepository::getUsuarioById($negoc->getInnegusuduenho()->getInusuario());
-                    $usuaEsc = ManejoDataRepository::getUsuarioById($negoc->getInnegusuescribe()->getInusuario());
-                    $usuaSol = ManejoDataRepository::getUsuarioById($negoc->getInnegususolicita()->getInusuario());
-                    $promcalUsNeg = ManejoDataRepository::getPromedioCalifica($usuaNeg->getInusuario());
-                    $promcalUsEsc = ManejoDataRepository::getPromedioCalifica($usuaEsc->getInusuario());
-                    $promcalUsSol = ManejoDataRepository::getPromedioCalifica($usuaSol->getInusuario());
-                    if($pusuario == $negoc->getInnegusuduenho()){
-                        $leido = $negoc->getInnegmensleidodue();
-                    } else {
-                        $leido = $negoc->getInnegmensleidosol();
-                    }
-                    
-                    $arrConversacion[] = array('inidnegociacion' => $negoc->getInidnegociacion(),
-                        'innegmensleido' => $leido,
-                        'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
-                        'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
-                        'usrescribe' =>  $usuaEsc->getInusuario(),
-                        'tratoacep' => $negoc->getInnegtratoacep(),
-                    );
-                }
-                $arrNegociacion[] = array('txnegidconversacion' => $idconversacion, 'usrsolicita' =>  array('inusuario' => $usuaSol->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaSol->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaSol->getTxusuimagen()),'calificacion' => $promcalUsSol),
-                                'usrdueno' => array('inusuario' => $usuaNeg->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaNeg->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaNeg->getTxusuimagen()),'calificacion' => $promcalUsNeg), 
-                                "conversacion" => array($arrConversacion));
-                unset($arrConversacion);
-                
-            }
-            
-            return $arrNegociacion;
-        } catch (Exception $ex) {
-                return new LbNegociacion();
-        } 
-    }
-
-    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar){   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            //Primero busca todos los que tengan hijos
-            $histEjemplar = $em->createQueryBuilder()
-                ->select('a')
-                ->from('LibreameBackendBundle:LbHistejemplar', 'a')
-                ->Where('a.inhisejeejemplar = :pejemplar')
-                ->setParameter('pejemplar', $pejemplar)
-                //->andWhere('a.inhisejeusuario = :pusuario')
-                //->setParameter('pusuario', $pusuario)
-                //->andWhere('a.inhisejepadre  IS NOT NULL')
-                ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
-            $arrHistEjemplar = array();
-
-            $hisEje = new LbHistejemplar();
-            foreach ($histEjemplar as $hisEje) {
-                //Para cada uno busca sus hijos
-                $hijo = $hisEje->getInhistejemplar();
-                $padre = null;
-                if($hisEje->getInhisejepadre() != NULL)
-                    $padre = $hisEje->getInhisejepadre()->getInhistejemplar();
-                //$punteros[]['padre'] = $padre;
-                //$punteros[]['hijo'] = $hijo;
-                //echo "P:".$padre." -> H:".$hijo." \n";
-                
-                $histHijo = new LbHistejemplar();
-                //$rpadre = $registro['padre'];
-                $histHijo = $em->createQueryBuilder()
-                    ->select('a')
-                    ->from('LibreameBackendBundle:LbHistejemplar', 'a')
-                    ->Where('a.inhisejeejemplar = :pejemplar')
-                    ->setParameter('pejemplar', $pejemplar)
-                    //->andWhere('a.inhisejeusuario = :pusuario')
-                    //->setParameter('pusuario', $pusuario)
-                    ->andWhere('a.inhistejemplar = :idhijo')
-                    ->setParameter('idhijo', $hijo)
-                    ->orWhere('a.inhistejemplar = :idpadre')
-                    ->setParameter('idpadre', $padre)
-                    ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
-                
-                foreach ($histHijo as $hisEjePH) {
-                    $idusuario = $hisEjePH->getInhisejeusuario()->getInusuario();
-                    $usuaHist = ManejoDataRepository::getUsuarioById($idusuario);
-                    $promcalUsHist = ManejoDataRepository::getPromedioCalifica($idusuario);
-                    $descMovimiento = "";
-                    switch ($hisEjePH->getInhisejemovimiento()){
-                        case GamesController::inMovPubEjem: $descMovimiento = GamesController::txMovPubEjem; break;
-                        case GamesController::inMovBlqEjSi: $descMovimiento = GamesController::txMovBlqEjSi; break;
-                        case GamesController::inMovSoliEje: $descMovimiento = GamesController::txMovSoliEje; break;
-                        case GamesController::inMovEntrEje: $descMovimiento = GamesController::txMovEntrEje; break;
-                        case GamesController::inMovReciEje: $descMovimiento = GamesController::txMovReciEje; break;
-                        case GamesController::inMovActiEje: $descMovimiento = GamesController::txMovActiEje; break;
-                        case GamesController::inMovInacEje: $descMovimiento = GamesController::txMovInacEje; break;
-                        case GamesController::inMovComeEje: $descMovimiento = GamesController::txMovComeEje; break;
-                        case GamesController::inMovMeguEje: $descMovimiento = GamesController::txMovMeguEje; break;
-                        case GamesController::inMovNMegEje: $descMovimiento = GamesController::txMovNMegEje; break;
-                        case GamesController::inMovCamEEje: $descMovimiento = GamesController::txMovCamEEje; break;
-                        case GamesController::inMovContEje: $descMovimiento = GamesController::txMovContEje; break;
-                        case GamesController::inMovBajaEje: $descMovimiento = GamesController::txMovBajaEje; break;
-                        case GamesController::inMovConsEje: $descMovimiento = GamesController::txMovConsEje; break;
-                        case GamesController::inMovVendEje: $descMovimiento = GamesController::txMovVendEje; break;
-                        case GamesController::inMovCompEje: $descMovimiento = GamesController::txMovCompEje; break;
-                        case GamesController::inMovAcepEje: $descMovimiento = GamesController::txMovAcepEje; break;
-                        case GamesController::inMovRechEje: $descMovimiento = GamesController::txMovRechEje; break;
-                        case GamesController::inMovEjeDevu: $descMovimiento = GamesController::txMovEjeDevu; break;
-                        case GamesController::inMovUsPCali: $descMovimiento = GamesController::txMovUsPCali; break;
-                        case GamesController::inMovUsSCali: $descMovimiento = GamesController::txMovUsSCali; break;
-                    }
-                    $arrHistEjemplar[] = array('fehisejeregistro' => $hisEjePH->getFehisejeregistro()->format("Y-m-d H:i:s"),
-                        'inhisejemodoentrega' => $hisEjePH->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
-                        'inhisejemovimiento' => $hisEjePH->getInhisejemovimiento(),
-                        'txhisejedescmovimiento' => utf8_encode($descMovimiento),
-                        'inhisejeejemplar' => $hisEjePH->getInhisejeejemplar(),
-                        'inhisejepadre' => $hisEjePH->getInhisejepadre(),
-                        'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
-                                'calificacion' => $promcalUsHist)
-                    );
-                }    
-            }    
-            return $arrHistEjemplar;
-        
-        } catch (Exception $ex) {
-                return LbHistejemplar();
-        } 
-    }
-
-    public function getComentariosEjemplar(Solicitud $psolicitud)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
-                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
-                           array('fecomfeccomentario' => 'desc'));
-            $com = new LbComentarios();
-            $arComme = [];
-            $usr = new LbUsuarios();
-            foreach($comentarios as $com){
-               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
-                $arUsuar = [];
-               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
-                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
-               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
-                    if($com->getIncomcompadre()->getIncomactivo()==GamesController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
-                             "usuario" => $arUsuar);
-                    }
-               } else {
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
-               }
-            }
-            
-            return $arComme;
-        } catch (Exception $ex) {
-                return $arComme;
-        } 
-    }
-    
-    
-    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
-    public function getCantMegusta($inejemplar)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qmg = $em->createQueryBuilder()
-                ->select('count(a)')
-                ->from('LibreameBackendBundle:LbMegusta', 'a')
-                ->Where('a.inmegejemplar = :pejemplar')
-                ->setParameter('pejemplar', $inejemplar)
-                ->andWhere('a.inmegmegusta = :pmeg')
-                ->setParameter('pmeg', 1);
-                
-            /*$qnmg = $em->createQueryBuilder()
-                ->select('count(a)')
-                ->from('LibreameBackendBundle:LbMegusta', 'a')
-                ->Where('a.inmegejemplar = :pejemplar')
-                ->setParameter('pejemplar', $inejemplar)
-                ->andWhere('a.inmegmegusta = :pnomeg')
-                ->setParameter('pnomeg', 0);
-            */
-            $meg = $qmg->getQuery()->getSingleScalarResult();
-            //$nomeg = $qnmg->getQuery()->getSingleScalarResult();
-            
-            //echo "megusta ".$meg." - nomegusta ".$nomeg;
-            //return $meg - $nomeg;
-            return $meg;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
-    //Obtiene el indicador de si el usuario ha aceptado 1, rechazado 0, o no ha indicado el trato -1
-    public function getUsAceptTrato($usrescribe, $idconversa)
-    {
-        try{
-            $indicador = -1;
-            $em = $this->getDoctrine()->getManager();
-            $qs = $em->createQueryBuilder()
-                ->select('count(n)')
-                ->from('LibreameBackendBundle:LbNegociacion', 'n')
-                ->Where('n.txnegidconversacion = :idconv')
-                ->andWhere('n.innegusuescribe = :idusr')
-                ->andWhere('n.innegtratoacep = :acep')
-                ->setParameter('idconv', $idconversa)
-                ->setParameter('idusr', $usrescribe)
-                ->setParameter('acep', 0); //Busca rechazo
-            $indrechazo = $qs->getQuery()->getSingleScalarResult();
-            if ($indrechazo > 0) {
-                $indicador = $indrechazo;
-            } else {
-                $qt = $em->createQueryBuilder()
-                    ->select('count(n)')
-                    ->from('LibreameBackendBundle:LbNegociacion', 'n')
-                    ->Where('n.txnegidconversacion = :idconv')
-                    ->andWhere('n.innegusuescribe = :idusr')
-                    ->andWhere('n.innegtratoacep = :acep')
-                    ->setParameter('idconv', $idconversa)
-                    ->setParameter('idusr', $usrescribe)
-                    ->setParameter('acep', 1); //Busca aceptacion
-                $indacepta = $qt->getQuery()->getSingleScalarResult();
-                if ($indacepta > 0) {
-                    $indicador = $indacepta;
-                }
-            }
-            
-            return $indicador;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
-    
-    //Obtiene todo el chat por su id 
-    public function getChatNegociacionById($idconversa)
-    {   
-        try{
-            //echo "busca conversación ".$idconversa;
-            $em = $this->getDoctrine()->getManager();
-            $qs = $em->createQueryBuilder()
-                ->select('n')
-                ->from('LibreameBackendBundle:LbNegociacion', 'n')
-                ->Where('n.txnegidconversacion = :idconv')
-                ->setParameter('idconv', $idconversa)
-                ->orderBy('n.fenegfechamens', 'ASC');
-            $conversacion = $qs->getQuery()->getResult();
-            
-            return $conversacion;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
-    
-    //Obtiene un Registro histórico por su ID
-    public function getRegHisById($idregistro)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $registro = $em->getRepository('LibreameBackendBundle:LbHistejemplar')->
-                findOneBy(array('inhistejemplar' => $idregistro));
-
-            return $registro;
-        } catch (Exception $ex) {
-                return new LbHistejemplar();
-        } 
-    }
-    
-    //Obtiene el dato del genero según el Objeto
-    public function getGenero($genero)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                findOneBy(array('ingenero' => $genero));
-        } catch (Exception $ex) {
-                return new LbGeneros();
-        }   
-    }
-    
-    //Obtiene el objeto Libro según su nombre 
-    public function getLibroByTitulo($titulo)
-    {   
-        try{
-            //echo "El libro solicitado: -[".$inlibro."]- \n";
-            $em = $this->getDoctrine()->getManager();
-            //$libro = new LbLibros();
-            $libro = $em->getRepository('LibreameBackendBundle:LbLibros')->
-                //findOneBy(array("inlibro"=>$inlibro));
-                findOneBy(array("txlibtitulo" => $titulo));
-  
-            //echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
-            return $libro;
-        } catch (Exception $ex) {
-                return new LbLibros();
-        } 
-    }
-    
-    //Obtiene los datos de un autor por su ID
-    public function getAutorById($idautor)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbAutores')->
-                    findOneBy(array('inidautor' => $idautor));
-        } catch (Exception $ex) {
-                return new LbAutores();
-        } 
-    }
-                
-    //Obtiene una editorial por su ID
-    public function getEditorialById($ideditorial)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbEditoriales')->
-                    findOneBy(array('inideditorial' => $ideditorial));
-        } catch (Exception $ex) {
-                return new LbEditoriales();
-        } 
-    }
-                
-    //Obtiene todos los libros de un autor
-    public function getLibrosByAutor($autor)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbAutoreslibros')->
-                    findBy(array('inautlidautor' => $autor));
-        } catch (Exception $ex) {
-                return new LbAutoreslibros();
-        } 
-    }
-                
-    //Obtiene todos los libros de una editorial
-    public function getLibrosByEditorial($editorial)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbEditorialeslibros')->
-                    findBy(array('inedilibroeditorial' => $editorial));
-        } catch (Exception $ex) {
-                return new LbEditorialeslibros();
-        } 
-    }
-                
     //Obtiene todos los Ejemplares, de un usuario
     //1: Todos, 2: En negociación, 3: Publicados, 4: No publicados, 5: Bloqueados
     public static function getVisualizarBiblioteca(Usuario $usuario, $filtro, $em)
@@ -1756,28 +1280,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
                 
-    //Publica un mensaje
-    public function publicaMensajes(LbMensajes $mensaje)
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            //Verifica el tipo de mensaje para determinar si tiene que enviar a más 
-            //destinatarios tambien envía correos.
-            $tipomensaje = $mensaje->getInmenorigen();
-            switch ($tipomensaje) {
-                case GamesController::inMsPubEjem:
-                    
-                
-            }
-            
-            return $query->getResult();
-
-        } catch (Exception $ex) {
-                return new LbMensajes();
-        } 
-    }
-    
     //Obtiene la cantidad de mensajes sin leer  (Alertas)
     public static function getMensajesSinLeerUsuario(Usuario $usuario, $em)
     {   
@@ -1894,44 +1396,7 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
    
-    /*
-     * Recupera un comentario, con su Id numerico
-     */
-    public function getComentarioById($idcomentario){
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbComentarios')->
-                    findOneBy(array('inidcomentario' => $idcomentario));
 
-        } catch (Exception $ex) {
-                return new LbComentarios();
-        } 
-    }
-
-    /*
-     * Crea un ejemplar a partir de una solicitud y el libro que representa
-     */
-    public function crearEjemplar(Solicitud $psolicitud, LbLibros $libro, LbUsuarios $usuario)
-    {
-        $imagen = base64_encode($psolicitud->getImageneje());
-        $ejemplar = new LbEjemplares();
-        try {
-            //$em = $this->getDoctrine()->getManager();
-            $ejemplar->setInejecantidad(GamesController::inIdGeneral);//Se utiliza esta constante porque representa el # 1  
-            $ejemplar->setDbejeavaluo($psolicitud->getAvaluo());  
-            $ejemplar->setInejelibro($libro);  
-            $ejemplar->setInejeusudueno($usuario);  
-            $ejemplar->setTxejeimagen($imagen);  
-     
-            //$em->persist($ejemplar);
-            //$em->flush();    
-            
-            return $ejemplar;
-        } catch (Exception $ex)  {    
-            return $ejemplar;
-        }
-    }
-    
     //Cierra la sesion de un usuario 
     // ex4playS :: $em y modicficaciones al modelo
     public static function cerrarSesionUsuario(Sesion $sesion, $em)
@@ -1968,126 +1433,6 @@ echo "Decrypted: ".$newClear."</br>";
             return $cantmensajes;
         } catch (Exception $ex) {
                 return GamesController::inDatoCer;
-        } 
-    }
-    
-    //Adiciona todo el texto de un libro, al indice 
-    public function indexar(LbLibros $libro, $texto, $em)
-    {
-        try{
-            //echo "FULL: ".$texto."\n";
-            $arPalDescartar = array('a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
-                'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
-                'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
-                'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
-                'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
-                'si', 'lo', 'identificar', 'no', 'al', 'que', '1', '2', '3', '4', '5', 
-                '6', '7', '8', '9', '0', '(', ',', '.', ')', '"', '&', '/', '-', '=', 
-                'y', 'o', '¡', '¿', '?', ':'); 
-            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            
-            if ($flEm) {$em = $this->getDoctrine()->getManager();}
-            //echo $texto."\n ----------------------"; 
-            $texto = str_replace('(', '', $texto); 
-            $texto = str_replace('¡', '', $texto);
-            $texto = str_replace('?', '', $texto);
-            $texto = str_replace('-', '', $texto);
-            $texto = str_replace('/', '', $texto);
-            $texto = str_replace('=', '', $texto);
-            $texto = str_replace('&', '', $texto);
-            $texto = str_replace(',', '', $texto);
-            $texto = str_replace('.', '', $texto);
-            $texto = str_replace(')', '', $texto);
-            $texto = str_replace('"', '', $texto);
-            $texto = str_replace(':', '', $texto);
-            //echo $texto."\n ----------------------"; 
-
-            $palabras = explode(" ", $texto);
-            $repetidos = [];
-            
-            foreach ($palabras as $palabra)
-            {   
-                //echo "... ".$palabra."\n";
-                if(!in_array(strtolower($palabra), $arPalDescartar) and 
-                        !in_array(strtolower($palabra), $repetidos) and $palabra != "")
-                {
-                    if (!$em->getRepository('LibreameBackendBundle:LbIndicepalabra')->
-                        findOneBy(array('lbindpalpalabra' => $palabra, 'lbindpallibro' => $libro)))
-                    {    
-                        //echo "   SI   \n";
-                        $indice = new LbIndicepalabra();
-                        $indice->setLbindpallibro($libro);
-                        $dioma = $libro->getInlibidioma();
-                        if ($dioma == NULL)
-                            $indice->setLbindpalidioma("Sin especificar");
-                        else
-                            $indice->setLbindpalidioma(utf8_encode($idioma()->getTxidinombre()));
-                        $indice->setLbindpalpalabra(strtolower($palabra));
-                        $em->persist($indice);
-                        $repetidos[] = $palabra; 
-                    }
-                }
-            }
-            
-            if ($flEm) {$em->flush();}
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }    
-    
-    //Obtiene la lista de idiomas
-    public function getListaIdiomas()
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $sql = "SELECT i FROM LibreameBackendBundle:LbIdiomas i ";
-            $query = $em->createQuery($sql);
-            foreach ($query->getResult() as $regidioma){
-                $idiomas[] = $regidioma->getTxidinombre();
-                //echo $idiomas;
-                //echo $regidioma->getInididioma().' '.$regidioma->getTxidinombre();
-            }            
-            //echo $query->getResult(); 
-            //echo "Acabo"; 
-            return $query->getResult();
-            //return $idiomas;
-
-        } catch (Exception $ex) {
-                return new LbIdiomas();
-        } 
-    }
-    
-    //Obtiene la lista de editoriales
-    public function getListaEditoriales()
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $sql = "SELECT e FROM LibreameBackendBundle:LbEditoriales e ";
-            $query = $em->createQuery($sql);
-            
-            return $query->getResult();
-
-        } catch (Exception $ex) {
-                return new LbEditoriales();
-        } 
-    }
-    
-    //Obtiene la lista de autores
-    public function getListaAutores()
-    {   
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            $sql = "SELECT a FROM LibreameBackendBundle:LbAutores a ";
-            $query = $em->createQuery($sql);
-            
-            return $query->getResult();
-            //return $idiomas;
-
-        } catch (Exception $ex) {
-                return new LbAutores();
         } 
     }
     
@@ -2164,161 +1509,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
  
-   //Envia un mensaje en el chat de negociacion por un ejemplar
-    public function setMensajeChat(Solicitud $psolicitud)
-    {   
-        try{
-            //Si el mensaje viene en blanco, no se genera nada
-            $respuesta = NULL;
-            setlocale (LC_TIME, "es_CO");
-            $fecha = new \DateTime;
-            $em = $this->getDoctrine()->getManager();
-            $objEjemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar());
-            $usrEscribe = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            $usrDestino = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
-            $usrPropiet = $objEjemplar->getInejeusudueno();
-            if ($usrEscribe == $usrPropiet) { //Si el usuario que escribe es el propietario, solicitante = destinatario; si son diferentes, solicitante = escribe
-                $usrSolicit = $usrDestino;
-            } else {
-                $usrSolicit = $usrEscribe;
-            } 
-            $mensaje = $psolicitud->getComentario();
-            $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
-            //echo "tratoacep : ".$psolicitud->getTratoAcep();
-            // Si el registro es de 1 Aceptacion o 0: Rechazo, el mensaje es personalizado con una constante
-            
-            switch ($psolicitud->getTratoAcep()) {
-                case GamesController::inAccMsgNormal: //si es = -1
-                    //echo "entro a tratoacep : -1";
-                    $mensaje = $psolicitud->getComentario();
-                    break;
-                case GamesController::inAccMsgCancel: //si es = 0
-                    //echo "entro a tratoacep : 0";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgRechazoTr);
-                    break;
-                case GamesController::inAccMsgAcepta: //si es = 1
-                    //echo "entro a tratoacep : 1";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgAceptaTr);
-                    break;
-                case GamesController::inAccMsgOferta: //si es = 2
-                    //echo "entro a tratoacep : 2";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgHaceOferta);
-                    break;
-                case GamesController::inAccMsgContra: //si es = 3
-                    //echo "entro a tratoacep : 3";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgContraoferta);
-                    break;
-                case GamesController::inAccMsgEntreg: //si es = 4
-                    //echo "entro a tratoacep : 4";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgEntregaEjem);
-                    break;
-                case GamesController::inAccMsgRecibe: //si es = 5
-                    //echo "entro a tratoacep : 5";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgRecibeEjem);
-                    break;
-                case GamesController::inAccMsgSCalif: //si es = 6
-                    //echo "entro a tratoacep : 6";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgCalificacion);
-                    break;
-                case GamesController::inAccMsgDCalif: //si es = 7
-                    //echo "entro a tratoacep : 7";
-                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), GamesController::txMsgCalificacion);
-                    break;
-                case GamesController::inAccMsgFinali: //si es = 10
-                    //echo "entro a tratoacep : 10";
-                    $mensaje = GamesController::txMsgFinalizacion;
-                    break;
-            }
-            if ($mensaje != "")
-            {
-                $chatNegociacion = new LbNegociacion();
-                $chatNegociacion->setFenegfechamens($fecha);
-                $chatNegociacion->setInnegmensleidodue(GamesController::inDatoCer);
-                $chatNegociacion->setInnegmensleidosol(GamesController::inDatoCer);
-                $chatNegociacion->setInnegmenseliminado(GamesController::inDatoCer);
-                $chatNegociacion->setInnegejemplar($objEjemplar);
-                $chatNegociacion->setInnegusuduenho($usrPropiet);
-                $chatNegociacion->setInnegusuescribe($usrEscribe);
-                $chatNegociacion->setInnegususolicita($usrSolicit);
-                $chatNegociacion->setTxnegmensaje(utf8_encode($mensaje));
-                $chatNegociacion->setTxnegidconversacion($negIdConver);
-                $chatNegociacion->setInnegtratoacep($psolicitud->getTratoAcep());
-
-                $em->persist($chatNegociacion);
-
-                $em->flush();
-            }
-            $respuesta = $negIdConver;
-            
-            //echo "Conversacion : ".$negIdConver;
-                
-            return $respuesta;
-
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-    }
- 
-    
-   //Envia un registro de calificacion a un usuario y un registro historico del ejemplar:: Cierra el ciclo de negociacion
-    public function setCalificaUsuarioTrato(Solicitud $psolicitud)
-    {   
-        try{
-            $respuesta = NULL;
-            setlocale (LC_TIME, "es_CO");
-            $fecha = new \DateTime;
-            $em = $this->getDoctrine()->getManager();
-            //Obtiene : Ejemplar, usuario que califica y usuario calificado + Registro HistEjemplar de entrega o recibo. Hasta que no s
-            $objEjemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar());
-            $usrCalifica = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            $usrCalificado = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
-            //Registro historico de entrega o recibo
-            $regHisRecEntr = ManejoDataRepository::getRegHisById($psolicitud->getInRegHisPublicacion());
-            
-            //Crea el registro histórico
-            $regHisCalifica = new LbHistejemplar();
-            $regHisCalifica->setFehisejeregistro($fecha);
-            $regHisCalifica->setInhisejeejemplar($objEjemplar);
-            $regHisCalifica->setInhisejeestado($fecha);
-            $regHisCalifica->setInhisejemodoentrega($regHisRecEntr->getInhisejemodoentrega());
-            $regHisCalifica->setInhisejepadre($regHisRecEntr);
-            $regHisCalifica->setInhisejeusuario($usrCalifica);
-            //Determinar cual es el usuario que califica GamesController::txMovUsPCali
-            //Si el registro padre es de Recibo = txMovReciEje, quien califica es el Solicitante  inMovUsSCali
-            //Si el registro padre es de Entrega = txMovEntrEje, quien califica es el Dueño inMovUsPCali
-            $fallido = GamesController::inFallido;
-            if ($regHisRecEntr->getInhisejemovimiento() == GamesController::inMovEntrEje){
-                $regHisCalifica->setInhisejemovimiento(GamesController::inMovUsPCali);
-                $fallido  = GamesController::inExitoso; 
-            } elseif ($regHisRecEntr->getInhisejemovimiento() == GamesController::inMovReciEje) {
-                $regHisCalifica->setInhisejemovimiento(GamesController::inMovUsSCali);
-                $fallido = GamesController::inExitoso; 
-            }
-            
-            if ($fallido  == GamesController::inExitoso){
-                //Crea el registro de calificaicon
-                $regCalifica = new LbCalificausuarios();
-                $regCalifica->setFecalfecha($fecha);
-                $regCalifica->setIncalcalificacion($psolicitud->getInCalificacion());
-                $regCalifica->setIncalhisejemplar($objEjemplar);
-                $regCalifica->setIncalusucalifica($usrCalifica);
-                $regCalifica->setIncalusucalificado($usrCalificado);
-                $regCalifica->setTxcalcomentario($psolicitud->getComentario());
-
-                $em->persist($regHisCalifica);
-                $em->persist($regCalifica);
-                $em->flush();
-            }
-            
-            $respuesta = $fallido;
-
-            return $respuesta;
-
-        } catch (Exception $ex) {
-                return GamesController::inFallido;
-        } 
-    }
-    
     //Valida datos de registro de    un usuario
     public function datosUsuarioValidos($usuario, $clave, $em)
     {
@@ -2525,7 +1715,30 @@ echo "Decrypted: ".$newClear."</br>";
     
     //Obtiene los videojuegos que ha transado un usuario en un mes
      public function getJuegosMesUsuario($usuario, $em){
-         return 0;
+        
+        try {
+            
+            $fechaIni = new DateTime();
+            $fechaIni->modify('first day of this month');
+            //echo $fechaIni->format('d/m/Y'); 
+            $fechaFin = new DateTime();
+            $fechaFin->modify('last day of this month');
+            //echo $fechaFin->format('d/m/Y'); 
+            $qTratosMes = $em->createQueryBuilder()
+                ->select('COALESCE(COUNT(t.idtrato), 0) AS cantidad')
+                ->from('LibreameBackendBundle:Trato', 't')
+                ->Where('t.tratousrdueno = :pusuario')
+                ->orWhere('t.tratousrsolicita = :pusuario')    
+                ->andWhere('t.fefechatrato between :fini and :ffin')    
+                ->andWhere('t.inestadotrato = :pestado')    
+                ->setParameter('pusuario', $usuario)
+                ->setParameter('fini', $fechaIni)
+                ->setParameter('ffin', $fechaFin)
+                ->setParameter('pestado', GamesController::inDatoDos)
+                ->setMaxResults(1);
+        } finally {
+            return GamesController::inDatoCer;
+        }
     }
              
     
@@ -2567,10 +1780,19 @@ echo "Decrypted: ".$newClear."</br>";
             $BARTSUSR = $parametros['BARTsCR'] + $parametros['BARTsEF'] - $parametros['BARTsCO'];
             $PEND_CALIF = $parametros['PEND_CALIF'];
             $FECVENCPLAN = $parametros['VENC_PLAN'];
-            if ($BARTSVJ > $BARTSUSR) $inValidado = GamesController::inDatoCer;//Si los BARTs NO Alcanzan
-            if ($PEND_CALIF == GamesController::inDatoUno) $inValidado = GamesController::inDatoDos;//Si tiene calificaciones pendientes por realizar
-            if ($fecha > $FECVENCPLAN) $inValidado = GamesController::inDatoTre;//Si está vencido el plan
-            if ($VJMESUSR >= $VJMESPLAN) $inValidado = GamesController::inDatoCua;//Videojuegos del plan superados
+            if ($BARTSVJ > $BARTSUSR) {
+                $inValidado = GamesController::inDatoCer;//Si los BARTs NO Alcanzan
+                echo "Los BARTs no alcanzan :: Requeridos = [".$BARTSVJ."] - Usuario = [".$BARTSUSR."] \n";
+            }
+            if ($PEND_CALIF == GamesController::inDatoUno){
+                $inValidado = GamesController::inDatoDos;//Si tiene calificaciones pendientes por realizar
+            }
+            if ($fecha > $FECVENCPLAN) {
+                $inValidado = GamesController::inDatoTre;//Si está vencido el plan
+            }
+            if ($VJMESUSR >= $VJMESPLAN) {
+                $inValidado = GamesController::inDatoCua;//Videojuegos del plan superados
+            }
               
             //echo "Validado = ".$inValidado." \n || Si es 0 : No alcazan BARTs \n || 2 : Calif Pendientes \n || 3 : Plan Vencido \n || 4 : Cantidad de videojuegos superado \n ";
             $respuesta->setRespuestaTrato($inValidado);
@@ -3044,21 +2266,6 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
 
-    public function getCantidadUsuarios() {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $qs = $em->createQueryBuilder()
-                ->select('count(u.inusuario)')
-                ->from('LibreameBackendBundle:LbUsuarios', 'u');
-            $cuenta = $qs->getQuery()->getSingleScalarResult();
-            
-            return $cuenta;
-        } catch (Exception $ex) {
-                return GamesController::inDatoCer;
-        } 
-        
-    }
-    
 
     //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
     //El parámetro $blEjemUsuario, indica "E", si es un ejemplar o "U" si es un usuario
