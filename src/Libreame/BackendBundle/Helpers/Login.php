@@ -82,10 +82,19 @@ class Login
                         //Recupera el estado de login (sesion activa, inactiva) del suario
                         $sesion = ManejoDataRepository::recuperaEstadoSesionUsuario($usuario,$pSolicitud,$em,$estadoSesion);
                         //echo "loginUsuario : retornó la sesion \n";
+                        //14-01-2018 si estado sesion = 0 se debe cerrar la sesion
+                        if ($estadoSesion == GamesController::inDatoCer) {
+                            //AQUI CIERRA SESION 
+                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaEstadoSesionUsuario($usuario, $pSolicitud, $em, $estadosesion), $em);
+                            //Genera sesion activa sin fecha de finalización
+                            ManejoDataRepository::generaActSesion($sesion,GamesController::inDatoUno,'Logout usuario '.$usuario->getTxmailusuario().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, $em);
+                            $estadoSesion = GamesController::inDatoUno;
+                        }
                         switch ($estadoSesion) {
                             case GamesController::inDatoCer: //Error, debe especificar sesion : El usuario tiene una sesion activa
                                 $respuesta->setRespuesta(GamesController::inUSeActi);    
-                                break;
+                                //14-01-2018 Se elimina el break para que cierre sesión 
+                                //break;
                             case GamesController::inDatoUno: //Logear
                                 $sesion = ManejoDataRepository::generaSesion($usuario,GamesController::inSesActi,$fecha,NULL,$pSolicitud->getIPaddr(),$em);
                                 //Genera sesion activa sin fecha de finalización
