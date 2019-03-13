@@ -156,8 +156,8 @@ class Logica {
 
                 case GamesController::txAccPubMensa: {//Dato:19 : Chatear
                     //echo "<script>alert('Antes de entrar a Chatear-".$solicitud->getEmail()."')</script>";
-                    $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::enviarMensajeChat($solicitud);
+                    //$objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = GestionEjemplares::enviarMensajeChat($solicitud, $em);
                     break;
                 } 
 
@@ -975,8 +975,7 @@ class Logica {
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'indacept' => $respuesta->getIndAcept(), 
-                                'indotroacept' => $respuesta->getIndOtroAcept(), 'botonera' => $respuesta->getBotonesMostrar(), 'conversacion' => $parreglo )));
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'conversacion' => $parreglo )));
         } catch (Exception $ex) {
                 return GamesController::inPlatCai;
         } 

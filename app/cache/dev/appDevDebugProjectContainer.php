@@ -608,7 +608,7 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\DBAL\Configuration();
         $b->setSQLLogger($a);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => 3306, 'dbname' => 'ex4play', 'user' => 'adminex4play', 'password' => 'adminex4play', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('driver' => 'pdo_mysql', 'host' => '127.0.0.1', 'port' => 3306, 'dbname' => 'ex4play', 'user' => 'root', 'password' => 'root', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
     }
 
     /**
@@ -3494,8 +3494,8 @@ class appDevDebugProjectContainer extends Container
             'database_host' => '127.0.0.1',
             'database_port' => 3306,
             'database_name' => 'ex4play',
-            'database_user' => 'adminex4play',
-            'database_password' => 'adminex4play',
+            'database_user' => 'root',
+            'database_password' => 'root',
             'locale' => 'en',
             'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'mailer_transport' => 'smtp',

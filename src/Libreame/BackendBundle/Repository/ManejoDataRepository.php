@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query;
 use Libreame\BackendBundle\Controller\GamesController;
+use Libreame\BackendBundle\Controller\EnviaMailController;
 use Libreame\BackendBundle\Helpers\Respuesta;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Entity\Lugar;
@@ -423,14 +424,14 @@ class ManejoDataRepository extends EntityRepository {
         try{            
             $planus = $em->getRepository('LibreameBackendBundle:Planusuario')->
                     findOneBy(array('planusuariousuario' => $usuario));
-            
+  
             $detalleplan = $em->getRepository('LibreameBackendBundle:Detalleplan')->
-                    findOneBy(array('detalleplanplan' => $planus->getidplanusuario()));
+                    findOneBy(array('detalleplanplan' => $planus->getplanusuarioplan()));
             return $detalleplan;
             
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
-                return new Planusuario();
+                return new Detalleplan();
         } 
     }
                 
@@ -1308,6 +1309,38 @@ echo "Decrypted: ".$newClear."</br>";
         } 
     }
     
+    //Obtiene la cantidad de mensajes sin leer  (Alertas)
+    public static function getConversacionTrato(Trato $trato, $em)
+    {   
+        try{            
+            
+            $qMensajes = $em->createQueryBuilder()
+                ->select('a')
+                ->from('LibreameBackendBundle:Actividadusuario', 'a')
+                ->Where('a.actusuariotrato = :idtrato')
+                ->setParameter('idtrato', $trato);
+            
+            $actusuario = $qMensajes->getQuery()->getResult();
+            
+            $mensajes = array();
+            foreach ( $actusuario as $actusr ) {
+                $usenv = $actusr->getactusuariousuarioescribe();
+                $usrec = $actusr->getactusuariousuariolee();
+                //echo "usuarios \n";
+                $mensajes[] = array('idmensaje' => $actusr->getidactividadusuario(), 'idenvia' => $usenv->getidusuario(),
+                    'idrecibe' => $usrec->getidusuario(), 'fecha' => $actusr->getactusuariofecha(),
+                    'mensaje' => utf8_encode($actusr->getactusuariomensaje()), 'leido' => $actusr->getactusuarioleido());
+            }
+            
+
+            return $mensajes;
+
+        } catch (Exception $ex) {
+                return GamesController::inDatoCer;
+        } 
+    }
+    
+
 
     //Obtiene los trato asociados a un usuario
     public function getTratosUsuario(Usuario $usuario, $em)
@@ -1782,7 +1815,7 @@ echo "Decrypted: ".$newClear."</br>";
             $FECVENCPLAN = $parametros['VENC_PLAN'];
             if ($BARTSVJ > $BARTSUSR) {
                 $inValidado = GamesController::inDatoCer;//Si los BARTs NO Alcanzan
-                echo "Los BARTs no alcanzan :: Requeridos = [".$BARTSVJ."] - Usuario = [".$BARTSUSR."] \n";
+                //echo "Los BARTs no alcanzan :: Requeridos = [".$BARTSVJ."] - Usuario = [".$BARTSUSR."] \n";
             }
             if ($PEND_CALIF == GamesController::inDatoUno){
                 $inValidado = GamesController::inDatoDos;//Si tiene calificaciones pendientes por realizar
@@ -1820,7 +1853,7 @@ echo "Decrypted: ".$newClear."</br>";
 
                 $actividadusuario->setactusuariotrato($trato);
                 $actividadusuario->setactusuarioejemplar($ejemplar);
-                $actividadusuario->setactusuariousuarioescribe($usuario->getIdusuario());
+                $actividadusuario->setactusuariousuarioescribe($usuario);
                 $actividadusuario->setactusuariousuariolee($ejemplarusuario->getejemplarusuariousuario());
                 $actividadusuario->setactusuarioleido(GamesController::inDatoCer);
                 $actividadusuario->setactusuariofecha($fecha);
@@ -1830,16 +1863,27 @@ echo "Decrypted: ".$newClear."</br>";
                 $em->persist($actividadusuario);
 
                 //AQUI SE DEBE ENVIAR EMAIL DE NOTIFICACION PARA AMBOS
+                error_reporting(E_ERROR);
+                $transport = (new \Swift_SmtpTransport('p3plcpnl0478.prod.phx3.secureserver.net', 25))
+                    ->setUsername('ex4play@baisica.co')
+                    ->setPassword('eX.fouR.pl4y$');
+                $mailer = new \Swift_Mailer($transport);
+                EnviaMailController::enviaMailRegistroAction($usuario, $mailer, GamesController::inDatoUno);
+                //echo "\n registroUsuario :: Envió mail";
 
+                
+                //
+                //
+                //Registro de puntos e Resta para el solicitante
                 $puntosusuario->setpunusuarioidtrato($trato);
                 $puntosusuario->setincontar(GamesController::inContar);
                 $puntosusuario->setfefechapuntos($fecha);
                 $puntosusuario->setinpuntaje(ManejoDataRepository::getPuntajeBarts($ejemplar->getejemplarVideojuego()->getincategvideojuego()));
-                $puntosusuario->setinsumaresta(GamesController::inSuma_);
+                $puntosusuario->setinsumaresta(GamesController::inResta);
                 $puntosusuario->setpuntosusuariousuario($usuario);
                 $puntosusuario->setpunusuarioejemplar($ejemplar);
                 $em->persist($puntosusuario);
-                $em->flush();
+                $em-x>flush();
 
                 //$em->getConnection()->commit();
                 $respuestaProc =  GamesController::inExitoso; 
@@ -2473,5 +2517,40 @@ echo "Decrypted: ".$newClear."</br>";
     }
 
  
+//enviar mensaje
+public function enviarMensaje(Usuario $usuario, Usuario $usuariodes, Trato $trato, Ejemplar $ejemplar, $mensaje, $em)
+    {
+        $respuestaProc =  GamesController::inFallido; 
+        try{
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            //$em->getConnection()->beginTransaction();
+            
+            $actividadusuario = new Actividadusuario();
+
+            $actividadusuario->setactusuariotrato($trato);
+            $actividadusuario->setactusuarioejemplar($ejemplar);
+            $actividadusuario->setactusuariousuarioescribe($usuario);
+            $actividadusuario->setactusuariousuariolee($usuariodes);
+            $actividadusuario->setactusuarioleido(GamesController::inDatoCer);
+            $actividadusuario->setactusuariofecha($fecha);
+            $actividadusuario->setactusuariomensaje(utf8_decode($mensaje));
+
+            $actividadusuario->setactusuariotipoaccion(GamesController::inActEscribir);
+            $em->persist($actividadusuario);
+            $em->flush();
+            //echo "\n Guardo mensaje \n ".$mensaje;
+            $respuestaProc =  GamesController::inExitoso; 
+
+            //$em->getConnection()->commit();
+            //echo "\n Commit mensaje \n ".$mensaje;
+
+            return $respuestaProc;
+
+        } catch (Exception $ex) {
+                return  GamesController::inFallido;
+        } 
+    }    
     
+   
 }

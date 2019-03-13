@@ -238,65 +238,56 @@ class GestionEjemplares {
         }
        
     }
+
+    public static function enviarMensajeChat(Solicitud $psolicitud, $em)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $usuario = new Usuario();
+
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali= ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "enviarMensajeChat :: Validez de sesion ".$respSesionVali." \n";
+            if ($respSesionVali== GamesController::inULogged) 
+            {    
+                //echo "enviarMensajeChat :: FindAll ";
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+                $usuariodes = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes(), $em);
+                $trato = ManejoDataRepository::getTratoById($psolicitud->getIdTrato(), $em);
+                $ejemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar(), $em);
+                
+                //Crea el trato
+                //echo "enviarMensajeChat :: Crea el trato";
+                $resp = ManejoDataRepository::enviarMensaje($usuario, $usuariodes, $trato, $ejemplar, $psolicitud->getComentario(), $em);
+                
+                $respuesta->setRespuesta($resp);
+                
+                $conversacion = ManejoDataRepository::getConversacionTrato($trato, $em);
+                
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+     
+                return Logica::generaRespuesta($respuesta, $psolicitud, $conversacion, $em);
+                
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $ejemplares = array();
+                return Logica::generaRespuesta($respuesta, $psolicitud, $conversacion, $em);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            $conversacion = array();
+            return Logica::generaRespuesta($respuesta, $psolicitud, $conversacion, $em);
+        }
+       
+    }
     
 }
-/*http://localhost/Ex4ReadBE/web/app_dev.php/ingreso
-
-    
-in    
-{    "idsesion": {
-        "idaccion": "4",
-        "idtrx": "rvk4aat3k8x30mgvwxli2-xwcig3ha",
-        "ipaddr": "200.000.000.000",
-        "iddevice": "A4MACADDRESS",
-        "marca": "LG",
-        "modelo": "G2 Mini",
-        "so": "KITKAT"
-    },
-    "idsolicitud": {
-        "email": "A4alexviatela@gmail.com",
-        "clave": "clave12345",
-        "ultejemplar": "2"
-    }
-}    
-
-out
-{
-    "idsesion": {
-        "idaccion": "4",
-        "idtrx": "",
-        "ipaddr": "200.000.000.000",
-        "iddevice": "A4MACADDRESS",
-        "marca": "LG",
-        "modelo": "G2 Mini",
-        "so": "KITKAT"
-    },
-    "idrespuesta": {
-        "respuesta": 1,
-        "ejemplares": [
-            [],
-            {
-                "idejemplar": 3,
-                "idgenero": 1,
-                "inejecantidad": 1,
-                "dbavaluo": 0,
-                "indueno": 810,
-                "inlibro": 2,
-                "txgenero": "Genero Prueba",
-                "txlibro": "Libro Prueba 2",
-                "txdueno": "A4alexviatela@gmail.com"
-            },
-            {
-                "idejemplar": 4,
-                "idgenero": 1,
-                "inejecantidad": 3,
-                "dbavaluo": 0,
-                "indueno": 810,
-                "inlibro": 1,
-                "txgenero": "Genero Prueba",
-                "txlibro": "Libro Prueba 1",
-                "txdueno": "A4alexviatela@gmail.com"
-            }
-        ]
-    }
-}*/

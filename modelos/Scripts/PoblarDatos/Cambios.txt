@@ -1,4 +1,4 @@
-﻿//Padre de lugar puede ser NULL
+#/Padre de lugar puede ser NULL
 
 ALTER TABLE `ex4play`.`lugar` 
 DROP FOREIGN KEY `fk_lugar_lugar1`;

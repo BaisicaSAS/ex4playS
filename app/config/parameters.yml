@@ -4,8 +4,8 @@ parameters:
     database_host: 127.0.0.1
     database_port: 3306
     database_name: ex4play
-    database_user: adminex4play
-    database_password: adminex4play
+    database_user: root
+    database_password: root
     locale: en
     secret: 818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4
     mailer_transport: smtp

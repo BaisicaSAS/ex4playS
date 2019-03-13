@@ -28,8 +28,8 @@
     <parameter key="database_host">127.0.0.1</parameter>
     <parameter key="database_port">3306</parameter>
     <parameter key="database_name">ex4play</parameter>
-    <parameter key="database_user">adminex4play</parameter>
-    <parameter key="database_password">adminex4play</parameter>
+    <parameter key="database_user">root</parameter>
+    <parameter key="database_password">root</parameter>
     <parameter key="locale">en</parameter>
     <parameter key="secret">818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4</parameter>
     <parameter key="mailer_transport">smtp</parameter>
@@ -2275,8 +2275,8 @@
         <argument key="host">127.0.0.1</argument>
         <argument key="port">3306</argument>
         <argument key="dbname">ex4play</argument>
-        <argument key="user">adminex4play</argument>
-        <argument key="password">adminex4play</argument>
+        <argument key="user">root</argument>
+        <argument key="password">root</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
       <argument type="service">

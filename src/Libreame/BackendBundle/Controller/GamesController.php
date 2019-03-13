@@ -506,12 +506,10 @@ class GamesController extends Controller
                         //echo "<script>alert('ENTRA POR Chatear')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdTrato($json_datos['idsolicitud']['idtrato']);
                         $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusrdestino']);
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setComentario($json_datos['idsolicitud']['txmensaje']);
-                        $this->objSolicitud->setTratoAcep($json_datos['idsolicitud']['tratoacep']);
-                        $this->objSolicitud->setValor($json_datos['idsolicitud']['valor']);
-                        $this->objSolicitud->setUnidad($json_datos['idsolicitud']['unidad']);
                         break;
                     }
                     
@@ -745,9 +743,8 @@ class GamesController extends Controller
                     case self::txAccPubMensa: { //Dato:19 : Chatear
                         //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
-                                and isset($datos['idsolicitud']['idejemplar']) and isset($datos['idsolicitud']['txmensaje'])
-                                and isset($datos['idsolicitud']['idusrdestino']) and isset($datos['idsolicitud']['tratoacep'])
-                                 and isset($datos['idsolicitud']['valor']) and isset($datos['idsolicitud']['unidad']));
+                                and isset($datos['idsolicitud']['idtrato']) and isset($datos['idsolicitud']['idejemplar']) 
+                                and isset($datos['idsolicitud']['txmensaje']) and isset($datos['idsolicitud']['idusrdestino']));
                         break;
                     }
                     
