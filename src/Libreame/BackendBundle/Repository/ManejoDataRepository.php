@@ -41,8 +41,19 @@ class ManejoDataRepository extends EntityRepository {
      
 
     ///********************* LO QUE SE USA ********************************///
-    
-    
+    //ex4plays :: Obtiene el nombre del genero de acuerdo con las constantes
+    public static function getNomGenero($ingenero)
+    {   
+        $nomgenero = GamesController::txGenSinE;
+        if($ingenero == GamesController::inGenSinE) {
+            $nomgenero = GamesController::txGenSinE;
+        } else if($ingenero == GamesController::inGenMasc) {
+            $nomgenero = GamesController::txGenMasc;
+        } else if($ingenero == GamesController::inGenFeme) {
+            $nomgenero = GamesController::txGenFeme;
+        } 
+        return $nomgenero;
+    }
     //ex4plays :: Obtiene la cantidd de puntos de una categoría
     public static function getPuntajeBarts($incategoria)
     {   
@@ -393,7 +404,7 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{            
             $plan = $em->getRepository('LibreameBackendBundle:Plansuscripcion')->
-                    findOneBy(array('idplansuscripcion' => $planusuario->getidplanusuario()));
+                    findOneBy(array('idplansuscripcion' => $planusuario->getplanusuarioplan()));
             return $plan;
             
         } catch (Exception $ex) {
@@ -638,11 +649,11 @@ class ManejoDataRepository extends EntityRepository {
             
 
             $arrGeneros = array();
-            /*foreach ($generos as $gen){
-                if (!in_array($gen, $arrGeneros)) {
-                    $arrGeneros[] = array("idgenero" => $gen['ingenero'],"nomgenero" => utf8_encode($gen['txgennombre']));
-                }
-            }*/
+            //foreach ($generos as $gen){
+            //    if (!in_array($gen, $arrGeneros)) {
+            //        $arrGeneros[] = array("idgenero" => $gen['ingenero'],"nomgenero" => utf8_encode($gen['txgennombre']));
+            //    }
+            //}
             //echo "Cargó arreglo generos \n";
             
         
@@ -1565,7 +1576,7 @@ echo "Decrypted: ".$newClear."</br>";
     }
     
     //Obtiene la cantidad de BARTs del usuario
-    public function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, &$comprometidos, $em)
+    public static function obtenerSaldosBARTs(Usuario $usuario, &$efectivos, &$credito, &$comprometidos, $em)
     {   
         try{
             //echo "Aqui calcula los BARTs \n";
@@ -2539,6 +2550,13 @@ public function enviarMensaje(Usuario $usuario, Usuario $usuariodes, Trato $trat
             $actividadusuario->setactusuariotipoaccion(GamesController::inActEscribir);
             $em->persist($actividadusuario);
             $em->flush();
+            
+            if ($trato->gettratousrdueno()==$usuario) {
+                $trato->setintratoacciondueno(GamesController::inDueConvers);
+            } else {
+                $trato->setintratoaccionsolicitante(GamesController::inSolConvers);
+            }
+            $em->persist($trato);
             //echo "\n Guardo mensaje \n ".$mensaje;
             $respuestaProc =  GamesController::inExitoso; 
 
@@ -2552,5 +2570,23 @@ public function enviarMensaje(Usuario $usuario, Usuario $usuariodes, Trato $trat
         } 
     }    
     
+    public static function actualizarTrato($trato, $acciongener, $acciondueno, $accionsolic,  $em) {
+        try {
+           $traUpd = ManejoDataRepository::getTratoById($trato->getidtrato(), $em);
+           if ($acciongener != GamesController::inAccMsgNormal){
+               $traUpd->setinestadotrato($acciongener);
+           }
+           if ($acciondueno != GamesController::inAccMsgNormal){
+               $traUpd->setintratoacciondueno($acciondueno);
+           }
+           if ($accionsolic != GamesController::inAccMsgNormal){
+               $traUpd->setintratoaccionsolicitante($accionsolic);
+           }
+           $em->persist($traUpd);
+           $em->flush();
+        } catch (Exception $ex) {
+                return  GamesController::inFallido;
+        }
+    }
    
 }

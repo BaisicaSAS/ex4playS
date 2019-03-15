@@ -25,8 +25,21 @@ class GamesController extends Controller
     const txSalida = "SALIDA"; //Trx de Salida
     
     //Tratos de entrada o de salida (Para el dueño son de salida, para el otro es de entrada)
-    
-    
+    const inDueAcepSol = 0; //Solicitud Aceptada: El Dueño Acepta la solicitud
+    const inDueRechSol = 1; //Solicitud rechazada: El dueño no acepta la solicitud
+    const inDueEntrega = 2; //Videojuego Entregado por el dueño
+    const inDueEnQueja = 3; //Queja impuesta
+    const inDueCalific = 4; //Calificación realizada por el dueño
+    const inDueConvers = 5; //Dueño en Conversación
+    const inDueIniTrat = 10;//Trato iniciado
+        
+    const inSolSolicit = 0; //Ejemplar Solicitado: Cuando se ejecuta la solicitud
+    const inSolCancela = 1; //Solicitud Cancelada
+    const inSolRecibid = 2; //Videojuego Recibido
+    const inSolEnQueja = 3; //Queja impuesta
+    const inSolCalific = 4; //Calificación realizada
+    const inSolConvers = 5; // Solicitante en Conversación
+            
     //Acciones de Actividadusuario 
     const inActSolicitar = 0; 
     const inActEscribir = 1; 
@@ -52,9 +65,12 @@ class GamesController extends Controller
     const inDatoTre =  3; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
     const inDatoCua =  4; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
     const inDatoCin =  5; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
-    const inGenSinE =  2; //Genero del usuario: Sin especificar
-    const inGenFeme =  1; //Genero del usuario: Femenino
-    const inGenMasc =  0; //Genero del usuario: Masculino
+    const inGenSinE =  0; //Genero del usuario: Sin especificar
+    const txGenSinE =  'Sin especificar'; //Genero del usuario: Sin especificar
+    const inGenMasc =  1; //Genero del usuario: Masculino
+    const txGenMasc =  'Masculino'; //Genero del usuario: Masculino
+    const inGenFeme =  2; //Genero del usuario: Femenino
+    const txGenFeme =  'Femenino'; //Genero del usuario: Femenino
     const inTamVali =  128; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const inJsonInv = -10; //Datos inconsistentes
@@ -122,7 +138,8 @@ class GamesController extends Controller
     const txAccRecLista =  '28'; //recuperar listas del sistema
     const txAccRecClave =  '29'; //Recuperar clave perdida
     const txAccSolLibro =  '30'; //Solicitar Libro:: Automático
-    //const txAccModifPub =  '31'; //modificar Publicacion
+    
+    //const txAccLisTrato =  '31'; //Listar todos los tratos de un usuario
     const txAccReaOfert =  '32'; //Realizar oferta
     const txAccRecPubli =  '33'; //Recuperar publicacion
     const txAccRecTrato =  '34'; //Recuperar informacion Trato
@@ -159,6 +176,9 @@ class GamesController extends Controller
     const inMenNoAc = -7; //Mensaje no activo - inactivo
     const inErrImag = -8; //Error en la carga de imágen
     const inUsClAcI = -9; //Clave actual inválida
+    //Constante funcion Cancelar trato
+    const inTraCance = -20; //El trato ya está cancelado: no se puede cancelar de nuevo
+    const inTraFinal = -21; //El trato ya está finalizado: No se puede cancelar
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
     //
@@ -501,7 +521,15 @@ class GamesController extends Controller
                         $this->objSolicitud->setFiltro($json_datos['idsolicitud']['filtro']);
                         break;
                     }
-
+                    
+                    case self::txAccElimiOfe: { //Dato:18 : Cancelar / Eliminar oferta
+                        //echo "<script>alert('ENTRA POR Chatear')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdTrato($json_datos['idsolicitud']['idtrato']);
+                        break;
+                    }
+                    
                     case self::txAccPubMensa: { //Dato:19 : Chatear
                         //echo "<script>alert('ENTRA POR Chatear')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -740,6 +768,13 @@ class GamesController extends Controller
                         break;
                     }
 
+                    case self::txAccElimiOfe: { //Dato:18 : Cancelar / Eliminar oferta
+                        //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                and isset($datos['idsolicitud']['idtrato']));
+                        break;
+                    }
+                    
                     case self::txAccPubMensa: { //Dato:19 : Chatear
                         //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])

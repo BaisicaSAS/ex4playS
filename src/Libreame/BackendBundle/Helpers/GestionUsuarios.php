@@ -105,12 +105,14 @@ class GestionUsuarios {
                     
 //                    $planusuario = new Planusuario();
                     $planusuario = ManejoDataRepository::getPlanUsuario($usuario, $em);
-                    
+                    //echo "\n Plan usuario ".$planusuario->getidplanusuario();
 //                    $plansuscrip = new Plansuscripcion();
                     $plansuscrip = ManejoDataRepository::getPlanSuscripcion($planusuario, $em);
+                    //echo "\n Plan suscripcion ".$plansuscrip->getidplansuscripcion();
                     //echo "\n obtenerParametros :: Plan :: ".utf8_encode($plansuscrip->gettxnomplan());
                     //$arrPlanUsuario = array();
                     //foreach ($planusuario as $plan) {
+                    
                     $arrPlanUsuario = array("inplan"=>$plansuscrip->getidplansuscripcion(),
                                             "txplannombre" => utf8_encode($plansuscrip->gettxnomplan()),
                                             "txplandescripcion" => utf8_encode($plansuscrip->gettxdescripcionplan()),

@@ -290,4 +290,72 @@ class GestionEjemplares {
        
     }
     
+    public static function cancelarTrato($psolicitud, $em)
+    {   
+        $fecha = new \DateTime;
+        $respuesta = new Respuesta();
+        //$objAcceso = $this->get('acceso_service');
+        $ucancela = new Usuario();
+        $udueno = new Usuario();
+        $usolicita = new Usuario();
+        $sesion = new Sesion();
+        $trato = new Trato();
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali= ManejoDataRepository::validaSesionUsuario($psolicitud, $em);
+            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==GamesController::inULogged) 
+            {    
+                //Recupera el trato
+                $trato = ManejoDataRepository::getTratoById($psolicitud->getIdTrato(), $em);
+                //identifica si el usuario que cancela es el dueño
+                //Usuario que cancela
+                $ucancela = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail(), $em);
+                //Usuario dueño
+                $udueno = ManejoDataRepository::getUsuarioById($trato->gettratousrdueno(), $em);
+                //Usuario que solicita
+                $usolicita = ManejoDataRepository::getUsuarioById($trato->gettratousrsolicita(), $em);
+                
+                //Verifica si se puede cancelar el trato
+                //Si el trato esta en estado = 0 / solicitado
+                $acciongener = -1;
+                $acciondueno = -1;
+                $accionsolic = -1;
+                if ($trato->getinestadotrato() == GamesController::inEsTrSol) {
+                    if ($udueno==$ucancela) {
+                        if ($trato->getinestadocancela()==GamesController::inEsTrCnS) {
+                            $acciongener = GamesController::inEsTrCnA;
+                        } else {
+                            $acciongener = GamesController::inEsTrCnD;
+                        }
+                        $acciondueno = GamesController::inDueRechSol;
+                    } else {
+                        if ($trato->getinestadocancela()==GamesController::inEsTrCnD) {
+                            $acciongener = GamesController::inEsTrCnA;
+                        } else {
+                            $acciongener = GamesController::inEsTrCnS;
+                        }
+                        $accionsolic = GamesController::inSolCancela;
+                    }
+                    ManejoDataRepository::actualizarTrato($trato, $acciongener, $acciondueno, $accionsolic,  $em);
+                    $respuesta->setRespuesta(GamesController::inExitoso);
+                } else if ($trato->getinestadotrato() == GamesController::inDatoUno)  { //Estado Cancelado 
+                    $respuesta->setRespuesta(GamesController::inTraCance);
+                } else if ($trato->getinestadotrato() == GamesController::inDatoDos)  { //Estado finalizado
+                    $respuesta->setRespuesta(GamesController::inTraFinal);
+                }
+
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(GamesController::inPlatCai);
+            return Logica::generaRespuesta($respuesta, $psolicitud, NULL, $em);
+        }
+       
+    }
+    
+    
 }
